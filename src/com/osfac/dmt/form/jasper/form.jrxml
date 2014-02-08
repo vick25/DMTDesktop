@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Formulaire" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_requester" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logo" class="java.lang.Object"/>
+	<parameter name="usage" class="java.lang.String"/>
+	<parameter name="country" class="java.lang.String"/>
+	<parameter name="number" class="java.lang.Integer"/>
+	<parameter name="pathrow" class="java.lang.String"/>
+	<parameter name="categories" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     *
+FROM
+     dmt_requester INNER JOIN  dmt_delivery ON dmt_requester.`id_requester` = dmt_delivery.`id_requester`
+WHERE
+     dmt_requester.id_requester = $P{id_requester}]]>
+	</queryString>
+	<field name="id_requester" class="java.lang.Integer"/>
+	<field name="firstname" class="java.lang.String"/>
+	<field name="familyname" class="java.lang.String"/>
+	<field name="othername" class="java.lang.String"/>
+	<field name="sex" class="java.lang.String"/>
+	<field name="adress" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="profession" class="java.lang.String"/>
+	<field name="institution" class="java.lang.String"/>
+	<field name="nationality" class="java.lang.String"/>
+	<field name="interest_area" class="java.lang.String"/>
+	<field name="usefulness" class="java.lang.String"/>
+	<field name="comment" class="java.lang.String"/>
+	<field name="id_delivery" class="java.lang.Integer"/>
+	<field name="id_user" class="java.lang.Integer"/>
+	<field name="image_size" class="java.lang.String"/>
+	<field name="request_date" class="java.sql.Date"/>
+	<field name="pathrow" class="java.lang.String"/>
+	<field name="confirm_email_sent" class="java.lang.String"/>
+	<field name="confirm_request_treated" class="java.lang.String"/>
+	<field name="form_path" class="java.lang.String"/>
+	<detail>
+		<band height="842" splitType="Stretch">
+			<rectangle>
+				<reportElement x="177" y="305" width="148" height="60" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="210" width="108" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adresse (Adress) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="285" width="96" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Types d'images]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="285" width="135" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Usages (Applications)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="372" width="500" height="16" backcolor="#E7E1E1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Notes sur l'utilisation de l'image (Brief describe of proposed application) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="602" width="500" height="16" backcolor="#E7E1E1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comment avez - vous entendu parler de la distribution d'images à l'OSFAC ?]]></text>
+			</staticText>
+			<line>
+				<reportElement x="46" y="760" width="501" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="618" width="500" height="16" backcolor="#E7E1E1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[How did you learn about OSFAC ?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="726" width="34" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="119" y="772" width="342" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Maiandra GD" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[14, avenue Sergent MOKE Q. SOCIMAT Commune de NGALIEMA - KINSHASA / RDC.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="161" y="782" width="46" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Maiandra GD" size="8" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[E - mail : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="205" y="781" width="84" height="13" forecolor="#0000FF"/>
+				<textElement>
+					<font fontName="Maiandra GD" size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[contact@osfac.net]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="318" y="781" width="100" height="13" forecolor="#0033CC"/>
+				<textElement>
+					<font fontName="Maiandra GD" size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[http://www.osfac.net]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="289" y="782" width="29" height="13"/>
+				<textElement>
+					<font fontName="Maiandra GD" size="8"/>
+				</textElement>
+				<text><![CDATA[Web :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="46" y="746" width="501" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="47" y="634" width="500" height="76" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="54" y="645" width="484" height="53"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="47" y="532" width="500" height="70" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="516" width="500" height="16" backcolor="#E7E1E1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Images]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="47" y="443" width="500" height="50" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="427" width="500" height="16" backcolor="#E7E1E1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zones d'intérêt (Area of interest)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="54" y="448" width="484" height="40"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{interest_area}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="47" y="388" width="500" height="39" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="51" y="391" width="487" height="34"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{usefulness}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="340" y="305" width="207" height="60" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="87" y="285" width="48" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Volume]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="46" y="305" width="117" height="60" forecolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="232" width="217" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adresse électronique (E-mail adress) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="249" width="116" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Téléphone (Phone) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="173" width="138" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Réquerant (Requester) :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="336" width="86" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{image_size}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="112" y="135" width="370" height="23"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="14" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[FORMULAIRE DE DEMANDE D'IMAGES SATELLITES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="302" y="83" width="258" height="12" forecolor="#00CC00"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Observatoire Satellital des Forêts d'Afrique Centrale]]></text>
+			</staticText>
+			<line>
+				<reportElement x="112" y="81" width="448" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#009900"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="61" y="312" width="86" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{number}+" image(s)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="193" width="204" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profession / Domaine (Profession) :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="186" y="311" width="130" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{categories}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="93" y="728" width="208" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{request_date}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement positionType="FixRelativeToBottom" x="161" y="174" width="386" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="163" y="175" width="375" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{firstname} +"  "+$F{familyname}.toUpperCase()+"  "+$F{othername}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="211" y="192" width="336" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="134" y="211" width="413" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="224" y="230" width="323" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="147" y="249" width="400" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="214" y="193" width="324" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{profession}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="212" width="400" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{adress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="231" width="309" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="250" width="384" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RealHeight">
+				<reportElement x="27" y="32" width="85" height="110"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" mode="Transparent" x="390" y="41" width="170" height="49" isRemoveLineWhenBlank="true" forecolor="#00CC00"/>
+				<textElement textAlignment="Right" markup="html">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[OSFAC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="267" width="68" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Institution :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="105" y="267" width="442" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="496" width="102" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pays (Country) :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="127" y="496" width="420" height="16" forecolor="#F4EBEB"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="110" y="268" width="428" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{institution}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="539" width="482" height="54"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pathrow}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="465" y="726" width="34" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Visa :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="348" y="312" width="190" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{usage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="497" width="404" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{country}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
