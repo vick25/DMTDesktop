@@ -217,7 +217,6 @@
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
       <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Territoire_Rwanda.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Documents\Kinshasa\New.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\District_RDC.shp</item>
@@ -227,6 +226,7 @@
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
       </value>
     </mapping>
     <mapping>

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.Timer;
 
-public final class RenderingManager {
+public class RenderingManager {
 
     // [sstein: 20.01.2006] added for Ole
     /**

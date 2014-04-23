@@ -13,7 +13,6 @@ import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.ui.WorkbenchFrame;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
@@ -61,11 +60,11 @@ public class Config {
                 if (isLiteVersion()) {
                     host = "127.0.0.1";
                     username = "root";
-                    password = "";
+                    password = "ustopudie";
                 } else {
-                    host = "192.168.1.119";
-                    username = "admin";
-                    password = "OsfacLab01";
+                    host = "127.0.0.1";
+                    username = "root";
+                    password = "ustopudie";
                     host = pref.get(SettingKeyFactory.Connection.HOST, host);
                 }
                 con = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
