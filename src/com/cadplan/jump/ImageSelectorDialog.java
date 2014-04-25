@@ -1,6 +1,7 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
+import com.osfac.dmt.workbench.DMTWorkbench;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -22,11 +23,10 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
     public double svgFactor = 1.0;
 
     public ImageSelectorDialog(int xSize, int ySize, I18NPlug iPlug) {
-        super(new JFrame(), iPlug.get("JumpPrinter.Image.Dialog"), true);
+        super(DMTWorkbench.frame, iPlug.get("JumpPrinter.Image.Dialog"), true);
         this.xSize = xSize;
         this.ySize = ySize;
         this.iPlug = iPlug;
-
         init();
     }
 
@@ -45,6 +45,7 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
         gb.setInsets(10, 10, 0, 10);
         gb.setSpan(1, 1);
         gb.setFill(GridBagConstraints.HORIZONTAL);
+        typeCombo.setFocusable(false);
         gb.addComponent(typeCombo);
         typeCombo.addActionListener(this);
 
@@ -134,7 +135,7 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
 
         addData();
         pack();
-        setLocation(100, 100);
+        setLocationRelativeTo(DMTWorkbench.frame);
         setVisible(true);
     }
 

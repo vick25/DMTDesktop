@@ -1,6 +1,6 @@
 package com.cadplan.jump;
 
-import com.cadplan.fileioA.FileChooser;
+import com.cadplan.fileio.FileChooser;
 import com.lowagie.text.pdf.DefaultFontMapper;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
@@ -268,7 +268,7 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
             try {
                 pj.print();
             } catch (PrinterException e) {
-                printer.sb.append("ERROR in printing: " + e + "\n");
+                printer.sb.append("ERROR in printing: ").append(e).append("\n");
             }
             if (printer.sb.toString().length() > 0) {
                 display(context, printer.sb.toString());

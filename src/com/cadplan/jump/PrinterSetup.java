@@ -2,6 +2,7 @@ package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.util.Blackboard;
+import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -63,7 +64,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
     private boolean printSinglePage = false;
 
     public PrinterSetup(PlugInContext context, PrinterPreview preview, Blackboard blackboard, I18NPlug iPlug) {
-        super(new JFrame(), iPlug.get("JumpPrinter.Setup"), true);
+        super(DMTWorkbench.frame, iPlug.get("JumpPrinter.Setup"), true);
         this.context = context;
         this.preview = preview;
         this.blackboard = blackboard;
@@ -77,14 +78,16 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 
         aboutButton = new JButton(iPlug.get("JumpPrinter.Setup.About"));
         aboutButton.addActionListener(this);
+        aboutButton.setFocusable(false);
         gb.setPosition(0, 0);
         gb.setInsets(0, 5, 0, 0);
         gb.setFill(GridBagConstraints.HORIZONTAL);
-        gb.addComponent(aboutButton);
+//        gb.addComponent(aboutButton);
 
         autoCB = new JCheckBox(iPlug.get("JumpPrinter.Setup.FitToPage"));
         gb.setPosition(1, 0);
         gb.setInsets(0, 10, 0, 0);
+        autoCB.setFocusable(false);
         gb.addComponent(autoCB);
         autoCB.setSelected(autoScale);
 
@@ -97,7 +100,8 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         printQualityCombo = new JComboBox(qualityItems);
         gb.setPosition(2, 0);
         gb.setInsets(0, 0, 0, 5);
-        gb.addComponent(printQualityCombo);
+        printQualityCombo.setFocusable(false);
+//        gb.addComponent(printQualityCombo);
         if (printMode >= qualityItems.length) {
             printMode = 0;
         }
@@ -124,6 +128,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         zoomInButton.setMargin(new Insets(0, 5, 0, 5));
         zoomInButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbz.setPosition(0, 0);
+        zoomInButton.setFocusable(false);
         gbz.addComponent(zoomInButton);
         zoomInButton.addActionListener(this);
 
@@ -131,6 +136,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         zoom100Button.setMargin(new Insets(0, 5, 0, 5));
         zoom100Button.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbz.setPosition(1, 0);
+        zoom100Button.setFocusable(false);
         gbz.addComponent(zoom100Button);
         zoom100Button.addActionListener(this);
 
@@ -138,6 +144,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         zoomOutButton.setMargin(new Insets(0, 6, 0, 6));
         zoomOutButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbz.setPosition(2, 0);
+        zoomOutButton.setFocusable(false);
         gbz.addComponent(zoomOutButton);
         zoomOutButton.addActionListener(this);
 
@@ -151,6 +158,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gb.setPosition(6, 0);
         gb.setInsets(0, 5, 0, 0);
         //gb.setFill(GridBagConstraints.HORIZONTAL);
+        furnitureButton.setFocusable(false);
         gb.addComponent(furnitureButton);
 
         helpButton = new JButton(iPlug.get("JumpPrinter.Setup.Help"));
@@ -158,7 +166,8 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gb.setPosition(7, 0);
         gb.setInsets(0, 5, 0, 10);
         gb.setAnchor(GridBagConstraints.EAST);
-        gb.addComponent(helpButton);
+        helpButton.setFocusable(false);
+//        gb.addComponent(helpButton);
 
 //       printLabel = new JLabel("Print Size");
 //       gb.setPosition(5,0);
@@ -182,6 +191,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 
         cancelButton = new JButton(iPlug.get("JumpPrinter.Setup.Cancel"));
         cancelButton.addActionListener(this);
+        cancelButton.setFocusable(false);
         gbb.setPosition(0, 0);
         gbb.setInsets(0, 5, 0, 0);
         //gb.setFill(GridBagConstraints.HORIZONTAL);
@@ -192,7 +202,8 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gbb.setPosition(1, 0);
         gbb.setInsets(0, 10, 0, 0);
         //gb.setFill(GridBagConstraints.HORIZONTAL);
-        gbb.addComponent(loadButton);
+        loadButton.setFocusable(false);
+//        gbb.addComponent(loadButton);
         configNames = (Vector<String>) blackboard.get("ConfigFiles");
         if (configNames.size() < 1) {
             configNames.add("Default");   // fix of vector is empty at this point
@@ -210,7 +221,8 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gbb.setPosition(2, 0);
         gb.setInsets(0, 0, 0, 0);
         gb.setWeight(1.0, 0.0);
-        gbb.addComponent(configCombo);
+//        gbb.addComponent(configCombo);
+        configCombo.setFocusable(false);
         configCombo.setSelectedIndex(item);
         configCombo.addActionListener(this);
 
@@ -220,7 +232,8 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gbb.setInsets(0, 0, 0, 0);
         gbb.setSpan(1, 2);
         gbb.setFill(GridBagConstraints.HORIZONTAL);
-        gbb.addComponent(saveButton);
+        saveButton.setFocusable(false);
+//        gbb.addComponent(saveButton);
 
         setupButton = new JButton(iPlug.get("JumpPrinter.Setup.PageSetup"));
         setupButton.addActionListener(this);
@@ -228,6 +241,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gbb.setInsets(0, 10, 0, 0);
         gbb.setAnchor(GridBagConstraints.WEST);
         gbb.setFill(GridBagConstraints.HORIZONTAL);
+        setupButton.setFocusable(false);
         gbb.addComponent(setupButton);
 
         printButton = new JButton(iPlug.get("JumpPrinter.Setup.Print"));
@@ -236,6 +250,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         gbb.setInsets(0, 10, 0, 0);
         gbb.setAnchor(GridBagConstraints.WEST);
         gbb.setFill(GridBagConstraints.HORIZONTAL);
+        printButton.setFocusable(false);
         gbb.addComponent(printButton);
 
         singlePageCB = new JCheckBox(iPlug.get("JumpPrinter.Setup.SinglePage"));
@@ -246,6 +261,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 
         saveImageButton = new JButton(iPlug.get("JumpPrinter.Setup.SaveImage"));
         saveImageButton.addActionListener(this);
+        saveImageButton.setFocusable(false);
         gbb.setPosition(8, 0);
         gbb.setInsets(0, 10, 0, 10);
         gbb.setAnchor(GridBagConstraints.WEST);
@@ -274,9 +290,9 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         //preview.setPreferredSize(new Dimension(800,600));
         pack();
         //setResizable(false);
+        setLocationRelativeTo(DMTWorkbench.frame);
         addWindowListener(this);
         setVisible(true);
-
     }
 
     /**

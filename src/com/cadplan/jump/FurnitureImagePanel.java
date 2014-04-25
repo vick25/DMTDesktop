@@ -1,7 +1,7 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import com.cadplan.fileioA.FileChooser;
+import com.cadplan.fileio.FileChooser;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;

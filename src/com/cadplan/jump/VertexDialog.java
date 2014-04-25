@@ -3,15 +3,14 @@ package com.cadplan.jump;
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.feature.AttributeType;
 import com.osfac.dmt.feature.FeatureSchema;
-
-import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * User: geoff Date: 16/06/2007 Time: 13:24:24 Copyright 2005 Geoffrey G Roy.
@@ -357,7 +356,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
 ////        return VertexParams.IMAGE;
 //        return VertexParams.EXTERNAL;
 //    }
-
     public String getSymbolName() {
         for (int i = 0; i < vectorPanel.symbolPanel.vertexRB.length; i++) {
             if (vectorPanel.symbolPanel.vertexRB[i].isSelected()) {

@@ -1,6 +1,7 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
+import com.osfac.dmt.workbench.DMTWorkbench;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,6 +114,7 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
         closeButton.addActionListener(this);
 
         pack();
+        this.setLocationRelativeTo(DMTWorkbench.frame);
         setVisible(true);
     }
 
@@ -154,7 +156,6 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
 
             parent.updateDrawing();
             dispose();
-
         }
     }
 

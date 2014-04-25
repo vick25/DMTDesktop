@@ -54,8 +54,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import org.openjump.core.ui.style.decoration.ArrowLineStringMiddlepointStyle;
 
-
-
 public class MapImagePrinter extends Component {
 
     boolean debug = false;
