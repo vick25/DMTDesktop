@@ -1,5 +1,6 @@
 package org.openjump;
 
+import com.cadplan.jump.PrinterPlugIn;
 import com.osfac.dmt.io.datasource.StandardReaderWriterFileDataSource;
 import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.WorkbenchContext;
@@ -134,6 +135,9 @@ public class OpenJumpConfiguration {
 
         FileDragDropPlugin fileDragDropPlugin = new FileDragDropPlugin();
         fileDragDropPlugin.initialize(pluginContext);
+        
+        PrinterPlugIn printerPlugIn = new PrinterPlugIn();
+        printerPlugIn.initialize(pluginContext);
 
         //-- [sstein 10.July.2008] now initialized with default-plugins.xml file
     /*

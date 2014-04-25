@@ -4,16 +4,14 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.ColorThemingStyle;
-
+import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
 import java.awt.*;
-
-import java.awt.geom.Point2D;
 import java.awt.geom.GeneralPath;
-
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.Map;
+import java.awt.geom.Point2D;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * User: geoff Date: 12/02/2007 Time: 14:47:51 Copyright 2005 Geoffrey G Roy.

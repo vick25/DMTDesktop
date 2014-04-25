@@ -74,17 +74,17 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         String menuItemName = iPlug.get("JumpPrinter.MenuItem");
         EnableCheckFactory check = new EnableCheckFactory(context.getWorkbenchContext());
 
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("/Resources/printer.png"));
+        ImageIcon icon = new ImageIcon(this.getClass().getResource("/com/osfac/dmt/images/fileprint(23).png"));
         context.getFeatureInstaller().addMainMenuItem(this, new String[]{fileMenuName}, menuItemName,
                 false, icon, check.createAtLeastNLayersMustExistCheck(1));
 
-        String dirName = context.getWorkbenchContext().getWorkbench().getPlugInManager().getPlugInDirectory().getAbsolutePath();
+//        String dirName = context.getWorkbenchContext().getWorkbench().getPlugInManager().getPlugInDirectory().getAbsolutePath();
 
         //System.out.println("Printer Resource path: "+this.getClass().getResource("/Resources/jprinter.gif"));
         //IconLoader loader = new IconLoader(dirName,"JumpPrinter");
         //Image image = loader.loadImage("jprinter.gif");
 
-        icon = new ImageIcon(this.getClass().getResource("/Resources/jprinter.gif"));
+        icon = new ImageIcon(this.getClass().getResource("/com/osfac/dmt/images/fileprint(23).png"));
         //ImageIcon icon = new ImageIcon(image);
         WorkbenchToolBar toolBar = context.getWorkbenchFrame().getToolBar();
 

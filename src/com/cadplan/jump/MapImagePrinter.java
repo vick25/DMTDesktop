@@ -21,18 +21,40 @@ import com.osfac.dmt.workbench.ui.renderer.style.MetricsLineStringSegmentStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.Style;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexIndexLineSegmentStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexXYLineSegmentStyle;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Point;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import org.openjump.core.ui.style.decoration.ArrowLineStringMiddlepointStyle;
+
+
 
 public class MapImagePrinter extends Component {
 
@@ -122,15 +144,15 @@ public class MapImagePrinter extends Component {
                     Layerable layer = (Layerable) ijj.next();
                     try {
                         Class dummy = Class.forName("de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer");
-                        if ((AbstractLayerable) layer instanceof de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) {
-                            boolean isVisible = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).isVisible();
-                            if (isVisible) {
-                                rasterLayers.add(layer);
-                            }
-                            if (debug) {
-                                System.out.println("Layer:" + layer.getName() + "        Layer is Raster***********  visible:" + isVisible);
-                            }
-                        }
+//                        if ((AbstractLayerable) layer instanceof de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) {
+//                            boolean isVisible = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).isVisible();
+//                            if (isVisible) {
+//                                rasterLayers.add(layer);
+//                            }
+//                            if (debug) {
+//                                System.out.println("Layer:" + layer.getName() + "        Layer is Raster***********  visible:" + isVisible);
+//                            }
+//                        }
                     } catch (ClassNotFoundException ex) {
                         // ignore if image is not Pirol type
                     }
@@ -171,11 +193,11 @@ public class MapImagePrinter extends Component {
                     } catch (IOException ex) {
                     }
                 } else {
-                    bimage = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).createImage(context.getLayerViewPanel());
-                    imageEnvelope = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getEnvelope();
-                    transparencyLevel = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getTransparencyLevel();
-                    imageX = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getXOffset();
-                    imageY = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getYOffset();
+//                    bimage = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).createImage(context.getLayerViewPanel());
+//                    imageEnvelope = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getEnvelope();
+//                    transparencyLevel = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getTransparencyLevel();
+//                    imageX = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getXOffset();
+//                    imageY = ((de.fhOsnabrueck.jump.pirol.utilities.RasterImageSupport.RasterImageLayer) layer).getYOffset();
                 }
 
                 if (debug) {

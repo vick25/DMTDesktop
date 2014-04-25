@@ -14,8 +14,6 @@ import java.awt.geom.RectangularShape;
 import org.openjump.util.SLDImporter.SizedStrokeFillStyle;
 
 public abstract class VertexStyle implements Style, SizedStrokeFillStyle {
-    // UT
-    // protected RectangularShape shape;
 
     protected Shape shape;
     protected int size = 4;
@@ -160,7 +158,6 @@ public abstract class VertexStyle implements Style, SizedStrokeFillStyle {
             return super.clone();
         } catch (CloneNotSupportedException e) {
             Assert.shouldNeverReachHere();
-
             return null;
         }
     }
