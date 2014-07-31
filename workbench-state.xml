@@ -7,7 +7,7 @@
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\Kinshasa</value>
+      <value class="java.lang.String">D:\LANDSAT\LE71810632001209EDC00</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST DIRECTORY</key>
@@ -26,11 +26,11 @@
       <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - LINES ENABLED</key>
+      <key class="java.lang.String">CONSTRAIN_LENGTH - ENABLED</key>
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">CONSTRAIN_LENGTH - ENABLED</key>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - LINES ENABLED</key>
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
@@ -100,12 +100,12 @@
       <value class="java.awt.Font">Dialog, 0, 24</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datastore.ConnectionManager - CONNECTION DESCRIPTORS</key>
       <value class="java.util.ArrayList" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT_COLOR</key>
@@ -163,12 +163,12 @@
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">INCREMENTAL_ANGLE_CONSTRAINT</key>
       <value class="java.lang.Integer">8</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER COORDINATE SYSTEM</key>
@@ -199,12 +199,12 @@
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">ImportSLDPlugin.filename</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST FILE FILTER DESCRIPTION</key>
       <value class="java.lang.String" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ImportSLDPlugin.filename</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">FORMAT</key>
@@ -217,7 +217,6 @@
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
       <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Documents\Kinshasa\New.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\District_RDC.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Territoire_Angola.shp</item>
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Collectivite_RDC.shp</item>
@@ -225,8 +224,9 @@
         <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
+        <item class="java.lang.String">D:\LANDSAT\LE71810632001209EDC00\L71181063_06320010728_543.TIF</item>
         <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
       </value>
     </mapping>
     <mapping>

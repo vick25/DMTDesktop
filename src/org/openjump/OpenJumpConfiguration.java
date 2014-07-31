@@ -66,6 +66,9 @@ import org.openjump.core.ui.plugin.mousemenu.category.MoveCategoryToTop;
 import org.openjump.core.ui.plugin.mousemenu.category.SetCategoryVisibilityPlugIn;
 import org.openjump.core.ui.plugin.queries.SimpleQueryPlugIn;
 import org.openjump.core.ui.plugin.style.ImportSLDPlugIn;
+import org.openjump.core.ui.plugin.tools.JoinAttributesSpatiallyPlugIn;
+import org.openjump.core.ui.plugin.tools.MergeTwoSelectedPolygonsPlugIn;
+import org.openjump.core.ui.plugin.tools.SplitPolygonPlugIn;
 import org.openjump.core.ui.plugin.view.EasyButtonsPlugin;
 import org.openjump.core.ui.plugin.view.MapToolTipPlugIn;
 import org.openjump.core.ui.plugin.view.ShowFullPathPlugIn;
@@ -253,11 +256,11 @@ public class OpenJumpConfiguration {
         /**
          * ** ANALYSIS ***
          */
-        /*
+        
          JoinAttributesSpatiallyPlugIn mySpatialJoin = new JoinAttributesSpatiallyPlugIn();
          mySpatialJoin.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
-
+/*
          // -- SIGLE PlugIn
          PlanarGraphPlugIn coveragePlugIn = new PlanarGraphPlugIn();
          coveragePlugIn.initialize(new PlugInContext(workbenchContext, null, null,
@@ -308,7 +311,7 @@ public class OpenJumpConfiguration {
          BlendLineStringsPlugIn myLSBlender = new BlendLineStringsPlugIn();
          myLSBlender.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
-
+*/
          MergeTwoSelectedPolygonsPlugIn twopolymerger = new MergeTwoSelectedPolygonsPlugIn();
          twopolymerger.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
@@ -316,7 +319,7 @@ public class OpenJumpConfiguration {
          SplitPolygonPlugIn cutpoly = new SplitPolygonPlugIn();
          cutpoly.initialize(new PlugInContext(workbenchContext, null, null, null,
          null));
-         */
+         
         /**
          * ** EDIT_ATTIBUTES ****
          */
