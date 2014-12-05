@@ -60,11 +60,11 @@ public class Config {
                 if (isLiteVersion()) {
                     host = "127.0.0.1";
                     username = "root";
-                    password = "ustopudie";
+                    password = "";
                 } else {
-                    host = "127.0.0.1";
-                    username = "root";
-                    password = "ustopudie";
+                    host = "192.168.1.109";
+                    username = "admin";
+                    password = "OsfacLab01";
                     host = pref.get(SettingKeyFactory.Connection.HOST, host);
                 }
                 con = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
@@ -204,7 +204,7 @@ public class Config {
             Config.pref.put(SettingKeyFactory.OtherFeatures.HOST, "http://" + IPAddress);
         }
         if (withoutError) {
-            OtherFeatures.RBHostProvider.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " " +"http://" + IPAddress);
+            OtherFeatures.RBHostProvider.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " " + "http://" + IPAddress);
             OtherFeatures.txtIP.setText(IPAddress);
         }
         if (!ChangeIP.useAtBegining) {

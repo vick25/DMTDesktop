@@ -146,10 +146,10 @@ public class GCPlugin extends ExtCorePlugIn {
 			} else {
 				context.getFeatureInstaller().addMainMenuItem(
 				// one plugin per menuentry
-						plugin, menuchain, _(menuentry.toLowerCase()), false, null, checker);
+						plugin, menuchain, a(menuentry.toLowerCase()), false, null, checker);
 				// the layer popup menu
 				context.getFeatureInstaller().addPopupMenuItem(popupMenu,
-						plugin, popupchain, _(menuentry.toLowerCase()), false, null, checker);
+						plugin, popupchain, a(menuentry.toLowerCase()), false, null, checker);
 			}
 		}
 		*/
@@ -170,7 +170,7 @@ public class GCPlugin extends ExtCorePlugIn {
 			} else {
 				// the layer popup menu
 				context.getFeatureInstaller().addPopupMenuItem(popupMenu,
-						plugin, popupchain, _(menuentry.toLowerCase()), false, null, checker);
+						plugin, popupchain, a(menuentry.toLowerCase()), false, null, checker);
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class GCPlugin extends ExtCorePlugIn {
 			} else {
 				// one plugin per menuentry
 				context.getFeatureInstaller().addMainMenuItem(
-								plugin, menuchain, _(menuentry.toLowerCase()), false, null, checker);
+								plugin, menuchain, a(menuentry.toLowerCase()), false, null, checker);
 			}
 		}		
 	}
@@ -207,7 +207,7 @@ public class GCPlugin extends ExtCorePlugIn {
 			String message = ( target.equalsIgnoreCase("close-lines") || target.equalsIgnoreCase("remove-closing-segment") ) ?
 					"treat-all-with-tools" :
 					"convert-all-to";
-			if ( !okCancel( _("are-you-sure"), _(message, buf, _(target.toLowerCase()) ) ) )
+			if ( !okCancel( a("are-you-sure"), a(message, buf, a(target.toLowerCase()) ) ) )
 						return false;
 		}
 		
@@ -234,11 +234,11 @@ public class GCPlugin extends ExtCorePlugIn {
 			for (Iterator i = feats.iterator(); i.hasNext();) {
 				try {
 					Feature feat = (Feature) i.next();
-					// keep for comparision with geom_new
-					Geometry geom_orig = layeraction.getGeom(feat);
+					// keep for comparision with geomanew
+					Geometry geomaorig = layeraction.getGeom(feat);
 					// might be split in lines later
-					Geometry geom_src = geom_orig;
-					Geometry geom_new = null;
+					Geometry geomasrc = geomaorig;
+					Geometry geomanew = null;
 					// reset warning monitor
 					youvebeenwarned = false;
 					
@@ -247,18 +247,18 @@ public class GCPlugin extends ExtCorePlugIn {
 
 						// these tools make only sense with line segmented geometries
 						// that not insist on being closed rings
-						if (geom_src instanceof LinearRing 
-								|| geom_src instanceof Polygon 
-								|| geom_src instanceof MultiPolygon)
-							geom_src = factory.createMultiLineString( getLines( geom_src ) );
+						if (geomasrc instanceof LinearRing 
+								|| geomasrc instanceof Polygon 
+								|| geomasrc instanceof MultiPolygon)
+							geomasrc = factory.createMultiLineString( getLines( geomasrc ) );
 						
-						int count = geom_src.getNumGeometries();
+						int count = geomasrc.getNumGeometries();
 						boolean changed = false;
-						Geometry[] geoms_new = new Geometry[count];
+						Geometry[] geomsanew = new Geometry[count];
 						GeometryEditor editor = new GeometryEditor();
 
 						for (int j = 0; j < count; j++) {
-							Geometry geom = geom_src.getGeometryN(j);
+							Geometry geom = geomasrc.getGeometryN(j);
 							// weirdly closed linestrings always end up to be linearrings
 							if ( geom instanceof LinearRing )
 								geom = factory.createLineString(geom.getCoordinates());
@@ -266,48 +266,48 @@ public class GCPlugin extends ExtCorePlugIn {
 							//Coordinate[] points = geom.getCoordinates();
 
 							if (target.equalsIgnoreCase("close-lines") ) {
-								geoms_new[j] = editor.edit( geom, new CloseRing());
+								geomsanew[j] = editor.edit( geom, new CloseRing());
 							} else if (target.equalsIgnoreCase("remove-closing-segment") ) {
-								geoms_new[j] = editor.edit( geom, new RemoveClosing());
+								geomsanew[j] = editor.edit( geom, new RemoveClosing());
 							}
 
 							//System.out.println("geom: "+geom);
-							//System.out.println("new : "+geoms_new[j]);
+							//System.out.println("new : "+geomsanew[j]);
 							
 							// did we receive a changed geometry?
-							if ( !geoms_new[j].equalsExact(geom) ) changed = true;
+							if ( !geomsanew[j].equalsExact(geom) ) changed = true;
 						}
 						// only create a new geometry if the old was changed
 						if ( changed && count > 1 ) {						
-							geom_new = factory.createGeometryCollection(geoms_new);
-							// restore multigeometrytype of geom_src collection
-							geom_new = convert( geom_new, geom_src.getGeometryType() );
+							geomanew = factory.createGeometryCollection(geomsanew);
+							// restore multigeometrytype of geomasrc collection
+							geomanew = convert( geomanew, geomasrc.getGeometryType() );
 						}
 						else if ( changed && count == 1 )
-							geom_new = geoms_new[0];
+							geomanew = geomsanew[0];
 						else
-							warnUser(_("nothing-to-do", feat.getID()));
+							warnUser(a("nothing-to-do", feat.getID()));
 						
 					}				
 					// CONVERSIONS (moved to external method)
 					else {
-						geom_new = convert( geom_src, target);
+						geomanew = convert( geomasrc, target);
 					}
 					
-					//System.out.println(geom_new);
-					//System.out.println(geom_orig);
+					//System.out.println(geomanew);
+					//System.out.println(geomaorig);
 					
-					if (geom_new != null && !geom_new.equalsExact(geom_orig)) {
-						layeraction.setGeom(feat, geom_new);
+					if (geomanew != null && !geomanew.equalsExact(geomaorig)) {
+						layeraction.setGeom(feat, geomanew);
 					}
 					
 				} 
 				catch (IllegalArgumentException e) {
-					warnUser(_e(e.getMessage()));
+					warnUser(ae(e.getMessage()));
 				}
 				catch (InvocationTargetException ie) {
 					if (ie.getCause() != null)
-						warnUser(_e(ie.getCause().getLocalizedMessage()));
+						warnUser(ae(ie.getCause().getLocalizedMessage()));
 				}
 			}
 			
@@ -323,7 +323,7 @@ public class GCPlugin extends ExtCorePlugIn {
 		}
 		// don't mask other warnings here
 		else if (!youvebeenwarned ){
-			warnUser(_("nothing-changed"));
+			warnUser(a("nothing-changed"));
 		}
 
 		// operation failed
@@ -331,7 +331,7 @@ public class GCPlugin extends ExtCorePlugIn {
 	}
 
 	public String getName() {
-		return _("convert-selected-to");
+		return a("convert-selected-to");
 	}
 
 	
@@ -383,14 +383,14 @@ public class GCPlugin extends ExtCorePlugIn {
 			public String check(JComponent component) {
 				Collection layers = getLayers();
 				if (layers == null || layers.isEmpty())
-					return _("select-geometries-or-layers");
+					return a("select-geometries-or-layers");
 
 				for (Iterator iterator = layers.iterator(); iterator.hasNext();) {
 					Layer layer = (Layer) iterator.next();
 					// System.out.println(layer.getName()
 					// +"->"+(layer.isEditable()?"ja":"nein"));
 					if (!layer.isEditable()) {
-						return _("layer-not-editable", layer.getName());
+						return a("layer-not-editable", layer.getName());
 					}
 				}
 
@@ -505,8 +505,8 @@ public class GCPlugin extends ExtCorePlugIn {
 		this.wbc.getLayerViewPanel().getContext().warnUser(message);
 	}
 
-	private Geometry convert( Geometry geom_src, String type ) throws Exception{
-		Geometry geom_new = null;
+	private Geometry convert( Geometry geomasrc, String type ) throws Exception{
+		Geometry geomanew = null;
 		
 		Method method = (Method) getCreatableGeoms().get(type);
 		Class[] cparams = ( method instanceof Method ) ? method.getParameterTypes() : null;
@@ -514,19 +514,19 @@ public class GCPlugin extends ExtCorePlugIn {
 		// do we have to && can we convert?
 		if ( !(method instanceof Method) ) {
 			// ups we've got ourself no conversion
-			warnUser(_("no-conversion-method", _(type.toLowerCase()), type));
+			warnUser(a("no-conversion-method", a(type.toLowerCase()), type));
 			return null;
 		}
 		
 		/*
 		// Multi*s and polygon always get line segments separated
-		// Points contain _zero_ line segments
+		// Points contain azeroa line segments
 		LineString[] lines = null;
 		if ( (type.toLowerCase().startsWith("multi") || 
 			type.equalsIgnoreCase("polygon")) ){
-			lines = getLines( geom_src, false );
+			lines = getLines( geomasrc, false );
 			if (lines.length > 0)
-				geom_src = factory.createMultiLineString( lines );		
+				geomasrc = factory.createMultiLineString( lines );		
 		}
 		*/
 		boolean isArray = cparams[0].isArray();
@@ -536,28 +536,28 @@ public class GCPlugin extends ExtCorePlugIn {
 		if (!isArray
 				&& name.equals("com.vividsolutions.jts.geom.Coordinate")) {
 			// System.out.println("eine koordinate");
-			if (geom_src.getCoordinates().length == 1) {
-				geom_new = (Geometry) method.invoke(factory,
-						new Object[] { geom_src
+			if (geomasrc.getCoordinates().length == 1) {
+				geomanew = (Geometry) method.invoke(factory,
+						new Object[] { geomasrc
 								.getCoordinates()[0] });
 			} else {
-				warnUser(_("only-one-coordinate",type));
+				warnUser(a("only-one-coordinate",type));
 			}
 		}
 		// simple geometries made from coord[]
 		else if (isArray
 				&& name.equals("com.vividsolutions.jts.geom.Coordinate")) {
 			// System.out.println("mehrere koordinaten");
-			geom_new = (Geometry) method.invoke(factory,
-					new Object[] { geom_src.getCoordinates() });
+			geomanew = (Geometry) method.invoke(factory,
+					new Object[] { geomasrc.getCoordinates() });
 		}
 		// multilinestring
 		else if (isArray
 				&& name.equals("com.vividsolutions.jts.geom.LineString")) {
-			Coordinate[] coords = geom_src.getCoordinates();
+			Coordinate[] coords = geomasrc.getCoordinates();
 
-			geom_new = (Geometry) method.invoke(factory,
-					new Object[] { getLines( geom_src ) });
+			geomanew = (Geometry) method.invoke(factory,
+					new Object[] { getLines( geomasrc ) });
 
 		}
 		// polygon
@@ -567,40 +567,40 @@ public class GCPlugin extends ExtCorePlugIn {
 				&& name.equals(cparams[1].getComponentType()
 						.getName())) {
 
-			geom_new = constructPolygon(geom_src);
+			geomanew = constructPolygon(geomasrc);
 
 		}
 		// multipolygon
 		else if (isArray
 				&& name.equals("com.vividsolutions.jts.geom.Polygon")) {
 			// feed the line separated geom into algorithm
-			Polygon[] polys = constructPolygons(geom_src);
+			Polygon[] polys = constructPolygons(geomasrc);
 			if ( polys != null )
-				geom_new = (Geometry) method.invoke(factory,
+				geomanew = (Geometry) method.invoke(factory,
 					new Object[] { polys });
 		}
 		// geometrycollection
 		else if (isArray
 				&& name.equals("com.vividsolutions.jts.geom.Geometry")) {
 			// get all geoms and feed them to create
-			Geometry[] geoms = new Geometry[geom_src.getNumGeometries()];
-			for (int j = 0; j < geom_src.getNumGeometries(); j++) {
-				geoms[j] = geom_src.getGeometryN(j);
+			Geometry[] geoms = new Geometry[geomasrc.getNumGeometries()];
+			for (int j = 0; j < geomasrc.getNumGeometries(); j++) {
+				geoms[j] = geomasrc.getGeometryN(j);
 			}
-			geom_new = (Geometry) method.invoke(factory,
+			geomanew = (Geometry) method.invoke(factory,
 					new Object[] { geoms });
 		}
 		// what ends here is based on parameters that are not implemented yet
 		else {
-			warnUser(_("conversion-not-implemented", _(type.toLowerCase()), type));
+			warnUser(a("conversion-not-implemented", a(type.toLowerCase()), type));
 		}
 		
-		return geom_new;
+		return geomanew;
 	}
 	
 	/**
 	 * borrowed from org.geotools.shapefile.PolygonHandler
-	 * try to construct _one_ polygon from the given geometry
+	 * try to construct aonea polygon from the given geometry
 	 */
 	private Polygon constructPolygon(Geometry src) {
 		
@@ -650,7 +650,7 @@ public class GCPlugin extends ExtCorePlugIn {
 			
 			// ups, don't convert this
 			if (shells.size() != 1) {
-				warnUser(_("missing-exactly-one-shell"));
+				warnUser(a("missing-exactly-one-shell"));
 				return null;
 			}
 			
@@ -659,7 +659,7 @@ public class GCPlugin extends ExtCorePlugIn {
 							.toArray(new LinearRing[0]));
 			
 		} catch (IllegalArgumentException e) {
-			warnUser(_e(e.getMessage()));
+			warnUser(ae(e.getMessage()));
 		}
 
 		return null;
@@ -696,7 +696,7 @@ public class GCPlugin extends ExtCorePlugIn {
 				}
 			} catch (IllegalArgumentException e) {
 				// badrings means loss, means error, means stop here
-				warnUser(_("bad-rings"));
+				warnUser(a("bad-rings"));
 				return null;
 			
 				// crashes on simple points
@@ -704,7 +704,7 @@ public class GCPlugin extends ExtCorePlugIn {
 					LineString ring = geometryFactory.createLineString(points);
 					badRings.add(ring);
 				} catch (IllegalArgumentException e2) {
-					warnUser(_(e2.getMessage()));
+					warnUser(a(e2.getMessage()));
 				}*/
 			}
 		}
@@ -841,19 +841,19 @@ public class GCPlugin extends ExtCorePlugIn {
 	/**
 	 * separate line components in a (multi)geometry
 	 */
-	private LineString[] getLines(Geometry geom_src) {
-		return (LineString[]) getLines( geom_src, false);
+	private LineString[] getLines(Geometry geomasrc) {
+		return (LineString[]) getLines( geomasrc, false);
 	}
-	private LinearRing[] getRings(Geometry geom_src) {
-		return (LinearRing[]) getLines( geom_src, true);
+	private LinearRing[] getRings(Geometry geomasrc) {
+		return (LinearRing[]) getLines( geomasrc, true);
 	}	
-	private Geometry[] getLines(Geometry geom_src, boolean asRings) {
+	private Geometry[] getLines(Geometry geomasrc, boolean asRings) {
 		// List linescol = new ArrayList();
-		// geom_src.apply(new LineFilter( linescol ));
+		// geomasrc.apply(new LineFilter( linescol ));
 
 		List linescol = new ArrayList();
-		for (int i = 0; i < geom_src.getNumGeometries(); i++) {
-			Geometry g = geom_src.getGeometryN(i);
+		for (int i = 0; i < geomasrc.getNumGeometries(); i++) {
+			Geometry g = geomasrc.getGeometryN(i);
 			//System.out.println(g.getNumGeometries()+","+g.getGeometryType());
 			if (g.getNumGeometries() > 1){
 				linescol.addAll( Arrays.asList( getLines( g, asRings) ) );
@@ -905,12 +905,12 @@ private class CloseRing extends GeometryEditor.CoordinateOperation {
 		if (first.equals(last))
 			return coordinates;
 		
-		Coordinate[] coordinates_new = new Coordinate[coordinates.length + 1];
+		Coordinate[] coordinatesanew = new Coordinate[coordinates.length + 1];
 		for (int i = 0; i < coordinates.length; i++) {
-			coordinates_new[i] = coordinates[i];
+			coordinatesanew[i] = coordinates[i];
 		}
-		coordinates_new[coordinates_new.length - 1] = coordinates[0];
-		return coordinates_new;
+		coordinatesanew[coordinatesanew.length - 1] = coordinates[0];
+		return coordinatesanew;
 	}
 }
 
@@ -930,11 +930,11 @@ private class RemoveClosing extends GeometryEditor.CoordinateOperation {
 	}
 	
 	private Coordinate[] removeLast(Coordinate[] coordinates){
-		Coordinate[] coordinates_new = new Coordinate[coordinates.length - 1];
+		Coordinate[] coordinatesanew = new Coordinate[coordinates.length - 1];
 		for (int i = 0; i < coordinates.length - 1; i++) {
-			coordinates_new[i] = coordinates[i];
+			coordinatesanew[i] = coordinates[i];
 		}
-		return coordinates_new;
+		return coordinatesanew;
 	}
 }
 

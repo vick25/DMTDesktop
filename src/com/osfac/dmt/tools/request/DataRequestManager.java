@@ -119,7 +119,7 @@ public class DataRequestManager extends javax.swing.JPanel {
                 SortableTable sortableTable = new SortableTable(emptyTableModel) {
                     @Override
                     public void scrollRectToVisible(Rectangle aRect) {
-                        scrollRectToVisible(this, aRect);
+//                        scrollRectToVisible(this, aRect);
                     }
                 };
                 _group.add(sortableTable.getSelectionModel());
