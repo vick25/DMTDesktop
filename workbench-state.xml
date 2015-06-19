@@ -2,51 +2,109 @@
 <workbench-state>
   <properties>
     <mapping>
+      <key class="java.lang.String">CONSTRAIN_ANGLE - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
+      <value class="java.lang.String">C:\Program Files (x86)\OSFAC\OSFAC-DMT Desktop\default layers</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST DIRECTORY</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.DatasetOptionsPanelSHOW_CHARSET_SELECTION</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_PAINT_AREA</key>
       <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.file.open.OpenProjectWizard - FILE CHOOSER DIRECTORY</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">CONSTRAIN_LENGTH - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - LINES ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - LINE_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_COLOR</key>
+      <value class="java.awt.Color">255, 200, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_SIZE</key>
+      <value class="java.lang.Integer">5</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToVerticesPolicy - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Double">30.0</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">LENGTH_CONSTRAINT</key>
+      <value class="java.lang.Double">0.5</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.PROJECTS</key>
+      <value class="java.util.LinkedHashSet">
+        <item class="java.lang.String">C:\Users\OSFACLAP4\Documents\test11.dmt</item>
+      </value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ABSOLUTE_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">RELATIVE_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.SaveDatasetAsPlugIn - LAST FORMAT</key>
+      <value class="java.lang.String">ESRI Shapefile</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FONT</key>
+      <value class="java.awt.Font">Dialog, 0, 12</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - LINE_PAINT</key>
       <value class="java.lang.Boolean">true</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToFeaturesPolicy - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_PAINT</key>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_PAINT_LENGTH</key>
       <value class="java.lang.Boolean">true</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.SaveFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\Kinshasa</value>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT</key>
+      <value class="java.awt.Font">Dialog, 0, 24</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_FORM</key>
-      <value class="java.lang.String">SQUARE</value>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datastore.ConnectionManager - CONNECTION DESCRIPTORS</key>
+      <value class="java.util.ArrayList" />
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT_DISTANCE</key>
-      <value class="java.lang.Boolean">true</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_COLOR</key>
-      <value class="java.awt.Color">255, 0, 0, 255</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">FORMAT</key>
-      <value class="java.lang.String">png</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST FILE FILTER DESCRIPTION</key>
-      <value class="java.lang.String" />
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">CONSTRAIN_ANGLE - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">CONSTRAIN_INCREMENTAL_ANGLE - ENABLED</key>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
@@ -54,64 +112,16 @@
       <value class="java.awt.Color">0, 0, 0, 255</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_SIZE</key>
-      <value class="java.lang.Integer">5</value>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_FORM</key>
+      <value class="java.lang.String">SQUARE</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT</key>
-      <value class="java.awt.Font">Dialog, 0, 24</value>
+      <key class="java.lang.String">LAST FILENAME</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\slideheader1.png</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - LINES ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">ImportSLDPlugin.filename</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FONT</key>
-      <value class="java.awt.Font">Dialog, 0, 12</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_PAINT_LENGTH</key>
-      <value class="java.lang.Boolean">true</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.DatasetOptionsPanelSHOW_CHARSET_SELECTION</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_SIZE</key>
-      <value class="java.lang.Integer">10</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">LENGTH_CONSTRAINT</key>
-      <value class="java.lang.Double">0.5</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER COORDINATE SYSTEM</key>
-      <value class="java.lang.String">Unspecified</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.datastore.ConnectionManager - CONNECTION DESCRIPTORS</key>
-      <value class="java.util.ArrayList" />
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">ABSOLUTE_ANGLE_CONSTRAINT</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">INCREMENTAL_ANGLE_CONSTRAINT</key>
-      <value class="java.lang.Integer">8</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT</key>
-      <value class="java.lang.Boolean">true</value>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_COLOR</key>
+      <value class="java.awt.Color">255, 255, 0, 255</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.view.EasyPanelEZ_LIST_KEY</key>
@@ -129,109 +139,99 @@
       </value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - DOTS ENABLED</key>
-      <value class="java.lang.Boolean">true</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_FORM</key>
       <value class="java.lang.String">SQUARE</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - LINE_COLOR</key>
-      <value class="java.awt.Color">255, 0, 0, 255</value>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_SIZE</key>
+      <value class="java.lang.Integer">5</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">CONSTRAIN_LENGTH - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_COLOR</key>
-      <value class="java.awt.Color">255, 0, 0, 255</value>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.SaveFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
+      <value class="java.lang.String">D:\Shapefile\lingwala</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - GRID_SIZE</key>
       <value class="java.lang.Double">20.0</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_COLOR</key>
-      <value class="java.awt.Color">255, 200, 0, 255</value>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_SIZE</key>
-      <value class="java.lang.Integer">5</value>
+      <key class="java.lang.String">CONSTRAIN_INCREMENTAL_ANGLE - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">INCREMENTAL_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Integer">8</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER COORDINATE SYSTEM</key>
+      <value class="java.lang.String">Unspecified</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadDatasetPlugIn - LAST FORMAT</key>
       <value class="java.lang.String">ESRI Shapefile</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.file.open.OpenProjectWizard - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">RELATIVE_ANGLE_CONSTRAINT</key>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_PAINT</key>
       <value class="java.lang.Boolean">true</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_FORM</key>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - DOTS ENABLED</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT_DISTANCE</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_FORM</key>
       <value class="java.lang.String">SQUARE</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToFeaturesPolicy - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST FILE FILTER DESCRIPTION</key>
+      <value class="java.lang.String" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ImportSLDPlugin.filename</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">FORMAT</key>
+      <value class="java.lang.String">png</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FONT_COLOR</key>
       <value class="java.awt.Color">0, 0, 0, 255</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.SaveDatasetAsPlugIn - LAST FORMAT</key>
-      <value class="java.lang.String">ESRI Shapefile</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_COLOR</key>
-      <value class="java.awt.Color">255, 255, 0, 255</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.PROJECTS</key>
-      <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Documents\test11.dmt</item>
-      </value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">D:\LANDSAT\LE71810632001209EDC00</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToVerticesPolicy - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">ANGLE_CONSTRAINT</key>
-      <value class="java.lang.Double">30.0</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
       <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Territoire_Angola.shp</item>
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Collectivite_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\OSFACLAP4\Desktop\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
-        <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\WSTATION03\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
         <item class="java.lang.String">D:\LANDSAT\LE71810632001209EDC00\L71181063_06320010728_543.TIF</item>
         <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
         <item class="java.lang.String">C:\Users\Bokanga\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
+        <item class="java.lang.String">C:\Program Files (x86)\OSFAC\OSFAC-DMT Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">D:\Shapefile\lingwala\lingwala.shp</item>
+        <item class="java.lang.String">D:\Shapefile\lingwala\points.shp</item>
+        <item class="java.lang.String">F:\shapefile_herve\REDD_PROJECT_centroid.shp</item>
         <item class="java.lang.String">C:\Users\bobnoblesse\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Documents\From Bob\Netbeansprojects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
       </value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">LAST FILENAME</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\slideheader1.png</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST DIRECTORY</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_SIZE</key>
+      <value class="java.lang.Integer">10</value>
     </mapping>
   </properties>
 </workbench-state>
