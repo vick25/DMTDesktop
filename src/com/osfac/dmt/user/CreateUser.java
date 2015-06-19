@@ -504,7 +504,7 @@ public class CreateUser extends javax.swing.JDialog {
                                 }.start();
                                 JOptionPane.showMessageDialog(this, I18N.get("CreateUser.confirmation-message1") + " "
                                         + "" + txtFirstName.getText() + " " + txtFamilyName.getText() + " "
-                                        + "" + I18N.get("CreateUser.confirmation-message1"), I18N.get("Text.Confirm"
+                                        + "" + I18N.get("CreateUser.confirmation-message2"), I18N.get("Text.Confirm"
                                         + ""), JOptionPane.INFORMATION_MESSAGE);
                                 this.dispose();
                             }
