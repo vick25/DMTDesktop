@@ -66,14 +66,14 @@
       <value class="java.lang.Double">0.5</value>
     </mapping>
     <mapping>
+      <key class="java.lang.String">ABSOLUTE_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.PROJECTS</key>
       <value class="java.util.LinkedHashSet">
         <item class="java.lang.String">C:\Users\OSFACLAP4\Documents\test11.dmt</item>
       </value>
-    </mapping>
-    <mapping>
-      <key class="java.lang.String">ABSOLUTE_ANGLE_CONSTRAINT</key>
-      <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">RELATIVE_ANGLE_CONSTRAINT</key>
@@ -100,12 +100,12 @@
       <value class="java.awt.Font">Dialog, 0, 24</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datastore.ConnectionManager - CONNECTION DESCRIPTORS</key>
       <value class="java.util.ArrayList" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT_COLOR</key>
@@ -163,12 +163,12 @@
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
-      <value class="java.lang.Boolean">false</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">INCREMENTAL_ANGLE_CONSTRAINT</key>
       <value class="java.lang.Integer">8</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToGridPolicy - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER COORDINATE SYSTEM</key>
@@ -199,12 +199,12 @@
       <value class="java.lang.Boolean">false</value>
     </mapping>
     <mapping>
-      <key class="java.lang.String">ImportSLDPlugin.filename</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
-    </mapping>
-    <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.ui.plugin.imagery.ImageFeatureCreator - LAST FILE FILTER DESCRIPTION</key>
       <value class="java.lang.String" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ImportSLDPlugin.filename</key>
+      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents\country_afrique.shp</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">FORMAT</key>
