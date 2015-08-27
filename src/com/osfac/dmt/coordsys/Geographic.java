@@ -50,6 +50,7 @@ public class Geographic {
         hgt = 0;
     }
 
+    @Override
     public String toString() {
         return lat + ", " + lon;
     }

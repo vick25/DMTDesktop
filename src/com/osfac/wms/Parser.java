@@ -35,14 +35,11 @@ public class Parser {
     }
 
     /**
-     * Parses the WMT_MS_Capabilities XML from the given InputStream into a
-     * Capabilities object.
+     * Parses the WMT_MS_Capabilities XML from the given InputStream into a Capabilities object.
      *
      * @param service the WMService from which this MapDescriptor is derived
-     * @param inStream the inputStream containing the WMT_MS_Capabilities XML to
-     * parse
-     * @return the MapDescriptor object created from the specified XML
-     * InputStream
+     * @param inStream the inputStream containing the WMT_MS_Capabilities XML to parse
+     * @return the MapDescriptor object created from the specified XML InputStream
      */
     public Capabilities parseCapabilities(WMService service, InputStream inStream) throws IOException {
         if (WMService.WMS_1_1_1.equals(service.getVersion())
@@ -54,13 +51,11 @@ public class Parser {
     }
 
     /**
-     * Traverses the DOM tree underneath the specified Node and generates a
-     * corresponding WMSLayer object tree. The returned WMSLayer will be set to
-     * have the specified parent.
+     * Traverses the DOM tree underneath the specified Node and generates a corresponding WMSLayer
+     * object tree. The returned WMSLayer will be set to have the specified parent.
      *
      * @param layerNode a DOM Node which is a <layer> XML element
-     * @return a WMSLayer with complete subLayer tree that corresponds to the
-     * DOM Node provided
+     * @return a WMSLayer with complete subLayer tree that corresponds to the DOM Node provided
      */
     public MapLayer wmsLayerFromNode(Node layerNode) {
         String name = null;
@@ -134,8 +129,8 @@ public class Parser {
     /**
      * Creates a new BoundingBox object based on the DOM Node given.
      *
-     * @param n the DOM Node to create the Bounding box from, must be either a
-     * LatLonBoundingBox element or a BoundingBox element
+     * @param n the DOM Node to create the Bounding box from, must be either a LatLonBoundingBox
+     * element or a BoundingBox element
      * @return a new BoundingBox object based on the DOM Node provided
      */
     public BoundingBox boundingBoxFromNode(Node n) throws Exception {
@@ -158,7 +153,6 @@ public class Parser {
             //	double miny = Double.parseDouble(nm.getNamedItem("miny").getNodeValue());
             //	double maxx = Double.parseDouble(nm.getNamedItem("maxx").getNodeValue());
             //	double maxy = Double.parseDouble(nm.getNamedItem("maxy").getNodeValue());
-
             // change "inf" values with +/-"Infinity"
             double minx;
             if (nm.getNamedItem("minx").getNodeValue().equals("inf")) {
@@ -242,7 +236,7 @@ public class Parser {
     }
 
     //UT TODO move this into a common method (
-    // private Capabilities parseCapabilities( WMService service, InputStream inStream, 
+    // private Capabilities parseCapabilities( WMService service, InputStream inStream,
     // String version)
     private Capabilities parseCapabilities_1_1_1(WMService service, InputStream inStream) throws IOException {
         MapLayer topLayer;

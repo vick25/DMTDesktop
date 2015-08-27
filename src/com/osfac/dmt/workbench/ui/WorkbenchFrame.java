@@ -6,9 +6,17 @@ import com.jidesoft.action.DockableBarContext;
 import com.jidesoft.docking.DockContext;
 import com.jidesoft.docking.DockableFrame;
 import com.jidesoft.docking.DockingManager;
-import com.jidesoft.document.*;
+import com.jidesoft.document.DocumentComponent;
+import com.jidesoft.document.DocumentPane;
 import com.jidesoft.document.DocumentPane.TabbedPaneCustomizer;
-import com.jidesoft.status.*;
+import com.jidesoft.document.IDocumentGroup;
+import com.jidesoft.document.IDocumentPane;
+import com.jidesoft.document.PopupMenuCustomizer;
+import com.jidesoft.status.LabelStatusBarItem;
+import com.jidesoft.status.MemoryStatusBarItem;
+import com.jidesoft.status.ProgressStatusBarItem;
+import com.jidesoft.status.StatusBar;
+import com.jidesoft.status.TimeStatusBarItem;
 import com.jidesoft.swing.ContentContainer;
 import com.jidesoft.swing.JideBoxLayout;
 import com.jidesoft.swing.JideButton;
@@ -76,7 +84,14 @@ import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -149,17 +164,18 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     @SuppressWarnings("LeakingThisInConstructor")
     public WorkbenchFrame(String title, final WorkbenchContext workbenchContext) throws Exception {
         if (Config.isFullVersion()) {
-            this.setTitle(title + "   [" + I18N.get("Text.Server-IP-Address-text") + " " + Config.host + "]");
+            this.setTitle(new StringBuilder(title).append("   [").append(I18N.get("Text.Server-IP-Address-text"))
+                    .append(" ").append(Config.host).append("]").toString());
         } else {
             this.setTitle(title);
         }
-        BSConnect = new JideButton(new ImageIcon(getClass().getResource(""
-                + "/com/osfac/dmt/images/base.png")));
-        BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
+        BSConnect = new JideButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/base.png")));
+        BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
+                .append(" [").append(Config.host).append("]").toString());
         BSConnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                connectToFTPServer();
+                connectToFTPServer();//method to connect to the FTP Server
             }
         });
 //        dbprocessing = new DBProcessing(this, true);
@@ -173,23 +189,27 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         this.getDockableBarManager().addDockableBar(menuBar);
         this.getDockableBarManager().addDockableBar(cbf.createStandardCommandBar());
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 exitMenuItem_actionPerformed(e);
             }
         });
         windowMenu.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
             public void menuCanceled(MenuEvent e) {
             }
 
+            @Override
             public void menuDeselected(MenuEvent e) {
             }
 
+            @Override
             public void menuSelected(MenuEvent e) {
                 windowMenu_menuSelected(e);
             }
         });
-        menuBar.add(fileMenu);
-        menuBar.add(windowMenu);
+        menuBar.add(fileMenu); //File menu
+        menuBar.add(windowMenu); //Window menu
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
         WorkbenchFrame.workbenchContext = workbenchContext;
@@ -197,7 +217,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         DMTWorkbench.setIcon(this);
         toolBar = new WorkbenchToolBar(workbenchContext);
         toolBar.setTaskMonitorManager(new TaskMonitorManager());
+
         new RecursiveKeyListener(this) {
+            @Override
             public void keyTyped(KeyEvent e) {
                 for (Iterator i = easyKeyListeners.iterator(); i.hasNext();) {
                     KeyListener l = (KeyListener) i.next();
@@ -205,6 +227,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             }
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 for (Iterator i = new ArrayList(easyKeyListeners).iterator(); i.hasNext();) {
                     KeyListener l = (KeyListener) i.next();
@@ -212,6 +235,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
                 for (Iterator i = new ArrayList(easyKeyListeners).iterator(); i.hasNext();) {
                     KeyListener l = (KeyListener) i.next();
@@ -219,6 +243,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             }
         };
+        //Install keyboard listener
         installKeyboardShortcutListener();
     }
 
@@ -227,6 +252,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // add a window listener to do clear up when windows closing.
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 this_windowClosing(e);
             }
@@ -246,12 +272,12 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         this.getDockingManager().getWorkspace().setLayout(new BorderLayout());
         this.getDockingManager().getWorkspace().add(_documentPane, BorderLayout.CENTER);
 
-        this.getDockableBarManager().addDockableBar(cbf.createToolsCommandBar());
+        this.getDockableBarManager().addDockableBar(cbf.createToolsCommandBar()); //Tools command bar
 //        menuBar.getMenu(3).getItem(10).setVisible(false);
-        menuBar.getMenu(2).add(cbf.createViewMenu(), 0);
-        menuBar.getMenu(4).getItem(0).setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SETTING));
+        menuBar.getMenu(2).add(cbf.createViewMenu(), 0); //View Menu Bar
+        menuBar.getMenu(4).getItem(0).setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SETTING)); //Customize
         exitMenuItem.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.EXIT));
-        cbf.createToolsMenu(menuBar.getMenu(5));
+        cbf.createToolsMenu(menuBar.getMenu(5)); //Tools menu
         for (int i = 0; i < menuBar.getMenuCount(); i++) {
             if (i == IndexMenu) {
                 continue;
@@ -282,7 +308,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DMTConfiguration.findData.setEnabled(activeTaskFrame != null
+                DMTConfiguration.findImagesData.setEnabled(activeTaskFrame != null
                         && activeTaskFrame.getLayerViewPanel().getSelectionManager().getSelectedItemsCount() > 0);
             }
         }).start();
@@ -291,6 +317,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 @Override
                 public void run() {
                     Thread thread = new Thread() {
+                        @Override
                         public void run() {
                             Connection con = remoteDBConnecting();
                             if (con != null) {
@@ -354,6 +381,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             }
         });
         new Thread() {
+            @Override
             public void run() {
                 Connection con = remoteDBConnecting();
                 if (con != null) {
@@ -411,11 +439,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         }
                     } catch (IOException | InterruptedException e) {
                         BSConnect.setEnabled(true);
-                        BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
+                        BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
+                                .append(" [").append(Config.host).append("]").toString());
                         progress.setProgress(100);
-                        JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                                + ""), I18N.get("WorkbenchFrame.Text.not-cennected-to-server") + "\n" + e.getMessage(), null, null, e, Level.SEVERE, null));
-//                        System.exit(0);                        
+                        JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                new StringBuilder(I18N.get("WorkbenchFrame.Text.not-cennected-to-server"))
+                                .append("\n").append(e.getMessage()).toString(), null, null, e, Level.SEVERE, null));
+//                        System.exit(0);
                         System.err.println(I18N.get("WorkbenchFrame.Text.not-cennected-to-server"));
 //                        ex.printStackTrace();
                     }
@@ -423,13 +453,16 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             };
             th.start();
             BSConnect.setEnabled(false);
-            BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
+            BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
+                    .append(" [").append(Config.host).append("]").toString());
         } catch (IOException e) {
             BSConnect.setEnabled(true);
-            BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
+            BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
+                    .append(" [").append(Config.host).append("]").toString());
             progress.setProgress(100);
-            JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), I18N.get("WorkbenchFrame.Text.unable-to-connect-to-server") + "\n" + e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    new StringBuilder(I18N.get("WorkbenchFrame.Text.unable-to-connect-to-server"))
+                    .append("\n").append(e.getMessage()).toString(), null, null, e, Level.SEVERE, null));
 ////////            System.exit(0);
         }
     }
@@ -457,7 +490,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         return new LogoContentContainer();
     }
 
-    private void jbInit(JPanel pan) {
+    private void statusPanelInit(JPanel pan) {
         desktopPane.setBackground(Color.black);
         pan.setLayout(new BorderLayout());
         pan.add(toolBar, BorderLayout.NORTH);
@@ -509,7 +542,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private void findImagesCategoriesAll() {
         try {
             ChBCategoryList.clear();
-            DMTConfiguration.findData.removeAll();
+            DMTConfiguration.findImagesData.removeAll();
             ResultSet res = Config.con.createStatement().executeQuery("SELECT distinct category_name "
                     + "FROM dmt_category order by category_name");
             while (res.next()) {
@@ -517,11 +550,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             }
             for (int i = 0; i < ChBCategoryList.size(); i++) {
                 ChBCategoryList.get(i).setSelected(true);
-                DMTConfiguration.findData.add(ChBCategoryList.get(i));
+                DMTConfiguration.findImagesData.add(ChBCategoryList.get(i));
             }
 
-            DMTConfiguration.findData.add(new JPopupMenu.Separator());
-            DMTConfiguration.findData.add(MIClear);
+            DMTConfiguration.findImagesData.add(new JPopupMenu.Separator());
+            DMTConfiguration.findImagesData.add(MIClear);
             MIClear.setText(I18N.get("Text.Unselect-All-categories"));
             MIClear.addActionListener(new ActionListener() {
                 @Override
@@ -546,7 +579,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private void findImagesCategories() {
         try {
             ChBCategoryList.clear();
-            DMTConfiguration.findData.removeAll();
+            DMTConfiguration.findImagesData.removeAll();
             Object FeatureTab[] = activeTaskFrame.getLayerViewPanel().getSelectionManager().getFeatureSelection().getSelectedItems().toArray();
             String where = "";
             for (int i = 0; i < FeatureTab.length; i++) {
@@ -561,11 +594,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             }
             for (int i = 0; i < ChBCategoryList.size(); i++) {
                 ChBCategoryList.get(i).setSelected(true);
-                DMTConfiguration.findData.add(ChBCategoryList.get(i));
+                DMTConfiguration.findImagesData.add(ChBCategoryList.get(i));
             }
 
-            DMTConfiguration.findData.add(new JPopupMenu.Separator());
-            DMTConfiguration.findData.add(MIClear);
+            DMTConfiguration.findImagesData.add(new JPopupMenu.Separator());
+            DMTConfiguration.findImagesData.add(MIClear);
             MIClear.setText(I18N.get("Text.Unselect-All-categories"));
             MIClear.addActionListener(new ActionListener() {
                 @Override
@@ -582,8 +615,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             });
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
     }
 
@@ -699,11 +732,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             }
         });
         JPanel pan = new JPanel();
-        jbInit(pan);
-        configureStatusLabel(timeLabel, 175);
+        statusPanelInit(pan);
+        configureStatusLabel(timeLabel, 175); //set the component size
         configureStatusLabel(scaleLabel, 90);
         configureStatusLabel(coordinateLabel, 175);
-        DocumentComponent geoSearch = new DocumentComponent(pan, I18N.get("Text.Geographic-Search"), I18N.get("Text.Geographic-Search"),
+        //Main document pane
+        DocumentComponent geoSearch = new DocumentComponent(pan, I18N.get("Text.Geographic-Search"),
+                I18N.get("Text.Geographic-Search"),
                 DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.ICON));
         geoSearch.setClosable(false);
         documentPane.setFocusable(false);
@@ -772,8 +807,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 return true;
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return false;
     }
@@ -815,8 +850,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             try {
                 desktop.browse(new URI(url_update));
             } catch (URISyntaxException | IOException e) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                        + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        e.getMessage(), null, null, e, Level.SEVERE, null));
             }
         }
     }
@@ -824,8 +859,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public static void actionFindData() {
         final String categories = getCategoriesSelected();
         if (categories.isEmpty() || categories.equals("''")) {
-            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get(""
-                    + "Text.WorkbenchFrame.categories-not-selected"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get(
+                    "Text.WorkbenchFrame.categories-not-selected"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
         } else {
             new Thread() {
                 @Override
@@ -851,8 +886,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 //                        dbprocessing.setVisible(false);
                         progress.setProgress(100);
                         if (IDsList.isEmpty()) {
-                            JOptionPane.showMessageDialog(DMTWorkbench.frame, ""
-                                    + I18N.get("WorkbenchFrame.No-image-found-in-database"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(DMTWorkbench.frame,
+                                    I18N.get("WorkbenchFrame.No-image-found-in-database"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                         } else {
                             new GeoResult(DMTWorkbench.frame, true, IDsList).setVisible(true);
                             if (previewLayer != null) {
@@ -861,8 +896,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             }
                         }
                     } catch (SQLException | HeadlessException e) {
-                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                                + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                e.getMessage(), null, null, e, Level.SEVERE, null));
                     }
                 }
             }.start();
@@ -876,8 +911,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     + "" + new File("OSFAC-DMT.chm"));
             p.waitFor();
         } catch (IOException | InterruptedException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -917,8 +952,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionQuerySearch() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.Query-Search"))) {
-            DocumentComponent document = new DocumentComponent(new QuerySearch(), I18N.get("Text.Query-Search"), I18N.get("Text.Query-Search")
-                    + "", DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.QUERYSEARCH));
+            DocumentComponent document = new DocumentComponent(new QuerySearch(), I18N.get("Text.Query-Search"), I18N.get("Text.Query-Search"),
+                    DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.QUERYSEARCH));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.Query-Search"));
@@ -930,9 +965,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionDataRequest() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.data-request-manager-tab"))) {
-            DocumentComponent document = new DocumentComponent(new DataRequestManager(), ""
-                    + I18N.get("Text.data-request-manager-tab"), I18N.get("Text.data-request-manager-tab")
-                    + "", DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.REQUEST));
+            DocumentComponent document = new DocumentComponent(new DataRequestManager(),
+                    I18N.get("Text.data-request-manager-tab"), I18N.get("Text.data-request-manager-tab"),
+                    DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.REQUEST));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.data-request-manager-tab"));
@@ -940,8 +975,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionUpdateDatabase() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.Update-Database"))) {
-            DocumentComponent document = new DocumentComponent(new UpdateDB(), I18N.get("Text.Update-Database"), I18N.get("Text.Update-Database")
-                    + "", DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.DATABASE));
+            DocumentComponent document = new DocumentComponent(new UpdateDB(), I18N.get("Text.Update-Database"), I18N.get("Text.Update-Database"),
+                    DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.DATABASE));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.Update-Database"));
@@ -949,8 +984,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionStatistic() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.Statistic"))) {
-            DocumentComponent document = new DocumentComponent(new Statistic(), I18N.get("Text.Statistic"), I18N.get("Text.Statistic")
-                    + "", DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.STATISTIC));
+            DocumentComponent document = new DocumentComponent(new Statistic(), I18N.get("Text.Statistic"), I18N.get("Text.Statistic"), DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.STATISTIC));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.Statistic"));
@@ -958,8 +992,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionUserManagement() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.User-Manager"))) {
-            DocumentComponent document = new DocumentComponent(new UserManager(), I18N.get("Text.User-Manager"), I18N.get("Text.User-Manager")
-                    + "", DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.USER));
+            DocumentComponent document = new DocumentComponent(new UserManager(), I18N.get("Text.User-Manager"), I18N.get("Text.User-Manager"), DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.USER));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.User-Manager"));
@@ -1076,8 +1109,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             Config.pref.put(SettingKeyFactory.Language.ABREV, LanguagePanel.customCombo.petStrings[index]);
             Config.pref.putInt(SettingKeyFactory.Language.INDEX, index);
             Config.setDefaultLocale(index);
-            JOptionPane.showMessageDialog(this, I18N.get("Text.Restart-OSFAC-DMT"
-                    + ""), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, I18N.get("Text.Restart-OSFAC-DMT"),
+                    I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             if (DMTWorkbench.frame instanceof DefaultDockableBarDockableHolder) {
                 DMTWorkbench.frame.getLayoutPersistence().resetToDefault();
             }
@@ -1085,10 +1118,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * Unlike #add(KeyListener), listeners registered using this method are
-     * notified when KeyEvents occur on this frame's child components. Note:
-     * Bug: KeyListeners registered using this method may receive events
-     * multiple times.
+     * Unlike #add(KeyListener), listeners registered using this method are notified when KeyEvents
+     * occur on this frame's child components. Note: Bug: KeyListeners registered using this method
+     * may receive events multiple times.
      *
      * @see #addKeyboardShortcut
      */
@@ -1110,8 +1142,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * @param newEnvelopeRenderingThreshold the number of on-screen features
-     * above which envelope rendering should occur
+     * @param newEnvelopeRenderingThreshold the number of on-screen features above which envelope
+     * rendering should occur
      */
     public void setEnvelopeRenderingThreshold(int newEnvelopeRenderingThreshold) {
         envelopeRenderingThreshold = newEnvelopeRenderingThreshold;
@@ -1139,6 +1171,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         setStatusMessage(lastStatusMessage);
     }
 
+    @Override
     public void setStatusMessage(String message) {
         lastStatusMessage = message;
         setStatusBarText(message);
@@ -1253,9 +1286,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * If internalFrame is a LayerManagerProxy, the close behaviour will be
-     * altered so that the user is prompted if it is the last window on the
-     * LayerManager.
+     * If internalFrame is a LayerManagerProxy, the close behaviour will be altered so that the user
+     * is prompted if it is the last window on the LayerManager.
      */
     public void addInternalFrame(JInternalFrame internalFrame) {
         addInternalFrame(internalFrame, false, true);
@@ -1268,7 +1300,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         }
         // <<TODO:IMPROVE>> Listen for when the frame closes, and when it does,
         // activate the topmost frame. Because Swing does not seem to do this
-        // automatically. 
+        // automatically.
         DMTWorkbench.setIcon(internalFrame);
         // Call JInternalFrame#setVisible before JDesktopPane#add; otherwise, the
         // TreeLayerNamePanel starts too narrow (100 pixels or so) for some reason.
@@ -1277,6 +1309,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         desktopPane.add(internalFrame, alwaysOnTop ? JLayeredPane.PALETTE_LAYER : JLayeredPane.DEFAULT_LAYER);
         if (autoUpdateToolBar) {
             internalFrame.addInternalFrameListener(new InternalFrameListener() {
+                @Override
                 public void internalFrameActivated(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                     // Associate current cursortool with the new frame [Jon
@@ -1284,26 +1317,32 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     toolBar.reClickSelectedCursorToolButton();
                 }
 
+                @Override
                 public void internalFrameClosed(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
 
+                @Override
                 public void internalFrameClosing(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
 
+                @Override
                 public void internalFrameDeactivated(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
 
+                @Override
                 public void internalFrameDeiconified(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
 
+                @Override
                 public void internalFrameIconified(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
 
+                @Override
                 public void internalFrameOpened(InternalFrameEvent e) {
                     toolBar.updateEnabledState();
                 }
@@ -1342,8 +1381,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             }
 
+            @Override
             public Object yield() {
                 internalFrame.getLayerManager().addLayerListener(new LayerListener() {
+                    @Override
                     public void layerChanged(LayerEvent e) {
                         if ((e.getType() == LayerEventType.METADATA_CHANGED)
                                 || (e.getType() == LayerEventType.REMOVED)) {
@@ -1351,18 +1392,21 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         }
                     }
 
+                    @Override
                     public void categoryChanged(CategoryEvent e) {
                     }
 
+                    @Override
                     public void featuresChanged(FeatureEvent e) {
                     }
                 });
                 i.addPropertyChangeListener(JInternalFrame.TITLE_PROPERTY,
                         new PropertyChangeListener() {
-                    public void propertyChange(PropertyChangeEvent e) {
-                        updateTitle();
-                    }
-                });
+                            @Override
+                            public void propertyChange(PropertyChangeEvent e) {
+                                updateTitle();
+                            }
+                        });
                 return null;
             }
         }.yield();
@@ -1372,6 +1416,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         final JInternalFrame internalFrame = (JInternalFrame) proxy;
         internalFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
             public void internalFrameClosing(InternalFrameEvent e) {
                 internalFrameCloseHandler.close(internalFrame);
             }
@@ -1392,7 +1437,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         return taskFramesAssociatedWithLayerManager;
     }
 
-    // added by 
+    // added by
     // Return every InternalFrame associated with taskFrame (taskFrame is
     // excluded)
     private Collection getInternalFramesAssociatedWith(TaskFrame taskFrame) {
@@ -1439,23 +1484,28 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // track which taskframe is activated
         taskFrame.addInternalFrameListener(new WorkbenchFrame.ActivateTaskFrame());
         taskFrame.getTask().getLayerManager().addLayerListener(new LayerListener() {
+            @Override
             public void featuresChanged(FeatureEvent e) {
             }
 
+            @Override
             public void categoryChanged(CategoryEvent e) {
                 toolBar.updateEnabledState();
             }
 
+            @Override
             public void layerChanged(LayerEvent layerEvent) {
                 toolBar.updateEnabledState();
             }
         });
         addInternalFrame(taskFrame);
         taskFrame.getLayerViewPanel().getLayerManager().getUndoableEditReceiver().add(new UndoableEditReceiver.Listener() {
+            @Override
             public void undoHistoryChanged() {
                 toolBar.updateEnabledState();
             }
 
+            @Override
             public void undoHistoryTruncated() {
                 toolBar.updateEnabledState();
                 log(I18N.get("ui.WorkbenchFrame.undo-history-was-truncated"));
@@ -1472,6 +1522,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     private class ActivateTaskFrame extends InternalFrameAdapter {
 
+        @Override
         public void internalFrameActivated(InternalFrameEvent e) {
             activeTaskFrame = (TaskFrame) e.getInternalFrame();
         }
@@ -1505,10 +1556,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         new Timer(100, new ActionListener() {
             private int tickCount = 0;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 tickCount++;
                 // This message is important, so overwrite whatever is on the
-                // status bar. 
+                // status bar.
                 setStatusBarText(message);
                 setStatusBarTextHighlighted((tickCount % 2) == 0, color);
                 if (tickCount == 4) {
@@ -1520,11 +1572,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * Can be called regardless of whether the current thread is the AWT event
-     * dispatch thread.
+     * Can be called regardless of whether the current thread is the AWT event dispatch thread.
      *
      * @param t Description of the Parameter
      */
+    @Override
     public void handleThrowable(final Throwable t) {
         log(StringUtil.stackTrace(t));
         Component parent = this;
@@ -1539,6 +1591,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         handleThrowable(t, parent);
     }
 
+    @Override
     public void handleThrowable(final Throwable t, final Component parent) {
         showThrowable(t, parent);
     }
@@ -1546,6 +1599,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public static void showThrowable(final Throwable t, final Component parent) {
         t.printStackTrace(System.err);
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 ErrorDialog.show(parent, StringUtil.toFriendlyName(t.getClass()
                         .getName()), toMessage(t), StringUtil.stackTrace(t));
@@ -1584,11 +1638,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         desktopPane.getDesktopManager().closeFrame(internalFrame);
     }
 
+    @Override
     public void warnUser(String warning) {
         log(I18N.get("ui.WorkbenchFrame.warning") + ": " + warning);
         flashStatusMessage(warning, Color.yellow);
     }
 
+    @Override
     public void zoomChanged(Envelope modelEnvelope) {
         toolBar.updateEnabledState();
     }
@@ -1631,13 +1687,14 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         }
         if (windowMenu.getItemCount() == addedMenuItems) {
             // For ezLink [Bob Boseko]
-            windowMenu.add(new JMenuItem("("
-                    + I18N.get("ui.WorkbenchFrame.no-windows") + ")"));
+            windowMenu.add(new JMenuItem(new StringBuilder("(")
+                    .append(I18N.get("ui.WorkbenchFrame.no-windows")).append(")").toString()));
         }
     }
 
     private void associate(JMenuItem menuItem, final JInternalFrame frame) {
         menuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     activateFrame(frame);
@@ -1708,9 +1765,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * Fundamental Style classes (like BasicStyle, VertexStyle, and LabelStyle)
-     * cannot be removed, and are thus excluded from the choosable Style
-     * classes.
+     * Fundamental Style classes (like BasicStyle, VertexStyle, and LabelStyle) cannot be removed,
+     * and are thus excluded from the choosable Style classes.
      */
     public Set getChoosableStyleClasses() {
         return Collections.unmodifiableSet(choosableStyleClasses);
@@ -1722,18 +1778,16 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * Adds a keyboard shortcut for a plugin. logs plugin exceptions. note -
-     * attaching to keyCode 'a', modifiers =1 will detect shift-A events. It
-     * will *not* detect caps-lock-'a'. This is due to inconsistencies in
-     * java.awt.event.KeyEvent. In the unlikely event you actually do want to
-     * also also attach to caps-lock-'a', then make two shortcuts - one to
-     * keyCode 'a' and modifiers =1 (shift-A) and one to keyCode 'A' and
-     * modifiers=0 (caps-lock A). For more details, see the
+     * Adds a keyboard shortcut for a plugin. logs plugin exceptions. note - attaching to keyCode
+     * 'a', modifiers =1 will detect shift-A events. It will *not* detect caps-lock-'a'. This is due
+     * to inconsistencies in java.awt.event.KeyEvent. In the unlikely event you actually do want to
+     * also also attach to caps-lock-'a', then make two shortcuts - one to keyCode 'a' and modifiers
+     * =1 (shift-A) and one to keyCode 'A' and modifiers=0 (caps-lock A). For more details, see the
      * java.awt.event.KeyEvent class - it has a full explaination.
      *
      * @param keyCode What key to attach to (See java.awt.event.KeyEvent)
-     * @param modifiers 0= none, 1=shift, 2= cntrl, 8=alt, 3=shift+cntrl, etc...
-     * See the modifier mask constants in the Event class
+     * @param modifiers 0= none, 1=shift, 2= cntrl, 8=alt, 3=shift+cntrl, etc... See the modifier
+     * mask constants in the Event class
      * @param plugIn What plugin to execute
      * @param enableCheck Is the key enabled at the moment?
      */
@@ -1742,21 +1796,25 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // Overwrite existing shortcut [Bob Boseko]
         keyCodeAndModifiersToPlugInAndEnableCheckMap.put(keyCode + ":" + modifiers,
                 new Object[]{
-            plugIn, enableCheck
-        });
+                    plugIn, enableCheck
+                });
     }
 
     private void installKeyboardShortcutListener() {
         addEasyKeyListener(new KeyListener() {
+            @Override
             public void keyTyped(KeyEvent e) {
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
             }
 
+            @Override
             public void keyPressed(KeyEvent e) {
-                Object[] plugInAndEnableCheck = (Object[]) keyCodeAndModifiersToPlugInAndEnableCheckMap.get(e.getKeyCode()
-                        + ":" + e.getModifiers());
+                Object[] plugInAndEnableCheck = (Object[]) keyCodeAndModifiersToPlugInAndEnableCheckMap.get(
+                        new StringBuilder(e.getKeyCode()).append(":")
+                        .append(e.getModifiers()).toString());
                 if (plugInAndEnableCheck == null) {
                     return;
                 }
@@ -1797,6 +1855,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     private class DefaultInternalFrameCloser implements InternalFrameCloseHandler {
 
+        @Override
         public void close(JInternalFrame internalFrame) {
             if (internalFrame instanceof TaskFrame) {
                 // delete reference to taskframe to be closed
@@ -1808,6 +1867,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 GUIUtil.dispose(internalFrame, desktopPane);
             }
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     System.runFinalization();
                     System.gc();
@@ -1818,6 +1878,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     private class DefaultApplicationExitHandler implements ApplicationExitHandler {
 
+        @Override
         public void exitApplication(JFrame mainFrame) {
             if (confirmClose(I18N.get("ui.WorkbenchFrame.exit-jump"),
                     getLayersWithModifiedFeatureCollections(),
@@ -1829,6 +1890,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 // Invoke System#exit after all pending GUI events have been fired
                 // (e.g. the hiding of this WorkbenchFrame) [Bob Boseko]
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         clearUp();
                         System.exit(0);
@@ -1854,14 +1916,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     // Confirm you want to close them first
                     if (confirmClose(
                             StringUtil.split(
-                            I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
-                            + " "
-                            + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
-                            60), I18N.get("ui.WorkbenchFrame.close-all"))) {
+                                    I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
+                                    + " "
+                                    + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
+                                    60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                         for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                             GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
                         }
-
                     } else {
                         return; // finally, I don't want to close
                     }
@@ -1878,10 +1939,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 // Confirm you want to close them first
                 if (confirmClose(
                         StringUtil.split(
-                        I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
-                        + " "
-                        + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
-                        60), I18N.get("ui.WorkbenchFrame.close-all"))) {
+                                I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
+                                + " "
+                                + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
+                                60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                     for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                         GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
                     }
@@ -1896,9 +1957,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     /**
-     * This method is used to confirm the close of a TaskFrame or the close of
-     * the application. In both cases, we need to check there is no unsaved
-     * layers.
+     * This method is used to confirm the close of a TaskFrame or the close of the application. In
+     * both cases, we need to check there is no unsaved layers.
      */
     private boolean confirmClose(String action,
             Collection modifiedLayers,
@@ -1927,16 +1987,16 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         }
         JOptionPane pane = new JOptionPane(
                 StringUtil.split(modifiedLayers.size() + " "
-                + I18N.get("ui.WorkbenchFrame.dataset")
-                + StringUtil.s(modifiedLayers.size())
-                + " "
-                + ((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
-                : I18N.get("ui.WorkbenchFrame.has-been-modified"))
-                + " ("
-                + ((modifiedLayers.size() > 3) ? "e.g. " : "")
-                + StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
-                0, Math.min(3, modifiedLayers.size()))) + ").\n"
-                + I18N.get("ui.WorkbenchFrame.continue"), 80),
+                        + I18N.get("ui.WorkbenchFrame.dataset")
+                        + StringUtil.s(modifiedLayers.size())
+                        + " "
+                        + ((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
+                                : I18N.get("ui.WorkbenchFrame.has-been-modified"))
+                        + " ("
+                        + ((modifiedLayers.size() > 3) ? "e.g. " : "")
+                        + StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
+                                        0, Math.min(3, modifiedLayers.size()))) + ").\n"
+                        + I18N.get("ui.WorkbenchFrame.continue"), 80),
                 JOptionPane.WARNING_MESSAGE);
         pane.setOptions(new String[]{action, I18N.get("ui.WorkbenchFrame.cancel")});
         pane.createDialog(this, "OSFAC-DMT").setVisible(true);
@@ -1979,8 +2039,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     /**
      * Add's a TaskListener, wich will be fired if a Task was added via the
-     * WorkbenchFrame.addTaskFrame(TaskFrame taskFrame) or the a Task was loaded
-     * completly with all his layers.
+     * WorkbenchFrame.addTaskFrame(TaskFrame taskFrame) or the a Task was loaded completly with all
+     * his layers.
      *
      * @param l - The TaskListener to add.
      */
@@ -1996,6 +2056,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public void removeTaskListener(TaskListener l) {
         getTaskListeners().remove(l);
     }
+
     DMTCommandBarFactory cbf = new DMTCommandBarFactory(this);
     private StatusBar _statusBar;
     private boolean _autohideAll = false;
@@ -2028,6 +2089,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private TitledPopupMenu categoryPopupMenu = new TitledPopupMenu() {
         {
             addPopupMenuListener(new PopupMenuListener() {
+                @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
                     setTitle((panel.selectedNodes(Category.class).size() != 1) ? ("("
@@ -2035,17 +2097,20 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             : ((Category) panel.selectedNodes(Category.class).iterator().next()).getName());
                 }
 
+                @Override
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 }
 
+                @Override
                 public void popupMenuCanceled(PopupMenuEvent e) {
                 }
             });
         }
     };
-    // <<TODO:REMOVE>> Actually we're not using the three optimization parameters below. Remove. 
+    // <<TODO:REMOVE>> Actually we're not using the three optimization parameters below. Remove.
     private int envelopeRenderingThreshold = 500;
     private HTMLFrame outputFrame = new HTMLFrame(this) {
+        @Override
         public void setTitle(String title) {
             // Don't allow the title of the output frame to be changed.
         }
@@ -2057,6 +2122,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private TitledPopupMenu layerNamePopupMenu = new TitledPopupMenu() {
         {
             addPopupMenuListener(new PopupMenuListener() {
+                @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
                     setTitle((panel.selectedNodes(Layer.class).size() != 1) ? ("("
@@ -2065,9 +2131,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             : ((Layerable) panel.selectedNodes(Layer.class).iterator().next()).getName());
                 }
 
+                @Override
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 }
 
+                @Override
                 public void popupMenuCanceled(PopupMenuEvent e) {
                 }
             });
@@ -2076,6 +2144,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private TitledPopupMenu wmsLayerNamePopupMenu = new TitledPopupMenu() {
         {
             addPopupMenuListener(new PopupMenuListener() {
+                @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
                     setTitle((panel.selectedNodes(WMSLayer.class).size() != 1) ? ("("
@@ -2084,15 +2153,18 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             : ((Layerable) panel.selectedNodes(WMSLayer.class).iterator().next()).getName());
                 }
 
+                @Override
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 }
 
+                @Override
                 public void popupMenuCanceled(PopupMenuEvent e) {
                 }
             });
         }
     };
     private LayerNamePanelListener layerNamePanelListener = new LayerNamePanelListener() {
+        @Override
         public void layerSelectionChanged() {
             toolBar.updateEnabledState();
         }
@@ -2107,12 +2179,14 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // changes.
         private StringBuffer positionStatusBuf = new StringBuffer("(");
 
+        @Override
         public void cursorPositionChanged(String x, String y) {
             positionStatusBuf.setLength(1);
             positionStatusBuf.append(x).append(" ; ").append(y).append(")");
             coordinateLabel.setText(positionStatusBuf.toString());
         }
 
+        @Override
         public void selectionChanged() {
             toolBar.updateEnabledState();
         }
@@ -2121,12 +2195,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             toolBar.updateEnabledState();
         }
 
+        @Override
         public void painted(Graphics graphics) {
         }
     };
-    // <<TODO:NAMING>> This name is not clear 
+    // <<TODO:NAMING>> This name is not clear
     private int maximumFeatureExtentForEnvelopeRenderingInPixels = 10;
-    // <<TODO:NAMING>> This name is not clear 
+    // <<TODO:NAMING>> This name is not clear
     private int minimumFeatureExtentForAnyRenderingInPixels = 2;
     private StringBuffer log = new StringBuffer();
     private int taskSequence = 1;
@@ -2159,7 +2234,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private boolean checkAll = false;
     private JMenuItem MIClear = new JMenuItem();
     public static JideButton DataRequestFound;
-    public static JideButton BSConnect;
+    public static JideButton BSConnect; //connect to FTP Server
     public static String TypeOfVersion = Config.FULL_VERSION;
     public static int idUser;
     public static DataRequestSync dataRequestSync;

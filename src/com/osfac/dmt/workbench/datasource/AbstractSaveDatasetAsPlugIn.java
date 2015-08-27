@@ -1,6 +1,5 @@
 package com.osfac.dmt.workbench.datasource;
 
-import com.vividsolutions.jts.util.Assert;
 import com.osfac.dmt.I18N;
 import com.osfac.dmt.io.datasource.Connection;
 import com.osfac.dmt.io.datasource.DataSourceQuery;
@@ -9,10 +8,11 @@ import com.osfac.dmt.workbench.WorkbenchContext;
 import com.osfac.dmt.workbench.plugin.EnableCheckFactory;
 import com.osfac.dmt.workbench.plugin.MultiEnableCheck;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
+import com.vividsolutions.jts.util.Assert;
 
-public abstract class AbstractSaveDatasetAsPlugIn
-        extends AbstractLoadSaveDatasetPlugIn {
+public abstract class AbstractSaveDatasetAsPlugIn extends AbstractLoadSaveDatasetPlugIn {
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         Assert.isTrue(getDataSourceQueries().size() == 1);
@@ -24,10 +24,8 @@ public abstract class AbstractSaveDatasetAsPlugIn
 
         Connection connection = dataSourceQuery.getDataSource().getConnection();
         try {
-            connection
-                    .executeUpdate(dataSourceQuery.getQuery(), context
-                    .getSelectedLayer(0).getFeatureCollectionWrapper(),
-                    monitor);
+            connection.executeUpdate(dataSourceQuery.getQuery(), context
+                    .getSelectedLayer(0).getFeatureCollectionWrapper(), monitor);
         } finally {
             connection.close();
         }
@@ -35,8 +33,7 @@ public abstract class AbstractSaveDatasetAsPlugIn
                 .setFeatureCollectionModified(false);
     }
 
-    public static MultiEnableCheck createEnableCheck(
-            final WorkbenchContext workbenchContext) {
+    public static MultiEnableCheck createEnableCheck(final WorkbenchContext workbenchContext) {
         EnableCheckFactory checkFactory = new EnableCheckFactory(
                 workbenchContext);
 

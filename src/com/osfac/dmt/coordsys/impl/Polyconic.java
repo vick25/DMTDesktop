@@ -6,6 +6,7 @@ import com.osfac.dmt.coordsys.Projection;
 
 /**
  * Implements the Polyconic projection. * @author $Author: javamap $
+ *
  * @version $Revision: 4 $  <pre>
  * $Id: Polyconic.java 4 2005-06-16 15:27:48Z javamap $
  * $Date: 2005-06-16 17:27:48 +0200 (jeu., 16 juin 2005) $
@@ -61,6 +62,7 @@ public class Polyconic extends Projection {
         phi0 = originLatitude / 180.0 * Math.PI;
     }
 
+    @Override
     public Planar asPlanar(Geographic q0, Planar p) {
         q.lat = q0.lat / 180.0 * Math.PI;
         q.lon = q0.lon / 180.0 * Math.PI;
@@ -68,6 +70,7 @@ public class Polyconic extends Projection {
         return p;
     }
 
+    @Override
     public Geographic asGeographic(Planar p, Geographic q) {
         inverse(p, q);
         q.lat = q.lat * 180.0 / Math.PI;

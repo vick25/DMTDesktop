@@ -19,6 +19,7 @@ public class FadingPanel extends JComponent implements ActionListener {
         this.fadeListener = fadeListener;
     }
 
+    @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
@@ -37,6 +38,7 @@ public class FadingPanel extends JComponent implements ActionListener {
         }
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(new Color(255, 255, 255, alpha));
@@ -49,6 +51,7 @@ public class FadingPanel extends JComponent implements ActionListener {
         ticker.start();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         alpha += step;
         if (alpha >= 255) {

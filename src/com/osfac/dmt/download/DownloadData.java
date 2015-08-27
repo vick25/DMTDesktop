@@ -373,23 +373,23 @@ public class DownloadData extends javax.swing.JFrame {
         PanMoreLayout.setHorizontalGroup(
                 PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addGroup(PanMoreLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanMoreLayout.createSequentialGroup()
-                .addComponent(BDownloadFailedFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CBFailedCauses, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE)));
+                        .addGap(0, 0, 0)
+                        .addGroup(PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanMoreLayout.createSequentialGroup()
+                                        .addComponent(BDownloadFailedFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(CBFailedCauses, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)));
         PanMoreLayout.setVerticalGroup(
                 PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanMoreLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(CBFailedCauses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BDownloadFailedFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap()));
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PanMoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(CBFailedCauses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BDownloadFailedFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()));
 
         BDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/osfac/dmt/images/download_manager(7).png"))); // NOI18N
         BDownload.setText(bundle.getString("DownloadData.BDownload.text")); // NOI18N
@@ -441,63 +441,63 @@ public class DownloadData extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(BMoreLess, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(BTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(labImageName, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labSize, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(labTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BTFileExists, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jideToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(BTClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(ProgressOnGoing, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(ProgressTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(PanMore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(BMoreLess, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(BTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(BDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(labImageName, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labSize, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(labTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(BTFileExists, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jideToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(6, 6, 6)
+                                        .addComponent(BTClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(ProgressOnGoing, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(ProgressTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(PanMore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap()));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(labSize, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labImageName, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProgressOnGoing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(BTClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jideToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BTFileExists, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProgressTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(BMoreLess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PanMore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labSize, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labImageName, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ProgressOnGoing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(BTClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jideToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BTFileExists, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ProgressTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(BMoreLess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BTargetFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanMore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -544,15 +544,15 @@ public class DownloadData extends javax.swing.JFrame {
             if (testBeforeCopyFile()) {
                 labTargetFolder.setText("");
                 BDownload.setEnabled(false);
-                JOptionPane.showMessageDialog(this, I18N.get("DownloadData.Target-Folder-not-enough-privileges"), ""
-                        + I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, I18N.get("DownloadData.Target-Folder-not-enough-privileges"),
+                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             } else {
                 long freeSpace = new File(dir).getFreeSpace();
                 if (dataSizeTotal >= freeSpace) {
                     BDownload.setEnabled(false);
                     labTargetFolder.setText("");
-                    JOptionPane.showMessageDialog(this, I18N.get("DownloadData.Target-Folder-not-enough-space"
-                            + ""), I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, I18N.get("DownloadData.Target-Folder-not-enough-space"),
+                            I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
                 } else {
                     labTargetFolder.setText(dir);
                     BDownload.setEnabled(true);
@@ -697,8 +697,8 @@ public class DownloadData extends javax.swing.JFrame {
         table.setSortable(false);
         table.getTableHeader().setReorderingAllowed(false);
         table.setTableStyleProvider(new RowStripeTableStyleProvider(new Color[]{Config.getColorFromKey(Config.pref.get(
-                    SettingKeyFactory.FontColor.RStripe21Color1, "253, 253, 244")), Config.getColorFromKey(Config.pref.get(
-                    SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255"))}));
+            SettingKeyFactory.FontColor.RStripe21Color1, "253, 253, 244")), Config.getColorFromKey(Config.pref.get(
+            SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255"))}));
         table.setColumnResizable(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setShowGrid(false);
@@ -728,7 +728,7 @@ public class DownloadData extends javax.swing.JFrame {
     private class MyTableModel extends AbstractTableModel implements StyleModel {
 
         private String[] columnNames = {I18N.get("DownloadData.table-header-File"), I18N.get("DownloadData.table-header-Size"
-                + ""), I18N.get("DownloadData.table-header-Status")};
+            ), I18N.get("DownloadData.table-header-Status")};
         private ArrayList[] Data;
 
         public MyTableModel() {
@@ -742,6 +742,7 @@ public class DownloadData extends javax.swing.JFrame {
             return true;
         }
 
+        @Override
         public CellStyle getCellStyleAt(int rowIndex, int columnIndex) {
             if (columnIndex == table.getColumnCount() - 1) {
                 if (statusImages.get(rowIndex) == SWAITING) {
@@ -762,14 +763,17 @@ public class DownloadData extends javax.swing.JFrame {
             }
         }
 
+        @Override
         public boolean isCellStyleOn() {
             return true;
         }
 
+        @Override
         public int getColumnCount() {
             return columnNames.length;
         }
 
+        @Override
         public int getRowCount() {
             return Data[0].size();
         }
@@ -779,6 +783,7 @@ public class DownloadData extends javax.swing.JFrame {
             return columnNames[col];
         }
 
+        @Override
         public Object getValueAt(int row, int col) {
             return Data[col].get(row);
         }
@@ -869,8 +874,8 @@ public class DownloadData extends javax.swing.JFrame {
         }
         ProgressTotal.setIndeterminate(false);
         BTargetFolder.setEnabled(targetFolder);
-        labSize.setText(I18N.get("DownloadData.label-Total-size")+" " + convertCapacity(dataSizeTotal));
-        labNumber.setText(I18N.get("DownloadData.label-Number")+" " +  idImagesList.size());
+        labSize.setText(I18N.get("DownloadData.label-Total-size") + " " + convertCapacity(dataSizeTotal));
+        labNumber.setText(I18N.get("DownloadData.label-Number") + " " + idImagesList.size());
         Long positionMax = new Long(dataSizeTotal);
         if (positionMax > 2047483647) {
             positionMax /= 1048576;
@@ -896,11 +901,11 @@ public class DownloadData extends javax.swing.JFrame {
         ProgressOnGoing.setValue((int) cumulSizeFile);
         pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
         pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-        ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " "+I18N.get("DownloadData.text-of")+ " "
+        ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
                 + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
                 + "" + pourcentAll + "              "
                 + "                           " + TotalTime);
-        ProgressOnGoing.setString(conversion(cumulSizeFile) + " "+I18N.get("DownloadData.text-of")+ " "
+        ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
                 + conversion(fileSize) + "                                               "
                 + "" + pourcentFile + "                                              "
                 + "" + FileTime);
@@ -943,7 +948,7 @@ public class DownloadData extends javax.swing.JFrame {
                 time = tpsSec + " sec";
             }
             this.setTitle(" " + pourcentAll + " - " + time + " " + "(" + s + ") - "
-                    + "" + (a + 1) + " "+I18N.get("DownloadData.text-of")+ " " + idImagesList.size());
+                    + "" + (a + 1) + " " + I18N.get("DownloadData.text-of") + " " + idImagesList.size());
         }
     }
 
@@ -1070,11 +1075,11 @@ public class DownloadData extends javax.swing.JFrame {
                         String HDD_Name = getHardDriveName(idImagesList.get(a));
                         table.scrollRowToVisible(a);
                         if (dataRead.equals(HDDNOTCONNECTED)) {
-                            showFailureAction(HDD_Name +" " +I18N.get("DownloadData.text-HDD-not-connected"));
+                            showFailureAction(HDD_Name + " " + I18N.get("DownloadData.text-HDD-not-connected"));
 //                            JOptionPane.showMessageDialog(downloadData, getHardDriveName(idImagesList.get(a)) + ""
 //                                    + " is not connected to the server !!!", "Fatal Error", JOptionPane.ERROR_MESSAGE);
                         } else if (dataRead.equals(FILENOTEXIST)) {
-                            showFailureAction(imageName + " "+ I18N.get("DownloadData.text-File-does-not-existed"));
+                            showFailureAction(imageName + " " + I18N.get("DownloadData.text-File-does-not-existed"));
 //                            JOptionPane.showMessageDialog(downloadData, imageName + ""
 //                                    + " doesn't exist in the server !!!", "Fatal Error", JOptionPane.ERROR_MESSAGE);
                         } else {
@@ -1127,11 +1132,11 @@ public class DownloadData extends javax.swing.JFrame {
                 ProgressOnGoing.setValue((int) cumulSizeFile);
                 pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
                 pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-                ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) +  " "+I18N.get("DownloadData.text-of")+ " "
+                ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
                         + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
                         + "" + pourcentAll + "              "
                         + "                           " + TotalTime);
-                ProgressOnGoing.setString(conversion(cumulSizeFile) +  " "+I18N.get("DownloadData.text-of")+ " "
+                ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
                         + conversion(fileSize) + "                                               "
                         + "" + pourcentFile + "                                              "
                         + "" + FileTime);

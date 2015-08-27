@@ -1,17 +1,20 @@
 package com.osfac.dmt.algorithm;
 
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateFilter;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineSegment;
 
 /**
- * Implements algorithm for computing a distance metric which can be thought of
- * as the "Vertex Hausdorff Distance". This is the Hausdorff distance restricted
- * to vertices for one of the geometries. Also computes two points of the
- * Geometries which are separated by the computed distance. <p> <b>NOTE: This
- * algorithm does NOT compute the full Hausdorff distance correctly, but an
- * approximation that is correct for a large subset of useful cases. One
- * important part of this subset is Linestrings that are roughly parallel to
- * each other, and roughly equal in length - just what is needed for line
- * matching. </b>
+ * Implements algorithm for computing a distance metric which can be thought of as the "Vertex
+ * Hausdorff Distance". This is the Hausdorff distance restricted to vertices for one of the
+ * geometries. Also computes two points of the Geometries which are separated by the computed
+ * distance.
+ * <p>
+ * <b>NOTE: This algorithm does NOT compute the full Hausdorff distance correctly, but an
+ * approximation that is correct for a large subset of useful cases. One important part of this
+ * subset is Linestrings that are roughly parallel to each other, and roughly equal in length - just
+ * what is needed for line matching. </b>
  */
 public class VertexHausdorffDistance {
 
@@ -43,8 +46,8 @@ public class VertexHausdorffDistance {
     }
 
     /**
-     * Computes the maximum oriented distance between two line segments, as well
-     * as the point pair separated by that distance.
+     * Computes the maximum oriented distance between two line segments, as well as the point pair
+     * separated by that distance.
      *
      * @param seg0 the line segment containing the furthest point
      * @param seg1 the line segment containing the closest point
@@ -80,6 +83,7 @@ public class VertexHausdorffDistance {
             this.geom = geom;
         }
 
+        @Override
         public void filter(Coordinate pt) {
             minPtDist.initialize();
             euclideanDist.computeDistance(geom, pt, minPtDist);

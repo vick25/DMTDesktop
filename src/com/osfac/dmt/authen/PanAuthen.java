@@ -27,8 +27,10 @@ public class PanAuthen extends javax.swing.JPanel {
         this.glassPane = glassPane;
         this.parent = parent;
         initComponents(I18N.DMTResourceBundle);
-        BServerIP.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " "
-                + "" + Config.pref.get(SettingKeyFactory.Connection.HOST, Config.host));
+        BServerIP.setText(new StringBuilder(I18N.get("com.osfac.dmt.Config.Server-Text")).append(" ").
+                append(Config.pref.get(SettingKeyFactory.Connection.HOST, Config.host)).toString());
+
+        //initialize value and log in automatically
         initialValues();
         if (txtEmail.getText().equals("")) {
             txtEmail.requestFocus();
@@ -38,6 +40,7 @@ public class PanAuthen extends javax.swing.JPanel {
         ListDataIntelliHints intellihints = new ListDataIntelliHints(txtEmail, getUserEmail());
         intellihints.setCaseSensitive(false);
         Timer time = new Timer(100, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (!txtEmail.getText().equals("") && !String.valueOf(txtPassword.getPassword()).equals("")) {
                     BLogIn.setEnabled(true);
@@ -221,6 +224,7 @@ public class PanAuthen extends javax.swing.JPanel {
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
             }
@@ -231,6 +235,7 @@ public class PanAuthen extends javax.swing.JPanel {
         BExit.setFocusable(false);
         BExit.setOpaque(false);
         BExit.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BExitActionPerformed(evt);
             }
@@ -242,6 +247,7 @@ public class PanAuthen extends javax.swing.JPanel {
         BLogIn.setFocusable(false);
         BLogIn.setOpaque(false);
         BLogIn.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BLogInActionPerformed(evt);
             }
@@ -253,6 +259,7 @@ public class PanAuthen extends javax.swing.JPanel {
         BPasswordForgot.setFocusable(false);
         BPasswordForgot.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         BPasswordForgot.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BPasswordForgotActionPerformed(evt);
             }
@@ -265,6 +272,7 @@ public class PanAuthen extends javax.swing.JPanel {
         BServerIP.setFocusable(false);
         BServerIP.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         BServerIP.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BServerIPActionPerformed(evt);
             }
@@ -276,6 +284,7 @@ public class PanAuthen extends javax.swing.JPanel {
         BSignUp.setButtonStyle(3);
         BSignUp.setFocusable(false);
         BSignUp.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSignUpActionPerformed(evt);
             }
@@ -286,52 +295,52 @@ public class PanAuthen extends javax.swing.JPanel {
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(BServerIP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BSignUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(txtPassword)
-                .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(BPasswordForgot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(BLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(BExit)))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(BServerIP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BSignUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(txtPassword)
+                                                .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(128, 128, 128)
+                                        .addComponent(BPasswordForgot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(BLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(3, 3, 3)
+                                        .addComponent(BExit)))
+                        .addContainerGap()));
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{BExit, BLogIn});
 
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(BPasswordForgot, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BServerIP, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(jLabel1)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(BSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BExit)
-                .addComponent(BLogIn))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(BPasswordForgot, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BServerIP, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(jLabel1)
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(BSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BExit)
+                                .addComponent(BLogIn))
+                        .addContainerGap()));
     }// </editor-fold>
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -373,7 +382,8 @@ public class PanAuthen extends javax.swing.JPanel {
                 }
             }
             if (!found) {
-                JOptionPane.showMessageDialog(this, I18N.get("com.osfac.dmt.authen.PanAuthen-Error-connection-setting"), I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, I18N.get("com.osfac.dmt.authen.PanAuthen-Error-connection-setting"),
+                        I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
@@ -381,11 +391,11 @@ public class PanAuthen extends javax.swing.JPanel {
     }//GEN-LAST:event_BLogInActionPerformed
 
 private void BPasswordForgotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPasswordForgotActionPerformed
-    new PasswordForgot(parent, true).setVisible(true);// TODO add your handling code here:
+        new PasswordForgot(parent, true).setVisible(true);// TODO add your handling code here:
 }//GEN-LAST:event_BPasswordForgotActionPerformed
 
 private void BServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BServerIPActionPerformed
-    new ChangeIP(parent, true).setVisible(true);
+        new ChangeIP(parent, true).setVisible(true);
 }//GEN-LAST:event_BServerIPActionPerformed
 
     private void BSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSignUpActionPerformed
@@ -395,8 +405,8 @@ private void BServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private ArrayList getUserEmail() {
         ArrayList<String> list = new ArrayList();
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select distinct email from dmt_user "
-                    + "where id_user not in (?, ?) order by email");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT email FROM dmt_user "
+                    + "WHERE id_user NOT IN (?, ?) ORDER BY email");
             ps.setInt(1, 3);
             ps.setInt(2, 4);
             ResultSet res = ps.executeQuery();
@@ -404,8 +414,8 @@ private void BServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 list.add(res.getString(1));
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return list;
     }

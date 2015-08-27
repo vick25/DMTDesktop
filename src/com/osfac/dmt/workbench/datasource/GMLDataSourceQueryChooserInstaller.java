@@ -36,71 +36,73 @@ import com.osfac.dmt.io.datasource.StandardReaderWriterFileDataSource;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.ErrorHandler;
 import com.osfac.dmt.workbench.ui.FileNamePanel;
-
 import java.awt.Component;
-
 import java.io.File;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
- * Adds to the JUMP Workbench the UIs for opening and saving GML files.
- * Called by InstallStandardDataSourceQueryChoosersPlugIn.
+ * Adds to the JUMP Workbench the UIs for opening and saving GML files. Called by
+ * InstallStandardDataSourceQueryChoosersPlugIn.
+ *
  * @see InstallStandardDataSourceQueryChoosersPlugIn
  */
 public class GMLDataSourceQueryChooserInstaller {
+
     private static final String GML_DESCRIPTION = "GML 2.0";
 
     public void addSaveGMLFileDataSourceQueryChooser(
-        final PlugInContext context) {
+            final PlugInContext context) {
         DataSourceQueryChooserManager.get(context.getWorkbenchContext()
-                                                 .getBlackboard())
-                                     .addSaveDataSourceQueryChooser(new SaveFileDataSourceQueryChooser(
-                StandardReaderWriterFileDataSource.GML.class, GML_DESCRIPTION,
-                InstallStandardDataSourceQueryChoosersPlugIn.extensions(
-                    StandardReaderWriterFileDataSource.GML.class),
-                context.getWorkbenchContext()) {
-                public boolean isInputValid() {
-                    return isValid(getTemplateFileNamePanel()) &&
-                    super.isInputValid();
-                }
+                .getBlackboard())
+                .addSaveDataSourceQueryChooser(new SaveFileDataSourceQueryChooser(
+                                StandardReaderWriterFileDataSource.GML.class, GML_DESCRIPTION,
+                                InstallStandardDataSourceQueryChoosersPlugIn.extensions(
+                                        StandardReaderWriterFileDataSource.GML.class),
+                                context.getWorkbenchContext()) {
+                                    @Override
+                                    public boolean isInputValid() {
+                                        return isValid(getTemplateFileNamePanel())
+                                        && super.isInputValid();
+                                    }
 
-                protected Map toProperties(File file) {
-                    HashMap properties = new HashMap(super.toProperties(file));
-                    properties.put(StandardReaderWriterFileDataSource.OUTPUT_TEMPLATE_FILE_KEY,
-                        getTemplateFileNamePanel().getSelectedFile().getPath());
+                                    @Override
+                                    protected Map toProperties(File file) {
+                                        HashMap properties = new HashMap(super.toProperties(file));
+                                        properties.put(StandardReaderWriterFileDataSource.OUTPUT_TEMPLATE_FILE_KEY,
+                                                getTemplateFileNamePanel().getSelectedFile().getPath());
 
-                    return properties;
-                }
+                                        return properties;
+                                    }
 
-                private FileNamePanel templateFileNamePanel;
-                private FileNamePanel getTemplateFileNamePanel() {
-                    //Lazily initialize to prevent NullPointerExceptions in WindowsFileChooserUI
-                    //[Bob Boseko 2004-01-19]
-                    if (templateFileNamePanel == null) {
-                        templateFileNamePanel = createTemplateFileNamePanel("Output Template: ",
-                                getFileChooserPanel().getChooser(),
-                                context.getErrorHandler());
-                    }
-                    return templateFileNamePanel;
-                }
+                                    private FileNamePanel templateFileNamePanel;
 
-                protected Component getSouthComponent1() {
-                    return getTemplateFileNamePanel();
-                }
-            });
+                                    private FileNamePanel getTemplateFileNamePanel() {
+                                        //Lazily initialize to prevent NullPointerExceptions in WindowsFileChooserUI
+                                        //[Bob Boseko 2004-01-19]
+                                        if (templateFileNamePanel == null) {
+                                            templateFileNamePanel = createTemplateFileNamePanel("Output Template: ",
+                                                    getFileChooserPanel().getChooser(),
+                                                    context.getErrorHandler());
+                                        }
+                                        return templateFileNamePanel;
+                                    }
+
+                                    @Override
+                                    protected Component getSouthComponent1() {
+                                        return getTemplateFileNamePanel();
+                                    }
+                                });
     }
 
     private boolean isValid(FileNamePanel templateFileNamePanel) {
         if (!templateFileNamePanel.isInputValid()) {
             JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(
                     templateFileNamePanel),
-                    I18N.get("datasource.GMLDataSourceQueryChooserInstaller.template-file")+" " + templateFileNamePanel.getValidationError(),
+                    I18N.get("datasource.GMLDataSourceQueryChooserInstaller.template-file") + " " + templateFileNamePanel.getValidationError(),
                     I18N.get("datasource.GMLDataSourceQueryChooserInstaller.error"), JOptionPane.ERROR_MESSAGE);
 
             return false;
@@ -110,77 +112,82 @@ public class GMLDataSourceQueryChooserInstaller {
     }
 
     public void addLoadGMLFileDataSourceQueryChooser(
-        final PlugInContext context) {
+            final PlugInContext context) {
         DataSourceQueryChooserManager.get(context.getWorkbenchContext()
-                                                 .getBlackboard())
-                                     .addLoadDataSourceQueryChooser(new LoadFileDataSourceQueryChooser(
-                StandardReaderWriterFileDataSource.GML.class, GML_DESCRIPTION,
-                InstallStandardDataSourceQueryChoosersPlugIn.extensions(
-                    StandardReaderWriterFileDataSource.GML.class),
-                context.getWorkbenchContext()) {
-                protected void addFileFilters(JFileChooser chooser) {
-                    super.addFileFilters(chooser);
-                    InstallStandardDataSourceQueryChoosersPlugIn.addCompressedFileFilter(GML_DESCRIPTION,
-                        chooser);
-                }
+                .getBlackboard())
+                .addLoadDataSourceQueryChooser(new LoadFileDataSourceQueryChooser(
+                                StandardReaderWriterFileDataSource.GML.class, GML_DESCRIPTION,
+                                InstallStandardDataSourceQueryChoosersPlugIn.extensions(
+                                        StandardReaderWriterFileDataSource.GML.class),
+                                context.getWorkbenchContext()) {
+                                    @Override
+                                    protected void addFileFilters(JFileChooser chooser) {
+                                        super.addFileFilters(chooser);
+                                        InstallStandardDataSourceQueryChoosersPlugIn.addCompressedFileFilter(GML_DESCRIPTION,
+                                                chooser);
+                                    }
 
-                public boolean isInputValid() {
-                    return isValid(getTemplateFileNamePanel()) &&
-                    super.isInputValid();
-                }
+                                    @Override
+                                    public boolean isInputValid() {
+                                        return isValid(getTemplateFileNamePanel())
+                                        && super.isInputValid();
+                                    }
 
-                protected Map toProperties(File file) {
-                    HashMap properties = new HashMap(super.toProperties(file));
-                    properties.put(StandardReaderWriterFileDataSource.INPUT_TEMPLATE_FILE_KEY,
-                        getTemplateFileNamePanel().getSelectedFile().getPath());
+                                    protected Map toProperties(File file) {
+                                        HashMap properties = new HashMap(super.toProperties(file));
+                                        properties.put(StandardReaderWriterFileDataSource.INPUT_TEMPLATE_FILE_KEY,
+                                                getTemplateFileNamePanel().getSelectedFile().getPath());
 
-                    return properties;
-                }
+                                        return properties;
+                                    }
 
-                private FileNamePanel templateFileNamePanel;
+                                    private FileNamePanel templateFileNamePanel;
 
-                private FileNamePanel getTemplateFileNamePanel() {
-                    //Lazily initialize to facilitate CoordinateSystemSupport flag [Bob Boseko]
-                    if (templateFileNamePanel == null) {
-                        templateFileNamePanel = createTemplateFileNamePanel("Input Template: ",
-                                getFileChooserPanel().getChooser(),
-                                context.getErrorHandler());
-                    }
+                                    private FileNamePanel getTemplateFileNamePanel() {
+                                        //Lazily initialize to facilitate CoordinateSystemSupport flag [Bob Boseko]
+                                        if (templateFileNamePanel == null) {
+                                            templateFileNamePanel = createTemplateFileNamePanel("Input Template: ",
+                                                    getFileChooserPanel().getChooser(),
+                                                    context.getErrorHandler());
+                                        }
 
-                    return templateFileNamePanel;
-                }
+                                        return templateFileNamePanel;
+                                    }
 
-                protected Component getSouthComponent1() {
-                    return getTemplateFileNamePanel();
-                }
-            });
+                                    @Override
+                                    protected Component getSouthComponent1() {
+                                        return getTemplateFileNamePanel();
+                                    }
+                                });
     }
 
     private FileNamePanel createTemplateFileNamePanel(String description,
-        final JFileChooser fileChooser, ErrorHandler errorHandler) {
-        return new TemplateFileNamePanel(I18N.get("datasource.GMLDataSourceQueryChooserInstaller.input-template")+" ", errorHandler) {
+            final JFileChooser fileChooser, ErrorHandler errorHandler) {
+        return new TemplateFileNamePanel(I18N.get("datasource.GMLDataSourceQueryChooserInstaller.input-template") + " ", errorHandler) {
 
-                {
-                    setFileMustExist(true);
+            {
+                setFileMustExist(true);
+            }
+
+            @Override
+            protected File getInitialFile() {
+                File initialFile = super.getInitialFile();
+
+                if (!initialFile.exists()
+                        && ((initialFile.getParent() == null)
+                        || !initialFile.getParentFile().exists())) {
+                    return fileChooser.getCurrentDirectory();
                 }
 
-                protected File getInitialFile() {
-                    File initialFile = super.getInitialFile();
-
-                    if (!initialFile.exists() &&
-                            ((initialFile.getParent() == null) ||
-                            !initialFile.getParentFile().exists())) {
-                        return fileChooser.getCurrentDirectory();
-                    }
-
-                    return initialFile;
-                }
-            };
+                return initialFile;
+            }
+        };
     }
 
     private class TemplateFileNamePanel extends FileNamePanel {
+
         public TemplateFileNamePanel(String description,
-            ErrorHandler errorHandler) {
+                ErrorHandler errorHandler) {
             super(errorHandler);
 
             //"" gives upper description zero height. [Bob Boseko]

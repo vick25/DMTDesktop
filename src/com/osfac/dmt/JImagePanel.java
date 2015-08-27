@@ -91,6 +91,7 @@ public class JImagePanel extends JPanel {
         _keepAspect = keepAspect;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (_image != null) {
@@ -98,8 +99,8 @@ public class JImagePanel extends JPanel {
                 g.drawImage(_image, _x, _y, _image.getWidth(null), _image.getHeight(null), null);
             } else {
                 Graphics2D g2d = (Graphics2D) g;
-                Double scaleWidth = new Double(getWidth()) / new Double(_image.getWidth(null));
-                Double scaleHeight = new Double(getHeight()) / new Double(_image.getHeight(null));
+                Double scaleWidth = (double) getWidth() / (double) _image.getWidth(null);
+                Double scaleHeight = (double) getHeight() / (double) _image.getHeight(null);
                 if (_keepAspect) {
                     if (scaleWidth > scaleHeight) {
                         scaleWidth = scaleHeight;

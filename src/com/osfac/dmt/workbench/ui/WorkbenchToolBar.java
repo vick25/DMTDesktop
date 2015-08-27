@@ -25,14 +25,15 @@ import javax.swing.JComponent;
 import javax.swing.Timer;
 
 /**
- * Makes it easy to add CursorTools and PlugIns as toolbar buttons. An
- * "EnableCheck" is used to specify whether to enable or disable the CursorTool
- * buttons. Moreover, CursorTools are added as mutually exclusive toggle buttons
- * (that is, JToggleButtons in a ButtonGroup). When a CursorTool button is
- * pressed, the current CursorTool is unregistered and the new one is registered
- * with the LayerViewPanel. <P> Set the cursor-tool-enable-check to use
- * context-sensitive enabling of toolbar buttons. <P> Set the
- * task-monitor-manager to report the progress of threaded plug-ins.
+ * Makes it easy to add CursorTools and PlugIns as toolbar buttons. An "EnableCheck" is used to
+ * specify whether to enable or disable the CursorTool buttons. Moreover, CursorTools are added as
+ * mutually exclusive toggle buttons (that is, JToggleButtons in a ButtonGroup). When a CursorTool
+ * button is pressed, the current CursorTool is unregistered and the new one is registered with the
+ * LayerViewPanel.
+ * <P>
+ * Set the cursor-tool-enable-check to use context-sensitive enabling of toolbar buttons.
+ * <P>
+ * Set the task-monitor-manager to report the progress of threaded plug-ins.
  */
 public class WorkbenchToolBar extends EnableableToolBar {
 
@@ -46,6 +47,7 @@ public class WorkbenchToolBar extends EnableableToolBar {
     }
     // By default, CursorTool buttons are always enabled. [Bob Boseko]
     private EnableCheck cursorToolEnableCheck = new EnableCheck() {
+        @Override
         public String check(JComponent component) {
             return null;
         }
@@ -72,17 +74,17 @@ public class WorkbenchToolBar extends EnableableToolBar {
     public ToolConfig addCursorTool(final CursorTool cursorTool) {
         return addCursorTool(cursorTool.getName(), cursorTool,
                 new JideToggleButton() {
-            public String getToolTipText(MouseEvent event) {
-                //Get tooltip text dynamically [Bob Boseko 11/13/2003]
-                return cursorTool.getName();
-            }
-        });
+                    @Override
+                    public String getToolTipText(MouseEvent event) {
+                        //Get tooltip text dynamically [Bob Boseko 11/13/2003]
+                        return cursorTool.getName();
+                    }
+                });
     }
 
     /**
-     * Add's a CursorTool with an own JToggleButton. This is useful, if you want
-     * to add CursorTool with an own JToggleButton implementation, such a
-     * DropDownToggleButton.
+     * Add's a CursorTool with an own JToggleButton. This is useful, if you want to add CursorTool
+     * with an own JToggleButton implementation, such a DropDownToggleButton.
      *
      */
     public ToolConfig addCursorTool(final CursorTool cursorTool, JideToggleButton button) {
@@ -120,17 +122,18 @@ public class WorkbenchToolBar extends EnableableToolBar {
         final QuasimodeTool quasimodeTool = QuasimodeTool.addStandardQuasimodes(cursorTool);
         add(button, tooltip, cursorTool.getIcon(),
                 new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                 //It's null when the Workbench starts up. [Bob Boseko]
-                //Or the active frame may not have a LayerViewPanel. [Bob Boseko]
-                if (layerViewPanelProxy.getLayerViewPanel() != null) {
-                    layerViewPanelProxy.getLayerViewPanel().setCurrentCursorTool(quasimodeTool);
-                }
+                        //Or the active frame may not have a LayerViewPanel. [Bob Boseko]
+                        if (layerViewPanelProxy.getLayerViewPanel() != null) {
+                            layerViewPanelProxy.getLayerViewPanel().setCurrentCursorTool(quasimodeTool);
+                        }
 
                 //<<TODO:DESIGN>> We really shouldn't create a new LeftClickFilter on each
-                //click of the tool button. Not a big deal though. [Bob Boseko]
-            }
-        }, cursorToolEnableCheck);
+                        //click of the tool button. Not a big deal though. [Bob Boseko]
+                    }
+                }, cursorToolEnableCheck);
         if (cursorToolButtonGroup.getButtonCount() == 1) {
             cursorToolButtonGroup.setSelected(button.getModel(), true);
             reClickSelectedCursorToolButton();
@@ -164,7 +167,7 @@ public class WorkbenchToolBar extends EnableableToolBar {
 
     //<<TODO:REFACTOR>> This method duplicates code in FeatureInstaller, with the
     //result that when the latter was updated (to handle ThreadedPlugIns), the
-    //changes were left out from the former. 
+    //changes were left out from the former.
     public JButton addPlugIn(Icon icon, final PlugIn plugIn, EnableCheck enableCheck, WorkbenchContext workbenchContext) {
         final JideButton button = new JideButton();
         ActionListener listener = AbstractPlugIn.toActionListener(plugIn, workbenchContext, taskMonitorManager);

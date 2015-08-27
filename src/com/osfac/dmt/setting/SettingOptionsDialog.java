@@ -2,11 +2,22 @@ package com.osfac.dmt.setting;
 
 import com.jidesoft.action.DefaultDockableBarDockableHolder;
 import com.jidesoft.animation.CustomAnimation;
-import com.jidesoft.dialog.*;
+import com.jidesoft.dialog.AbstractDialogPage;
+import com.jidesoft.dialog.BannerPanel;
+import com.jidesoft.dialog.ButtonNames;
+import com.jidesoft.dialog.ButtonPanel;
+import com.jidesoft.dialog.MultiplePageDialog;
+import com.jidesoft.dialog.PageList;
 import com.jidesoft.swing.JideSwingUtilities;
 import com.osfac.dmt.Config;
 import com.osfac.dmt.I18N;
-import com.osfac.dmt.setting.panel.*;
+import com.osfac.dmt.setting.panel.ChartFeaturePanel;
+import com.osfac.dmt.setting.panel.FontColorPan;
+import com.osfac.dmt.setting.panel.GeneralPanel;
+import com.osfac.dmt.setting.panel.LanguagePanel;
+import com.osfac.dmt.setting.panel.OtherFeatures;
+import com.osfac.dmt.setting.panel.PrivacyPanel;
+import com.osfac.dmt.setting.panel.ThemePanel;
 import com.osfac.dmt.tools.statistic.Statistic;
 import com.osfac.dmt.workbench.DMTCommandBarFactory;
 import com.osfac.dmt.workbench.DMTConfiguration;
@@ -14,14 +25,25 @@ import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.ui.WorkbenchFrame;
 import com.osfac.dmt.workbench.ui.plugin.OptionsPlugIn;
 import com.osfac.dmt.workbench.ui.snap.InstallGridPlugIn;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import org.jdesktop.swingx.JXErrorPane;
@@ -34,6 +56,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
         super(owner, title);
     }
 
+    @Override
     protected void initComponents() {
         super.initComponents();
         getContentPanel().setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -42,9 +65,11 @@ public class SettingOptionsDialog extends MultiplePageDialog {
         getPagesPanel().setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
     }
 
+    @Override
     public ButtonPanel createButtonPanel() {
         ButtonPanel buttonPanel = super.createButtonPanel();
         AbstractAction okAction = new AbstractAction(I18N.get("Text.OK")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (getApplyButton().isEnabled()) {
                     getApplyButton().doClick();
@@ -55,6 +80,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
             }
         };
         AbstractAction cancelAction = new AbstractAction(I18N.get("Text.CANCEL")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 setDialogResult(RESULT_CANCELLED);
                 setVisible(false);
@@ -95,6 +121,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
         applyOtherFeatures();
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(650, 520);
     }
@@ -122,7 +149,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
         if (Config.isFullVersion()) {
             model.append(panel5);
 //            if (Config.isAdministrator()) {
-                model.append(panel7);
+            model.append(panel7);
 //            }
         }
 
@@ -148,6 +175,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
             page = this;
         }
 
+        @Override
         public void lazyInitialize() {
             initComponents();
         }

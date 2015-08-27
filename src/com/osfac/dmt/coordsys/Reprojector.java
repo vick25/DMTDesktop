@@ -5,8 +5,8 @@ import com.vividsolutions.jts.geom.CoordinateFilter;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * The source and destination coordinate reference systems must have the same
- * datum (for example, WGS 84).
+ * The source and destination coordinate reference systems must have the same datum (for example,
+ * WGS 84).
  */
 public class Reprojector {
 
@@ -44,7 +44,7 @@ public class Reprojector {
 
         Planar result = destination.getProjection().asPlanar(source.getProjection()
                 .asGeographic(new Planar(
-                coordinate.x, coordinate.y), new Geographic()),
+                                coordinate.x, coordinate.y), new Geographic()),
                 new Planar());
         coordinate.x = result.x;
         coordinate.y = result.y;
@@ -57,6 +57,7 @@ public class Reprojector {
         }
 
         geometry.apply(new CoordinateFilter() {
+            @Override
             public void filter(Coordinate coord) {
                 reproject(coord, source, destination);
             }

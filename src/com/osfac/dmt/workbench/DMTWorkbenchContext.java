@@ -25,22 +25,27 @@ public class DMTWorkbenchContext extends WorkbenchContext {
         this.workbench = workbench;
     }
 
+    @Override
     public DMTWorkbench getWorkbench() {
         return workbench;
     }
 
+    @Override
     public Blackboard getBlackboard() {
         return workbench.getBlackboard();
     }
 
+    @Override
     public DriverManager getDriverManager() {
         return workbench.getDriverManager();
     }
 
+    @Override
     public ErrorHandler getErrorHandler() {
         return workbench.getFrame();
     }
 
+    @Override
     public Task getTask() {
         if (!(activeInternalFrame() instanceof TaskFrameProxy)) {
             return null;
@@ -49,6 +54,7 @@ public class DMTWorkbenchContext extends WorkbenchContext {
         return ((TaskFrameProxy) activeInternalFrame()).getTaskFrame().getTask();
     }
 
+    @Override
     public LayerNamePanel getLayerNamePanel() {
         if (!(activeInternalFrame() instanceof LayerNamePanelProxy)) {
             return null;
@@ -57,16 +63,18 @@ public class DMTWorkbenchContext extends WorkbenchContext {
         return ((LayerNamePanelProxy) activeInternalFrame()).getLayerNamePanel();
     }
 
+    @Override
     public LayerManager getLayerManager() {
         if (!(activeInternalFrame() instanceof LayerManagerProxy)) {
             //WarpingPanel assumes that this method returns null if the active frame is not
-            //a LayerManagerProxy. [Bob Boseko]            
+            //a LayerManagerProxy. [Bob Boseko]
             return null;
         }
 
         return ((LayerManagerProxy) activeInternalFrame()).getLayerManager();
     }
 
+    @Override
     public LayerViewPanel getLayerViewPanel() {
         if (!(activeInternalFrame() instanceof LayerViewPanelProxy)) {
             return null;

@@ -84,6 +84,7 @@ public class Albers extends Projection {
         A_p0 = (a * Math.sqrt(A_C - A_n * q0)) / A_n;
     }// END - constructor for Albers projection plane
 
+    @Override
     public Planar asPlanar(Geographic q0, Planar p) {
         q.lat = q0.lat / 180.0 * Math.PI;
         q.lon = q0.lon / 180.0 * Math.PI;
@@ -91,6 +92,7 @@ public class Albers extends Projection {
         return p;
     }
 
+    @Override
     public Geographic asGeographic(Planar p, Geographic q) {
         inverse(p, q);
         q.lat = q.lat * 180.0 / Math.PI;

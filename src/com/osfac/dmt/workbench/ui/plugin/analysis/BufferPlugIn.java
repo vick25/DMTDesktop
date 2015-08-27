@@ -22,13 +22,17 @@ import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.MultiTabInputDialog;
 import com.osfac.dmt.workbench.ui.images.IconLoader;
 import com.osfac.dmt.workbench.ui.plugin.clipboard.PasteItemsPlugIn;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.buffer.BufferParameters;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -81,8 +85,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
     private int attributeIndex = 0;
 
     public BufferPlugIn() {
-        super(
-                I18N.get("com.osfac.dmt.workbench.ui.plugin.analysis.BufferPlugIn") + "...",
+        super(I18N.get("com.osfac.dmt.workbench.ui.plugin.analysis.BufferPlugIn") + "...",
                 IconLoader.icon("buffer.gif"));
     }
     private String categoryName = StandardCategoryNames.RESULT;
@@ -91,6 +94,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         categoryName = value;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         context.getFeatureInstaller().addMainMenuItem(
                 new String[]{MenuNames.TOOLS, MenuNames.TOOLS_ANALYSIS},
@@ -100,7 +104,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         //featureInstaller.addMainMenuItem(
         //    this,					//exe
         //    new String[] {MenuNames.TOOLS, MenuNames.TOOLS_ANALYSIS}, 	//menu path
-        //    this.getName() + "...", //name methode .getName received by AbstractPlugIn 
+        //    this.getName() + "...", //name methode .getName received by AbstractPlugIn
         //    false,			        //checkbox
         //    ICON,			        //icon
         //    createEnableCheck(context.getWorkbenchContext()));
@@ -114,8 +118,8 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(1));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
-
         //[sstein, 16.07.2006] set again to obtain correct language
         //[LDB: 31.08.2007] moved all initialization of strings here
         MAIN_OPTIONS = I18N.get("ui.plugin.analysis.BufferPlugIn.main-options");
@@ -129,7 +133,6 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         FROM_ATTRIBUTE = I18N.get("ui.plugin.analysis.BufferPlugIn.get-distance-from-attribute-value");
         ATTRIBUTE = I18N.get("ui.plugin.analysis.BufferPlugIn.attribute-to-use");
         ATTRIBUTE_TOOLTIP = I18N.get("ui.plugin.analysis.BufferPlugIn.attribute-to-use-tooltip");
-
 
         OTHER_OPTIONS = I18N.get("ui.plugin.analysis.BufferPlugIn.other-options");
         QUADRANT_SEGMENTS = I18N.get("org.openjump.core.ui.plugin.edittoolbox.cursortools.DrawCircleWithGivenRadiusTool.Number-of-segments-per-circle-quarter");
@@ -150,7 +153,6 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         MITRE_LIMIT = I18N.get("ui.plugin.analysis.BufferPlugIn.mitre-join-limit");
 
         SINGLE_SIDED = I18N.get("ui.plugin.analysis.BufferPlugIn.single-sided");
-
 
         endCapStyles = new ArrayList();
         endCapStyles.add(CAP_FLAT);
@@ -182,6 +184,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context) throws Exception {
         monitor.allowCancellationRequests();
         FeatureSchema featureSchema = new FeatureSchema();
@@ -261,8 +264,8 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         int total = fcA.size();
         int count = 0;
         Collection resultColl = new ArrayList();
-        BufferParameters bufferParameters =
-                new BufferParameters(quadrantSegments, endCapStyleCode, joinStyleCode, mitreLimit);
+        BufferParameters bufferParameters
+                = new BufferParameters(quadrantSegments, endCapStyleCode, joinStyleCode, mitreLimit);
         bufferParameters.setSingleSided(singleSided);
         for (Iterator ia = fcA.iterator(); ia.hasNext();) {
             monitor.report(count++, total, I18N.get("com.osfac.dmt.qa.diff.DiffGeometry.features"));
@@ -351,6 +354,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         updateIcon(dialog);
 
         layerComboBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 for (ActionListener listener : layerComboBox.getActionListeners()) {
                     // execute other ActionListener methods before this one
@@ -362,26 +366,31 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
             }
         });
         fromAttributeCheckBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 updateControls(dialog);
             }
         });
         unionCheckBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 updateControls(dialog);
             }
         });
         endCapComboBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 updateControls(dialog);
             }
         });
         joinStyleComboBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 updateControls(dialog);
             }
         });
         singleSidedCheckBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 updateControls(dialog);
             }
@@ -461,7 +470,7 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         Feature feature = (Feature) ((Feature) originalFeatures.iterator().next()).clone();
         feature.setGeometry(factory.createGeometryCollection(
                 (Geometry[]) FeatureUtil.toGeometries(originalFeatures).toArray(
-                new Geometry[originalFeatures.size()])));
+                        new Geometry[originalFeatures.size()])));
         return feature;
     }
 
@@ -509,6 +518,6 @@ public class BufferPlugIn extends AbstractThreadedUiPlugIn {
         }
         dialog.setSideBarImage(
                 new javax.swing.ImageIcon(IconLoader.image(fileName.toString() + ".png")
-                .getScaledInstance((int) (216.0 * 0.8), (int) (159.0 * 0.8), java.awt.Image.SCALE_SMOOTH)));
+                        .getScaledInstance((int) (216.0 * 0.8), (int) (159.0 * 0.8), java.awt.Image.SCALE_SMOOTH)));
     }
 }

@@ -5,12 +5,30 @@ import com.osfac.wms.BoundingBox;
 import com.osfac.wms.MapLayer;
 import com.osfac.wms.MapRequest;
 import com.osfac.wms.WMService;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 /**
  * The executable WMS Viewer.
@@ -40,6 +58,7 @@ public class WMSViewer extends JFrame implements ActionListener, MouseListener {
     public WMSViewer() {
         super(I18N.get("com.vividsolutions.wms.ui.WMSViewer.wms-viewer"));
         this.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
@@ -113,7 +132,6 @@ public class WMSViewer extends JFrame implements ActionListener, MouseListener {
         rightPanel.add(thePanel, BorderLayout.SOUTH);
         getContentPane().add(rightPanel, BorderLayout.EAST);
 
-
         // create and layout the bottom panel (get image control)
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
@@ -140,6 +158,7 @@ public class WMSViewer extends JFrame implements ActionListener, MouseListener {
      *
      * @param actionEvent the event to process
      */
+    @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String command = actionEvent.getActionCommand();
         if (command.equals("connect")) {
@@ -219,6 +238,7 @@ public class WMSViewer extends JFrame implements ActionListener, MouseListener {
         }
     }
 
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         if (mouseEvent.getComponent() == canvas) {
             System.out.println("click");
@@ -254,15 +274,19 @@ public class WMSViewer extends JFrame implements ActionListener, MouseListener {
         }
     }
 
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
 

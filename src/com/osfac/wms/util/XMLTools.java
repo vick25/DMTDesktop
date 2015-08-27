@@ -11,10 +11,9 @@ import org.w3c.dom.NodeList;
 public class XMLTools {
 
     /**
-     * Recursively prints out the DOM structure underneath a Node. The prefix
-     * parameter is used in the recursive call to indent properly, but it can
-     * also be used in the initial call to provide an initial prefix or
-     * indentation.
+     * Recursively prints out the DOM structure underneath a Node. The prefix parameter is used in
+     * the recursive call to indent properly, but it can also be used in the initial call to provide
+     * an initial prefix or indentation.
      *
      * @param n the Node to print out
      * @param prefix the prefix to use
@@ -28,15 +27,14 @@ public class XMLTools {
     }
 
     /**
-     * A very simple XPath implementation. Recursively drills down into the DOM
-     * tree, starting at the given parent Node, following the provided XPath.
-     * The XPath string is a slash-delimited list of element names to drill down
-     * into, the node with the last name in the list is returned
+     * A very simple XPath implementation. Recursively drills down into the DOM tree, starting at
+     * the given parent Node, following the provided XPath. The XPath string is a slash-delimited
+     * list of element names to drill down into, the node with the last name in the list is returned
      *
      * @param parent the parent node to search into
      * @param xpath the simplified XPath search string
-     * @return the Node found at the end of the search, or null if the search
-     * failed to find the specified node.
+     * @return the Node found at the end of the search, or null if the search failed to find the
+     * specified node.
      */
     public static Node simpleXPath(Node parent, String xpath) {
         String name;

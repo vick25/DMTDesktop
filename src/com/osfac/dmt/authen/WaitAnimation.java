@@ -26,8 +26,9 @@ public class WaitAnimation extends JComponent implements ActionListener {
         MediaTracker tracker = new MediaTracker(this);
         animation = new Image[6];
         for (int i = 0; i < 6; i++) {
-            animation[i] = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource(""
-                    + "/com/osfac/dmt/authen/images/auth_" + String.valueOf(i) + ".png"));
+            animation[i] = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource(
+                    new StringBuilder("/com/osfac/dmt/authen/images/auth_").
+                    append(String.valueOf(i)).append(".png").toString()));
             tracker.addImage(animation[i], i);
         }
         try {
@@ -38,12 +39,14 @@ public class WaitAnimation extends JComponent implements ActionListener {
         animationTimer.start();
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         int x = (int) ((getWidth() - animation[index].getWidth(this)) / 2.0);
         int y = (int) ((getHeight() - animation[index].getHeight(this)) / 2.0);
         g.drawImage(animation[index], x, y, this);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         end++;
         index += direction;

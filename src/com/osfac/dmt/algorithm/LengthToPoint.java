@@ -1,12 +1,13 @@
 package com.osfac.dmt.algorithm;
 
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.LineSegment;
+import com.vividsolutions.jts.geom.LineString;
 
 /**
- * Computes the length along a LineString to the point on the line nearest a
- * given point.
+ * Computes the length along a LineString to the point on the line nearest a given point.
  */
-//Martin made a decision to create this duplicate of a class from JCS. 
+//Martin made a decision to create this duplicate of a class from JCS.
 //[Bob Boseko 2004-10-25]
 public class LengthToPoint {
 
@@ -24,8 +25,7 @@ public class LengthToPoint {
     }
 
     /**
-     * Computes the length along a LineString to the point on the line nearest a
-     * given point.
+     * Computes the length along a LineString to the point on the line nearest a given point.
      */
     public static double length(LineString line, Coordinate inputPt) {
         LengthToPoint lp = new LengthToPoint(line, inputPt);

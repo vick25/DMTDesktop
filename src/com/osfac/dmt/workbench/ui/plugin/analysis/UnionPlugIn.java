@@ -36,6 +36,7 @@ public class UnionPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
     public UnionPlugIn() {
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -53,6 +54,7 @@ public class UnionPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(1));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         //[sstein, 16.07.2006] put here again to load correct language
         //[mmichaud 2007-05-20] move to UnionPlugIn constructor to load the string only once
@@ -92,8 +94,8 @@ public class UnionPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         GUIUtil.centreOnWindow(dialog);
     }
 
-    public void run(TaskMonitor monitor, PlugInContext context)
-            throws Exception {
+    @Override
+    public void run(TaskMonitor monitor, PlugInContext context) throws Exception {
         FeatureCollection a;
         Collection inputC;
         if (useSelected) {

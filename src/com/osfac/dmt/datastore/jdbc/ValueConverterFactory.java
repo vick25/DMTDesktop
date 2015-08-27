@@ -1,11 +1,13 @@
 package com.osfac.dmt.datastore.jdbc;
 
 import com.osfac.dmt.feature.AttributeType;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 
 /**
- * Standard data converters for JDBC. Clients can extend this class, or simply
- * call it.
+ * Standard data converters for JDBC. Clients can extend this class, or simply call it.
  *
  * @author Martin Davis
  * @version 1.0
@@ -21,8 +23,8 @@ public class ValueConverterFactory {
     }
 
     /**
-     * Handles finding a converter for standard JDBC types. Clients should
-     * handle custom types themselves.
+     * Handles finding a converter for standard JDBC types. Clients should handle custom types
+     * themselves.
      *
      * @param rsm
      * @param columnIndex
@@ -66,10 +68,12 @@ public class ValueConverterFactory {
 
     public static class IntegerConverter implements ValueConverter {
 
+        @Override
         public AttributeType getType() {
             return AttributeType.INTEGER;
         }
 
+        @Override
         public Object getValue(ResultSet rs, int columnIndex)
                 throws SQLException {
             Object value = rs.getObject(columnIndex);
@@ -83,10 +87,12 @@ public class ValueConverterFactory {
 
     public static class DoubleConverter implements ValueConverter {
 
+        @Override
         public AttributeType getType() {
             return AttributeType.DOUBLE;
         }
 
+        @Override
         public Object getValue(ResultSet rs, int columnIndex)
                 throws SQLException {
             Object value = rs.getObject(columnIndex);
@@ -99,10 +105,12 @@ public class ValueConverterFactory {
 
     public static class StringConverter implements ValueConverter {
 
+        @Override
         public AttributeType getType() {
             return AttributeType.STRING;
         }
 
+        @Override
         public Object getValue(ResultSet rs, int columnIndex)
                 throws SQLException {
             return rs.getString(columnIndex);
@@ -111,10 +119,12 @@ public class ValueConverterFactory {
 
     public static class DateConverter implements ValueConverter {
 
+        @Override
         public AttributeType getType() {
             return AttributeType.DATE;
         }
 
+        @Override
         public Object getValue(ResultSet rs, int columnIndex)
                 throws SQLException {
             return rs.getDate(columnIndex);

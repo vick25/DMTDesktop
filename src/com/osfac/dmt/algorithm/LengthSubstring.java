@@ -1,19 +1,21 @@
 package com.osfac.dmt.algorithm;
 
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateList;
+import com.vividsolutions.jts.geom.LineSegment;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.util.Assert;
 
 /**
- * Computes a substring of a {@link LineString} between given distances along
- * the line. <ul> <li>The distances are clipped to the actual line length <li>If
- * the start distance is equal to the end distance, a zero-length line with two
- * identical points is returned <li>FUTURE: If the start distance is greater
- * than the end distance, an inverted section of the line is returned </ul> <p>
- * FUTURE: should handle startLength > endLength, and flip the returned
- * linestring. Also should handle negative lengths (they are measured from end
- * of line backwards).
+ * Computes a substring of a {@link LineString} between given distances along the line. <ul> <li>The
+ * distances are clipped to the actual line length <li>If the start distance is equal to the end
+ * distance, a zero-length line with two identical points is returned <li>FUTURE: If the start
+ * distance is greater than the end distance, an inverted section of the line is returned </ul>
+ * <p>
+ * FUTURE: should handle startLength > endLength, and flip the returned linestring. Also should
+ * handle negative lengths (they are measured from end of line backwards).
  */
-// Martin made a decision to create this duplicate of a class from JCS. 
+// Martin made a decision to create this duplicate of a class from JCS.
 // [Bob Boseko 2004-10-25]
 public class LengthSubstring {
 
@@ -41,8 +43,8 @@ public class LengthSubstring {
         if (startDistance >= line.getLength()) {
             return line.getFactory()
                     .createLineString(
-                    new Coordinate[]{coordinates[coordinates.length - 1],
-                        coordinates[coordinates.length - 1]});
+                            new Coordinate[]{coordinates[coordinates.length - 1],
+                                coordinates[coordinates.length - 1]});
         }
         if (startDistance < 0.0) {
             startDistance = 0.0;
@@ -53,7 +55,7 @@ public class LengthSubstring {
     /**
      * Assumes input is strictly valid (e.g. startDist < endDistance)
      *
-
+     *
      *
      * @param startDistance
      * @param endDistance
@@ -99,9 +101,9 @@ public class LengthSubstring {
         }
         Coordinate[] newCoordinateArray = newCoordinates.toCoordinateArray();
         /**
-         * Ensure there is enough coordinates to build a valid line. Make a
-         * 2-point line with duplicate coordinates, if necessary There will
-         * always be at least one coordinate in the coordList.
+         * Ensure there is enough coordinates to build a valid line. Make a 2-point line with
+         * duplicate coordinates, if necessary There will always be at least one coordinate in the
+         * coordList.
          */
         if (newCoordinateArray.length <= 1) {
             newCoordinateArray = new Coordinate[]{newCoordinateArray[0], newCoordinateArray[0]};

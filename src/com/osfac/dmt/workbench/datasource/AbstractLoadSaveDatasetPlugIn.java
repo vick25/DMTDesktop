@@ -20,11 +20,13 @@ public abstract class AbstractLoadSaveDatasetPlugIn extends ThreadedBasePlugIn {
         return getClass().getName() + " - LAST DIRECTORY";
     }
 
+    @Override
     public void initialize(final PlugInContext context) throws Exception {
         this.context = context.getWorkbenchContext();
         //Give other plug-ins a chance to add DataSourceQueryChoosers
         //before the dialog is realized. [Bob Boseko]
         context.getWorkbenchFrame().addWindowListener(new WindowAdapter() {
+            @Override
             public void windowOpened(WindowEvent e) {
                 String format = (String) PersistentBlackboardPlugIn.get(context.getWorkbenchContext())
                         .get(getLastFormatKey());
@@ -44,6 +46,7 @@ public abstract class AbstractLoadSaveDatasetPlugIn extends ThreadedBasePlugIn {
     }
     private Collection dataSourceQueries;
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         dataSourceQueries = showDialog(context.getWorkbenchContext());
         if (dataSourceQueries != null) {

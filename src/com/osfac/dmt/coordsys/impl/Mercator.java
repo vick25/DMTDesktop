@@ -63,6 +63,7 @@ public class Mercator extends Projection {
         Y0 = falseNorthing;
     }
 
+    @Override
     public Planar asPlanar(Geographic q0, Planar p) {
         q.lat = q0.lat / 180.0 * Math.PI;
         q.lon = q0.lon / 180.0 * Math.PI;
@@ -70,6 +71,7 @@ public class Mercator extends Projection {
         return p;
     }
 
+    @Override
     public Geographic asGeographic(Planar p, Geographic q) {
         inverse(p, q);
         q.lat = q.lat * 180.0 / Math.PI;
@@ -105,7 +107,7 @@ public class Mercator extends Projection {
         do {
             phiI = Math.PI / 2.0 - 2.0 * Math.atan(
                     t * Math.pow(((1.0 - e * Math.sin(phi)) / (1.0 + e * Math.sin(phi))),
-                    (e / 2.0)));
+                            (e / 2.0)));
             delta = Math.abs(phiI - phi);
             phi = phiI;
         } while (delta > 1.0e-014);

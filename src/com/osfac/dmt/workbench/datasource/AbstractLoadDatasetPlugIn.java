@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 public abstract class AbstractLoadDatasetPlugIn extends AbstractLoadSaveDatasetPlugIn {
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         //Seamus Thomas Carroll [mailto:carrolls@cpsc.ucalgary.ca]
@@ -37,19 +38,18 @@ public abstract class AbstractLoadDatasetPlugIn extends AbstractLoadSaveDatasetP
             Assert.isTrue(dataSourceQuery.getDataSource().isReadable());
             monitor.report(I18N.get("datasource.LoadDatasetPlugIn.loading") + " " + dataSourceQuery.toString() + "...");
 
-            Connection connection = dataSourceQuery.getDataSource()
-                    .getConnection();
+            Connection connection = dataSourceQuery.getDataSource().getConnection();
             try {
                 FeatureCollection dataset = dataSourceQuery.getDataSource().installCoordinateSystem(
                         connection.executeQuery(dataSourceQuery.getQuery(),
-                        exceptions,
-                        monitor),
+                                exceptions,
+                                monitor),
                         CoordinateSystemRegistry.instance(
-                        context.getWorkbenchContext().getBlackboard()));
+                                context.getWorkbenchContext().getBlackboard()));
                 if (dataset != null) {
                     context.getLayerManager()
                             .addLayer(chooseCategory(context),
-                            dataSourceQuery.toString(), dataset)
+                                    dataSourceQuery.toString(), dataset)
                             .setDataSourceQuery(dataSourceQuery)
                             .setFeatureCollectionModified(false);
                 }
@@ -80,11 +80,11 @@ public abstract class AbstractLoadDatasetPlugIn extends AbstractLoadSaveDatasetP
 
         Collection exceptionsToReport = exceptions.size() <= 10 ? exceptions
                 : CollectionUtil.concatenate(Arrays.asList(
-                new Collection[]{
-                    exceptions.subList(0, 5),
-                    exceptions.subList(exceptions.size() - 5,
-                    exceptions.size())
-                }));
+                                new Collection[]{
+                                    exceptions.subList(0, 5),
+                                    exceptions.subList(exceptions.size() - 5,
+                                            exceptions.size())
+                                }));
         for (Iterator j = exceptionsToReport.iterator(); j.hasNext();) {
             Exception exception = (Exception) j.next();
             context.getWorkbenchFrame().log(StringUtil.stackTrace(exception));

@@ -16,7 +16,7 @@ public class MergeDataRequest {
     public MergeDataRequest() {
         try {
             conNew = connectToTargetDB("bd_osfac_new");
-            PreparedStatement ps = conNew.prepareStatement("select id_requerant from t_requerant ");
+            PreparedStatement ps = conNew.prepareStatement("select id_requerant from t_requerant");
             ResultSet res = ps.executeQuery();
             while (res.next()) {
                 int idRequesterNew = insertRequester(findRequesterData(res.getInt(1)));
@@ -31,8 +31,8 @@ public class MergeDataRequest {
 
     private int insertDelivery(int idRequester, ArrayList<String> data, int idRequerantOld) throws SQLException {
         int idDelivery = -1;
-        PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)"
-                + "", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)",
+                Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, null);
         ps.setInt(2, idRequester);
         for (int i = 0; i < data.size(); i++) {
@@ -62,7 +62,7 @@ public class MergeDataRequest {
                 }
             }
         }
-        System.err.println(NewRequester + " has been added in the database successfully ...");
+        System.err.println(new StringBuilder(NewRequester).append(" has been added in the database successfully ...").toString());
         return idDelivery;
     }
 
@@ -130,8 +130,7 @@ public class MergeDataRequest {
 
     private int insertRequester(ArrayList<String> data) throws SQLException {
         PreparedStatement ps = Config.con.prepareStatement("insert into dmt_requester values "
-                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                + "", Statement.RETURN_GENERATED_KEYS);
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, null);
         for (int i = 0; i < data.size(); i++) {
             if (i == 3) {
@@ -148,7 +147,8 @@ public class MergeDataRequest {
         if (result == 1) {
             ResultSet res = ps.getGeneratedKeys();
             if (res.next()) {
-                NewRequester = data.get(0) + " " + data.get(1) + " " + data.get(2);
+                NewRequester = new StringBuilder(data.get(0)).append(" ").append(data.get(1)).
+                        append(" ").append(data.get(2)).toString();
 //                System.out.print(NewRequester + " has been found ... ");
                 return res.getInt(1);
             }

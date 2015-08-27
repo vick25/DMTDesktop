@@ -144,14 +144,14 @@ import org.openjump.core.ui.plugin.view.helpclassescale.InstallShowScalePlugIn;
 import org.openjump.core.ui.plugin.view.helpclassescale.ShowScaleRenderer;
 
 /**
- * Initializes the Workbench with various menus and cursor tools. Accesses the
- * Workbench structure through a WorkbenchContext.
+ * Initializes the Workbench with various menus and cursor tools. Accesses the Workbench structure
+ * through a WorkbenchContext.
  */
 public class DMTConfiguration implements Setup {
 
     /**
-     * Built-in plugins must be defined as instance variables, since they are
-     * located for iniatialization via reflection on this class
+     * Built-in plugins must be defined as instance variables, since they are located for
+     * initialization via reflection on this class
      */
     private InstallShowScalePlugIn installShowScalePlugIn = new InstallShowScalePlugIn();
     private InstallScaleBarPlugIn installScaleBarPlugIn = new InstallScaleBarPlugIn();
@@ -229,6 +229,7 @@ public class DMTConfiguration implements Setup {
     private CopyStylesPlugIn copyStylesPlugIn = new CopyStylesPlugIn();
     private PasteStylesPlugIn pasteStylesPlugIn = new PasteStylesPlugIn();
     private CombineSelectedFeaturesPlugIn combineSelectedFeaturesPlugIn = new CombineSelectedFeaturesPlugIn();
+//  private MergeSelectedFeaturesPlugIn mergeSelectedFeaturesPlugIn = new MergeSelectedFeaturesPlugIn();
     private ExplodeSelectedFeaturesPlugIn explodeSelectedFeaturesPlugIn = new ExplodeSelectedFeaturesPlugIn();
     // superseded by org/openjump/OpenJumpConfiguration.java
     //private InstallReferencedImageFactoriesPlugin installReferencedImageFactoriesPlugin = new InstallReferencedImageFactoriesPlugin();
@@ -236,19 +237,20 @@ public class DMTConfiguration implements Setup {
     private RefreshDataStoreLayerPlugin refreshDataStoreLayerPlugin = new RefreshDataStoreLayerPlugin();
     private DuplicateItemPlugIn duplicateItemPlugIn = new DuplicateItemPlugIn();
 
+    @Override
     public void setup(WorkbenchContext workbenchContext) throws Exception {
         configureStyles(workbenchContext);
         configureDatastores(workbenchContext);
         workbenchContext.getWorkbench().getBlackboard().put(SnapToVerticesPolicy.ENABLED_KEY, true);
         EnableCheckFactory checkFactory = new EnableCheckFactory(workbenchContext);
         FeatureInstaller featureInstaller = new FeatureInstaller(workbenchContext);
-        configureToolBar(workbenchContext, checkFactory);
-        configureMainMenus(workbenchContext, checkFactory, featureInstaller);
-        configureLayerPopupMenu(workbenchContext, featureInstaller, checkFactory);
-        configureAttributePopupMenu(workbenchContext, featureInstaller, checkFactory);
+        configureToolBar(workbenchContext, checkFactory); //Method that build the toolbar for using the map
+        configureMainMenus(workbenchContext, checkFactory, featureInstaller); //Application tool menu (File, Edit, etc.)
+        configureLayerPopupMenu(workbenchContext, featureInstaller, checkFactory); //Method to view popupmenu of a layer
+        configureAttributePopupMenu(workbenchContext, featureInstaller, checkFactory); //Method that manages the layer attributes table
         configureWMSQueryNamePopupMenu(workbenchContext, featureInstaller, checkFactory);
-        configureCategoryPopupMenu(workbenchContext, featureInstaller);
-        configureLayerViewPanelPopupMenu(workbenchContext, checkFactory, featureInstaller);
+        configureCategoryPopupMenu(workbenchContext, featureInstaller); //Method to view the popupmenu when mouse right-click on a category
+        configureLayerViewPanelPopupMenu(workbenchContext, checkFactory, featureInstaller);//Method to view the popupmenu when mouse right-click on map
         initializeRenderingManager();
         /**
          * ******************************************
@@ -267,6 +269,7 @@ public class DMTConfiguration implements Setup {
         RenderingManager.setRendererFactory(WMSLayer.class, new WmsLayerRendererFactory());
     }
 
+    //Method to view the popupmenu when mouse right-click on a category (Working or System)
     private void configureCategoryPopupMenu(WorkbenchContext workbenchContext,
             FeatureInstaller featureInstaller) {
         featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
@@ -288,8 +291,9 @@ public class DMTConfiguration implements Setup {
         //[sstein 2.June.2008] added back due to table list history (need to check other way?)
         featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
                 .getFrame().getCategoryPopupMenu(), addDatastoreLayerPlugIn,
-                addDatastoreLayerPlugIn.getName() + "...",
+                new StringBuilder(addDatastoreLayerPlugIn.getName()).append("...").toString(),
                 false, AddDatastoreLayerPlugIn.ICON, null);
+
         /* //[sstein 21.Mar.2008] removed since now contained in new open menu
          featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
          .getFrame().getCategoryPopupMenu(), addWMSQueryPlugIn,
@@ -299,7 +303,6 @@ public class DMTConfiguration implements Setup {
          .getFrame().getCategoryPopupMenu(), addImageLayerPlugIn,
          addImageLayerPlugIn.getName() + "...", false, null, null);
          */
-
         featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
                 .getFrame().getCategoryPopupMenu(), pasteLayersPlugIn,
                 pasteLayersPlugIn.getNameWithMnemonic(), false, null,
@@ -317,7 +320,7 @@ public class DMTConfiguration implements Setup {
         JPopupMenu wmsLayerNamePopupMenu = workbenchContext.getWorkbench()
                 .getFrame().getWMSLayerNamePopupMenu();
         featureInstaller.addPopupMenuItem(wmsLayerNamePopupMenu,
-                editWMSQueryPlugIn, editWMSQueryPlugIn.getName() + "...",
+                editWMSQueryPlugIn, new StringBuilder(editWMSQueryPlugIn.getName()).append("...").toString(),
                 false, null, editWMSQueryPlugIn
                 .createEnableCheck(workbenchContext));
         wmsLayerNamePopupMenu.addSeparator(); // ===================
@@ -342,6 +345,7 @@ public class DMTConfiguration implements Setup {
                 .createEnableCheck(workbenchContext));
     }
 
+    //Method that manages the layer attributes table
     private void configureAttributePopupMenu(
             final WorkbenchContext workbenchContext,
             FeatureInstaller featureInstaller, EnableCheckFactory checkFactory) {
@@ -368,6 +372,7 @@ public class DMTConfiguration implements Setup {
                 DeleteSelectedItemsPlugIn.createEnableCheck(workbenchContext));
     }
 
+    //Method to view popupmenu of a layer
     private void configureLayerPopupMenu(
             final WorkbenchContext workbenchContext,
             FeatureInstaller featureInstaller, EnableCheckFactory checkFactory) {
@@ -428,7 +433,7 @@ public class DMTConfiguration implements Setup {
 
         layerNamePopupMenu.addSeparator(); // ===================
 
-        //[sstein 18.Oct.2011] re-added the saveDatasetAsFilePlugIn and the MacOSX check 
+        //[sstein 18.Oct.2011] re-added the saveDatasetAsFilePlugIn and the MacOSX check
         //        since under MacOSX the SaveDatasetAsPlugIn is missing a text field to
         //        write the name of the new file. Hence, the dialog could only be used
         //        for saving to an existing dataset.
@@ -442,7 +447,7 @@ public class DMTConfiguration implements Setup {
          }
          */
         featureInstaller.addPopupMenuItem(layerNamePopupMenu,
-                saveDatasetAsPlugIn, saveDatasetAsPlugIn.getName() + "...",
+                saveDatasetAsPlugIn, new StringBuilder(saveDatasetAsPlugIn.getName()).append("...").toString(),
                 false, SaveDatasetAsPlugIn.ICON, AbstractSaveDatasetAsPlugIn
                 .createEnableCheck(workbenchContext));
 
@@ -464,7 +469,6 @@ public class DMTConfiguration implements Setup {
                 .getNameWithMnemonic(), false, CopySelectedLayersPlugIn.ICON,
                 copySelectedLayersPlugIn.createEnableCheck(workbenchContext));
 
-
         layerNamePopupMenu.addSeparator(); // ===================
         featureInstaller.addPopupMenuItem(layerNamePopupMenu,
                 addNewFeaturesPlugIn, addNewFeaturesPlugIn.getName() + "...",
@@ -483,9 +487,9 @@ public class DMTConfiguration implements Setup {
                 deleteAllFeaturesPlugIn, deleteAllFeaturesPlugIn.getName(),
                 false, DeleteAllFeaturesPlugIn.ICON, deleteAllFeaturesPlugIn
                 .createEnableCheck(workbenchContext));
-
     }
 
+    //Method to view the popupmenu when mouse right-click on map
     private void configureLayerViewPanelPopupMenu(
             WorkbenchContext workbenchContext, EnableCheckFactory checkFactory,
             FeatureInstaller featureInstaller) {
@@ -501,8 +505,8 @@ public class DMTConfiguration implements Setup {
                 null,
                 new MultiEnableCheck()
                 .add(
-                checkFactory
-                .createWindowWithLayerViewPanelMustBeActiveCheck())
+                        checkFactory
+                        .createWindowWithLayerViewPanelMustBeActiveCheck())
                 .add(checkFactory.createFenceMustBeDrawnCheck()));
         popupMenu.addSeparator(); // ===================
         featureInstaller.addPopupMenuItem(popupMenu, zoomToFencePlugIn,
@@ -519,8 +523,9 @@ public class DMTConfiguration implements Setup {
                 ZoomToSelectedItemsPlugIn.createEnableCheck(workbenchContext));
         //featureInstaller.addPopupMenuItem(popupMenu, zoomToClickPlugIn,
         //        I18N.get("JUMPConfiguration.zoom-out"), false, null, null);
+
         popupMenu.addSeparator(); // ===================
-        //[sstein] 23Mar2009 -- remove from layer view context menu to get space but is still to be found in >edit>selection> 
+        //[sstein] 23Mar2009 -- remove from layer view context menu to get space but is still to be found in >edit>selection>
         featureInstaller.addPopupMenuItem(popupMenu,
                 selectFeaturesInFencePlugIn, selectFeaturesInFencePlugIn
                 .getName(), false, null, SelectFeaturesInFencePlugIn.createEnableCheck(workbenchContext));
@@ -550,31 +555,31 @@ public class DMTConfiguration implements Setup {
                 explodeSelectedFeaturesPlugIn, explodeSelectedFeaturesPlugIn
                 .getName(), false, explodeSelectedFeaturesPlugIn.getIcon(),
                 explodeSelectedFeaturesPlugIn.createEnableCheck(workbenchContext));
-
         featureInstaller.addPopupMenuItem(popupMenu, copyThisCoordinatePlugIn,
                 copyThisCoordinatePlugIn.getName(), false, null,
                 CopyThisCoordinatePlugIn.createEnableCheck(workbenchContext));
-
     }
 
+    //Method used to manage the application menus
     private void configureMainMenus(final WorkbenchContext workbenchContext,
             final EnableCheckFactory checkFactory, FeatureInstaller featureInstaller) throws Exception {
-
-        FeatureInstaller.addMainMenu(featureInstaller, new String[]{
-            MenuNames.FILE
-        }, MenuNames.FILE_NEW, 0);
+        /**
+         * FILE ===================================================================
+         */
+        FeatureInstaller.addMainMenu(featureInstaller, new String[]{MenuNames.FILE},
+                MenuNames.FILE_NEW, 0);
         featureInstaller.addMainMenuItemWithJava14Fix(newTaskPlugIn, new String[]{
-            MenuNames.FILE, MenuNames.FILE_NEW
-        }, newTaskPlugIn.getName(), false, NewTaskPlugIn.getIcon2(), null);
+            MenuNames.FILE, MenuNames.FILE_NEW},
+                newTaskPlugIn.getName(), false, NewTaskPlugIn.getIcon2(), null); //New Project
         featureInstaller.addMenuSeparator(new String[]{MenuNames.FILE, MenuNames.FILE_NEW}); // ===================
         featureInstaller.addMainMenuItem(addNewLayerPlugIn,
                 new String[]{MenuNames.FILE, MenuNames.FILE_NEW},
                 new JMenuItem(I18N.get("com.osfac.dmt.workbench.ui.plugin.AddNewLayerPlugIn.name"), IconLoader.icon("layers.png")),
-                checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck());
+                checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()); //New Layer
         featureInstaller.addMainMenuItem(addNewCategoryPlugIn,
                 new String[]{MenuNames.FILE, MenuNames.FILE_NEW},
                 new JMenuItem(I18N.get("com.osfac.dmt.workbench.ui.plugin.AddNewCategoryPlugIn.name"), IconLoader.icon("chart_organisation.png")),
-                checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck());
+                checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()); //New Category
 
         featureInstaller.addMenuSeparator(MenuNames.FILE); // ===================
 
@@ -587,19 +592,19 @@ public class DMTConfiguration implements Setup {
         featureInstaller.addMainMenuItemWithJava14Fix(saveProjectAsPlugIn, new String[]{MenuNames.FILE},
                 saveProjectAsPlugIn.getName() + "...", false, SaveProjectAsPlugIn.ICON, checkFactory
                 .createTaskWindowMustBeActiveCheck());
-        FeatureInstaller.addMainMenu(featureInstaller, new String[]{
-            MenuNames.FILE
-        }, MenuNames.FILE_SAVEVIEW, 5);
+        FeatureInstaller.addMainMenu(featureInstaller, new String[]{MenuNames.FILE},
+                MenuNames.FILE_SAVEVIEW, 5);
         featureInstaller.addMainMenuItemWithJava14Fix(
                 saveImageAsPlugIn,
-                new String[]{
-            MenuNames.FILE, MenuNames.FILE_SAVEVIEW
-        }, saveImageAsPlugIn.getName() + "...",
+                new String[]{MenuNames.FILE, MenuNames.FILE_SAVEVIEW},
+                new StringBuilder(saveImageAsPlugIn.getName()).append("...").toString(),
                 false,
                 null,
                 SaveImageAsPlugIn.createEnableCheck(workbenchContext));
 
-        //-- EDIT
+        /**
+         * EDIT ===================================================================================
+         */
         featureInstaller.addMainMenuItemWithJava14Fix(undoPlugIn, new String[]{MenuNames.EDIT}, undoPlugIn
                 .getName(), false, GUIUtil.toSmallIcon(undoPlugIn.getIcon()),
                 undoPlugIn.createEnableCheck(workbenchContext));
@@ -614,9 +619,8 @@ public class DMTConfiguration implements Setup {
                 editSelectedFeaturePlugIn.getName(), false, editSelectedFeaturePlugIn.getIcon(),
                 EditSelectedFeaturePlugIn.createEnableCheck(workbenchContext));
 
-        FeatureInstaller.addMainMenu(featureInstaller, new String[]{
-            MenuNames.EDIT
-        }, MenuNames.SELECTION, 6);
+        FeatureInstaller.addMainMenu(featureInstaller, new String[]{MenuNames.EDIT},
+                MenuNames.SELECTION, 6);
         featureInstaller.addMainMenuItemWithJava14Fix(selectFeaturesInFencePlugIn,
                 new String[]{MenuNames.EDIT, MenuNames.SELECTION},
                 selectFeaturesInFencePlugIn.getName(), false, null,
@@ -639,12 +643,15 @@ public class DMTConfiguration implements Setup {
                 deleteSelectedItemsPlugIn.getName(), false, DeleteSelectedItemsPlugIn.ICON,
                 DeleteSelectedItemsPlugIn.createEnableCheck(workbenchContext));
         //featureInstaller.addMenuSeparator(MenuNames.EDIT); // ===================
-        /*//--[sstein 24 march 2007] moved to new customize menu 
+        /*//--[sstein 24 march 2007] moved to new customize menu
          featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[] {MenuNames.EDIT}, optionsPlugIn
          .getName()
          + "...", false, null, null);
          */
-        //-- VIEW        
+
+        /**
+         * VIEW =================================================================================
+         */
         editingPlugIn.createMainMenuItem(new String[]{MenuNames.VIEW}, GUIUtil
                 .toSmallIcon(EditingPlugIn.ICON), workbenchContext);
         featureInstaller.addMainMenuItemWithJava14Fix(copyImagePlugIn, new String[]{MenuNames.FILE},
@@ -657,16 +664,15 @@ public class DMTConfiguration implements Setup {
                 .createEnableCheck(workbenchContext));
         featureInstaller
                 .addMainMenuItemWithJava14Fix(
-                verticesInFencePlugIn,
-                new String[]{MenuNames.VIEW},
-                verticesInFencePlugIn.getName(),
-                false,
-                null,
-                new MultiEnableCheck()
-                .add(
-                checkFactory
-                .createWindowWithLayerViewPanelMustBeActiveCheck())
-                .add(checkFactory.createFenceMustBeDrawnCheck()));
+                        verticesInFencePlugIn,
+                        new String[]{MenuNames.VIEW},
+                        verticesInFencePlugIn.getName(),
+                        false,
+                        null,
+                        new MultiEnableCheck()
+                        .add(checkFactory
+                                .createWindowWithLayerViewPanelMustBeActiveCheck())
+                        .add(checkFactory.createFenceMustBeDrawnCheck()));
         featureInstaller.addMenuSeparator(MenuNames.VIEW); // ===================
         featureInstaller.addMainMenuItemWithJava14Fix(zoomToFullExtentPlugIn, new String[]{MenuNames.VIEW},
                 zoomToFullExtentPlugIn.getName(), false, GUIUtil
@@ -674,22 +680,21 @@ public class DMTConfiguration implements Setup {
                 zoomToFullExtentPlugIn.createEnableCheck(workbenchContext));
         featureInstaller
                 .addMainMenuItemWithJava14Fix(
-                zoomToFencePlugIn,
-                new String[]{MenuNames.VIEW},
-                zoomToFencePlugIn.getName(),
-                false,
-                GUIUtil.toSmallIcon(zoomToFencePlugIn.getIcon()),
-                new MultiEnableCheck()
-                .add(
-                checkFactory
-                .createWindowWithLayerViewPanelMustBeActiveCheck())
-                .add(checkFactory.createFenceMustBeDrawnCheck()));
+                        zoomToFencePlugIn,
+                        new String[]{MenuNames.VIEW},
+                        zoomToFencePlugIn.getName(),
+                        false,
+                        GUIUtil.toSmallIcon(zoomToFencePlugIn.getIcon()),
+                        new MultiEnableCheck()
+                        .add(checkFactory
+                                .createWindowWithLayerViewPanelMustBeActiveCheck())
+                        .add(checkFactory.createFenceMustBeDrawnCheck()));
         featureInstaller.addMainMenuItemWithJava14Fix(zoomToSelectedItemsPlugIn, new String[]{MenuNames.VIEW},
                 zoomToSelectedItemsPlugIn.getName(), false, GUIUtil
                 .toSmallIcon(zoomToSelectedItemsPlugIn.getIcon()),
                 ZoomToSelectedItemsPlugIn.createEnableCheck(workbenchContext));
         featureInstaller.addMainMenuItemWithJava14Fix(zoomToCoordinatePlugIn, new String[]{MenuNames.VIEW},
-                zoomToCoordinatePlugIn.getName() + "...", false, null,
+                new StringBuilder(zoomToCoordinatePlugIn.getName()).append("...").toString(), false, null,
                 zoomToCoordinatePlugIn.createEnableCheck(workbenchContext));
         featureInstaller.addMainMenuItemWithJava14Fix(zoomPreviousPlugIn, new String[]{MenuNames.VIEW},
                 zoomPreviousPlugIn.getName(), false, GUIUtil
@@ -701,54 +706,59 @@ public class DMTConfiguration implements Setup {
         featureInstaller.addMenuSeparator(MenuNames.VIEW); // ===================
         featureInstaller
                 .addMainMenuItemWithJava14Fix(
-                showScalePlugIn,
-                new String[]{MenuNames.VIEW},
-                showScalePlugIn.getName(),
-                true,
-                null,
-                new MultiEnableCheck()
-                .add(checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck())
-                .add(new EnableCheck() {
-            public String check(JComponent component) {
-                ((JCheckBoxMenuItem) component)
-                        .setSelected(ShowScaleRenderer
-                        .isEnabled(workbenchContext
-                        .getLayerViewPanel()));
-                return null;
-            }
-        }));
+                        showScalePlugIn,
+                        new String[]{MenuNames.VIEW},
+                        showScalePlugIn.getName(),
+                        true,
+                        null,
+                        new MultiEnableCheck()
+                        .add(checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck())
+                        .add(new EnableCheck() {
+                            @Override
+                            public String check(JComponent component) {
+                                ((JCheckBoxMenuItem) component)
+                                .setSelected(ShowScaleRenderer
+                                        .isEnabled(workbenchContext
+                                                .getLayerViewPanel()));
+                                return null;
+                            }
+                        }));
         featureInstaller
                 .addMainMenuItemWithJava14Fix(
-                scaleBarPlugIn,
-                new String[]{MenuNames.VIEW},
-                scaleBarPlugIn.getName(),
-                true,
-                null,
-                new MultiEnableCheck()
-                .add(checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck())
-                .add(new EnableCheck() {
-            public String check(JComponent component) {
-                ((JCheckBoxMenuItem) component)
-                        .setSelected(ScaleBarRenderer
-                        .isEnabled(workbenchContext
-                        .getLayerViewPanel()));
-                return null;
-            }
-        }));
+                        scaleBarPlugIn,
+                        new String[]{MenuNames.VIEW},
+                        scaleBarPlugIn.getName(),
+                        true,
+                        null,
+                        new MultiEnableCheck()
+                        .add(checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck())
+                        .add(new EnableCheck() {
+                            @Override
+                            public String check(JComponent component) {
+                                ((JCheckBoxMenuItem) component)
+                                .setSelected(ScaleBarRenderer
+                                        .isEnabled(workbenchContext
+                                                .getLayerViewPanel()));
+                                return null;
+                            }
+                        }));
         featureInstaller.addMainMenuItemWithJava14Fix(toolTipsPlugIn,
                 new String[]{MenuNames.VIEW}, toolTipsPlugIn.getName(), true, null,
                 MapToolTipsPlugIn.createEnableCheck(workbenchContext));
-        zoomBarPlugIn.createMainMenuItem(new String[]{MenuNames.VIEW}, null,
-                workbenchContext);
-        //-- LAYER       
+        zoomBarPlugIn.createMainMenuItem(new String[]{MenuNames.VIEW}, null, workbenchContext);
+
+        /**
+         * LAYER ===============================================================================
+         */
         //-- [sstein: 23.02.2006 new sub method in VividJump]
         configLayer(workbenchContext, checkFactory, featureInstaller);
 
-        //-- WINDOW
+        /**
+         * WINDOW ==============================================================================
+         */
         /*
          featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[] {MenuNames.WINDOW}, optionsPlugIn
-         .getName()
-         + "...", false, null, null);
+         .getName() + "...", false, null, null);
          */
         featureInstaller.addMainMenuItemWithJava14Fix(outputWindowPlugIn,
                 new String[]{MenuNames.WINDOW},
@@ -762,34 +772,42 @@ public class DMTConfiguration implements Setup {
 
         featureInstaller.addMainMenuItemWithJava14Fix(cloneWindowPlugIn, new String[]{MenuNames.WINDOW},
                 cloneWindowPlugIn.getName(), false, null, new EnableCheck() {
-            public String check(JComponent component) {
-                return (!(workbenchContext.getWorkbench().getFrame()
+                    @Override
+                    public String check(JComponent component) {
+                        return (!(workbenchContext.getWorkbench().getFrame()
                         .getActiveInternalFrame() instanceof CloneableInternalFrame)) ? I18N.get("JUMPConfiguration.not-available-for-the-current-window")
-                        : null;
-            }
-        });
-
+                                : null;
+                    }
+                });
         //featureInstaller.addMenuSeparator(MenuNames.WINDOW); // ===================
 
-        //-- TOOLS
+        /**
+         * TOOLS ==============================================================================
+         */
         /* [sstein 13.Aug.2008] -- initialization now in default-plugins.xml
-         configToolsAnalysis(workbenchContext, checkFactory, featureInstaller); 
-         configToolsEdit(workbenchContext, checkFactory, featureInstaller); 
-         configToolsQA(workbenchContext, checkFactory, featureInstaller);  
-         configToolsAttributes(workbenchContext, checkFactory, featureInstaller);  
+         configToolsAnalysis(workbenchContext, checkFactory, featureInstaller);
+         configToolsEdit(workbenchContext, checkFactory, featureInstaller);
+         configToolsQA(workbenchContext, checkFactory, featureInstaller);
+         configToolsAttributes(workbenchContext, checkFactory, featureInstaller);
+         */
+        /**
+         * HELP ===========================================================================
          */
         featureInstaller.addMainMenuItemWithJava14Fix(shortcutKeysPlugIn, new String[]{MenuNames.HELP},
-                shortcutKeysPlugIn.getName() + "...", false, ShortcutKeysPlugIn.ICON, null);
+                new StringBuilder(shortcutKeysPlugIn.getName()).append("...").toString(), false, ShortcutKeysPlugIn.ICON, null);
 //        new FeatureInstaller(workbenchContext).addMainMenuItemWithJava14Fix(
 //                new AboutPlugIn(), new String[]{MenuNames.HELP}, I18N.get("JUMPConfiguration.about"), false, AboutPlugIn.ICON, null);
 
-        //-- CUSTOMIZE
+        /**
+         * CUSTOMIZE ===========================================================================
+         */
         //-- [sstein: 24.03.2007 new menu]
-        featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[]{MenuNames.CUSTOMIZE}, optionsPlugIn
-                .getName() + "...", false, null, null);
+        featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[]{MenuNames.CUSTOMIZE}, new StringBuilder(optionsPlugIn
+                .getName()).append("...").toString(), false, null, null);
     }
-    //==== [sstein: 23.02.2006] ====== 
-    // this is a new method in VividJump (December 2005) to initialize 
+
+    //==== [sstein: 23.02.2006] ======
+    // this is a new method in VividJump (December 2005) to initialize
     // plugins working on layers
     //================================
     //public static String MENU_LAYER = MenuNames.LAYER;
@@ -798,6 +816,7 @@ public class DMTConfiguration implements Setup {
     private InstallDatastoreLayerRendererHintsPlugIn installDatastoreLayerRendererHintsPlugIn = new InstallDatastoreLayerRendererHintsPlugIn();
     //private AddImageLayerPlugIn addImageLayerPlugIn = new AddImageLayerPlugIn();
 
+    //Method to configue the Layer menu
     private void configLayer(final WorkbenchContext workbenchContext,
             final EnableCheckFactory checkFactory, FeatureInstaller featureInstaller) throws Exception {
 
@@ -808,7 +827,7 @@ public class DMTConfiguration implements Setup {
          addNewLayerPlugIn.getName());
          featureInstaller.addLayerViewMenuItem(addDatastoreLayerPlugIn, MENU_LAYER,
          addDatastoreLayerPlugIn.getName() + "...");
-       
+
          featureInstaller.addLayerViewMenuItem(runDatastoreQueryPlugIn, MENU_LAYER,
          runDatastoreQueryPlugIn.getName() + "...");
          */
@@ -816,7 +835,7 @@ public class DMTConfiguration implements Setup {
        /*
          featureInstaller.addLayerViewMenuItem(addWMSQueryPlugIn, MENU_LAYER,
          addWMSQueryPlugIn.getName() + "...");
-      	
+
          featureInstaller.addLayerViewMenuItem(addImageLayerPlugIn, MENU_LAYER,
          addImageLayerPlugIn.getName() + "...");
          */
@@ -851,6 +870,7 @@ public class DMTConfiguration implements Setup {
         // update exit handler
         final ApplicationExitHandler oldApplicationExitHandler = context.getWorkbench().getFrame().getApplicationExitHandler();
         context.getWorkbench().getFrame().setApplicationExitHandler(new ApplicationExitHandler() {
+            @Override
             public void exitApplication(JFrame mainFrame) {
                 try {
                     ConnectionManager.instance(context).closeConnections();
@@ -882,10 +902,12 @@ public class DMTConfiguration implements Setup {
         frame.addChoosableStyleClass(CircleLineStringEndpointStyle.End.class);
     }
 
+    //Method build for the select feature tool of the toolbar map
     private QuasimodeTool add(CursorTool tool, WorkbenchContext context) {
         return context.getWorkbench().getFrame().getToolBar().addCursorTool(tool).getQuasimodeTool();
     }
 
+    //Method that build the toolbar for using the map
     private void configureToolBar(final WorkbenchContext workbenchContext, EnableCheckFactory checkFactory) {
         WorkbenchFrame frame = workbenchContext.getWorkbench().getFrame();
         frame.getToolBar().addPlugIn(NewTaskPlugIn.getIcon(),
@@ -896,7 +918,7 @@ public class DMTConfiguration implements Setup {
         add(new ZoomTool(), workbenchContext);
         add(new PanTool(), workbenchContext);
         // Test for the new Zoom/Pan tool, comment the following line out, if it makes problems
-        // add(new SuperZoomPanTool(), workbenchContext);        
+        // add(new SuperZoomPanTool(), workbenchContext);
         frame.getToolBar().addPlugIn(zoomToFullExtentPlugIn.getIcon(),
                 zoomToFullExtentPlugIn,
                 zoomToFullExtentPlugIn.createEnableCheck(workbenchContext),
@@ -909,14 +931,14 @@ public class DMTConfiguration implements Setup {
         add(new ZoomRealtimeTool(), workbenchContext);  //TODO: move to OpenJumpConfiguration if possible
         frame.getToolBar()
                 .addPlugIn(
-                zoomToFencePlugIn.getIcon(),
-                zoomToFencePlugIn,
-                new MultiEnableCheck()
-                .add(
-                checkFactory
-                .createWindowWithLayerViewPanelMustBeActiveCheck())
-                .add(checkFactory.createFenceMustBeDrawnCheck()),
-                workbenchContext);
+                        zoomToFencePlugIn.getIcon(),
+                        zoomToFencePlugIn,
+                        new MultiEnableCheck()
+                        .add(
+                                checkFactory
+                                .createWindowWithLayerViewPanelMustBeActiveCheck())
+                        .add(checkFactory.createFenceMustBeDrawnCheck()),
+                        workbenchContext);
         frame.getToolBar().addSeparator();
         frame.getToolBar().addPlugIn(zoomPreviousPlugIn.getIcon(),
                 zoomPreviousPlugIn,
@@ -946,6 +968,7 @@ public class DMTConfiguration implements Setup {
                 workbenchContext);
         frame.getToolBar().addSeparator();
         add(new OrCompositeTool() {
+            @Override
             public String getName() {
                 return I18N.get("JUMPConfiguration.fence");
             }
@@ -953,14 +976,14 @@ public class DMTConfiguration implements Setup {
                 workbenchContext);
         add(new FeatureInfoTool(), workbenchContext);
         frame.getToolBar().addSeparator();
-//        configureEditingButton(workbenchContext);
 
+//        configureEditingButton(workbenchContext);
         AdvancedMeasureTool advancedMeasureTool = new AdvancedMeasureTool(workbenchContext);
         workbenchContext.getWorkbench().getFrame().getToolBar().addCursorTool(advancedMeasureTool, advancedMeasureTool.getToolbarButton());
         advancedMeasureOP = new AdvancedMeasureOptionsPanel(workbenchContext);
-        GeneralPanel.TabbedPaneAll.addTab(I18N.get(""
-                + "org.openjump.core.ui.plugin.tools.AdvancedMeasurePlugin.OptionPanelTitle"
-                + ""), new JScrollPane(advancedMeasureOP));
+        GeneralPanel.TabbedPaneAll.addTab(I18N.get(
+                "org.openjump.core.ui.plugin.tools.AdvancedMeasurePlugin.OptionPanelTitle"),
+                new JScrollPane(advancedMeasureOP));
 
         frame.getToolBar().addPlugIn(undoPlugIn.getIcon(), undoPlugIn,
                 undoPlugIn.createEnableCheck(workbenchContext),
@@ -971,30 +994,30 @@ public class DMTConfiguration implements Setup {
 //        frame.getToolBar().addSeparator();
 //        workbenchContext.getWorkbench().getFrame().getOutputFrame().setButton(
 //                frame.getToolBar().addPlugIn(outputWindowPlugIn.getIcon(),
-//                outputWindowPlugIn, new MultiEnableCheck(), workbenchContext));        
+//                outputWindowPlugIn, new MultiEnableCheck(), workbenchContext));
         frame.getToolBar().addSeparator();
-        findData = new JideSplitButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.STACK));
-        findData.setToolTipText(I18N.get("DMTConfiguration.Text.Tooltip.Search-Satellite-Images"));
-        findData.setText(I18N.get("DMTConfiguration.Text.Search-Satellite-Images"));
-        findData.setFocusable(false);
-        findData.addActionListener(new ActionListener() {
+        findImagesData = new JideSplitButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.STACK));
+        findImagesData.setToolTipText(I18N.get("DMTConfiguration.Text.Tooltip.Search-Satellite-Images"));
+        findImagesData.setText(I18N.get("DMTConfiguration.Text.Search-Satellite-Images"));
+        findImagesData.setFocusable(false);
+        findImagesData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 WorkbenchFrame.actionFindData();
             }
         });
-        loadShape = new JideButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.LAYER2));
-        loadShape.setToolTipText(I18N.get("Text.Load-Default-Layers"));
-        loadShape.addActionListener(new ActionListener() {
+        loadDefaultShapes = new JideButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.LAYER2));
+        loadDefaultShapes.setToolTipText(I18N.get("Text.Load-Default-Layers"));
+        loadDefaultShapes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 WorkbenchFrame.actionLoadLayers();
             }
         });
-        frame.getToolBar().add(loadShape);
+        frame.getToolBar().add(loadDefaultShapes);
         frame.getToolBar().addSeparator();
-        DefaultOverlayable findImage = Config.createOverLayableIcon(findData, OverlayableIconsFactory.QUESTION, DefaultOverlayable.SOUTH_WEST, ""
-                + I18N.get("Text.Click-for-Help"), I18N.get("Text.selection-must-be-in-geographic"));
+        DefaultOverlayable findImage = Config.createOverLayableIcon(findImagesData, OverlayableIconsFactory.QUESTION, DefaultOverlayable.SOUTH_WEST,
+                I18N.get("Text.Click-for-Help"), I18N.get("Text.selection-must-be-in-geographic"));
         findImage.setMaximumSize(new Dimension(140, 20));
         frame.getToolBar().add(findImage);
         //Last of all, add a separator because some plug-ins may add CursorTools.
@@ -1007,6 +1030,7 @@ public class DMTConfiguration implements Setup {
                 editingPlugIn.getName(), EditingPlugIn.ICON,
                 AbstractPlugIn.toActionListener(editingPlugIn, workbenchContext, new TaskMonitorManager()), null);
         workbenchContext.getWorkbench().getFrame().addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentShown(ComponentEvent e) {
                 //Can't #getToolbox before Workbench is thrown.
                 // Otherwise, get IllegalComponentStateException. Thus, do it inside
@@ -1014,10 +1038,12 @@ public class DMTConfiguration implements Setup {
                 editingPlugIn.getToolbox(workbenchContext).addComponentListener(new ComponentAdapter() {
                     //There are other ways to show/hide the
                     // toolbox. Track 'em. [Bob Boseko]
+                    @Override
                     public void componentShown(ComponentEvent e) {
                         toggleButton.setSelected(true);
                     }
 
+                    @Override
                     public void componentHidden(ComponentEvent e) {
                         toggleButton.setSelected(false);
                     }
@@ -1027,8 +1053,7 @@ public class DMTConfiguration implements Setup {
     }
 
     /**
-     * Call each PlugIn's #initialize() method. Uses reflection to build a list
-     * of plug-ins.
+     * Call each PlugIn's #initialize() method. Uses reflection to build a list of plug-ins.
      *
      * @param workbenchContext Description of the Parameter
      * @exception Exception Description of the Exception
@@ -1049,7 +1074,8 @@ public class DMTConfiguration implements Setup {
             plugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
         }
     }
-    public static JideSplitButton findData;
-    public static JideButton loadShape;
+
+    public static JideSplitButton findImagesData;
+    public static JideButton loadDefaultShapes;
     public static AdvancedMeasureOptionsPanel advancedMeasureOP;
 }

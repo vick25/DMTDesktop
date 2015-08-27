@@ -16,8 +16,8 @@ public class CheckBoxHeader extends JCheckBox implements TableCellRenderer, Mous
     /**
      * the Renderer Component.
      *
-     * @see #getTableCellRendererComponent(JTable table, Object value, boolean
-     * isSelected, boolean hasFocus, int row, int column)
+     * @see #getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean
+     * hasFocus, int row, int column)
      */
     protected CheckBoxHeader rendererComponent;
     /**
@@ -25,14 +25,13 @@ public class CheckBoxHeader extends JCheckBox implements TableCellRenderer, Mous
      */
     protected int column;
     /**
-     * remembers, if mousePressed() was called before. Workaround, because
-     * dozens of mouseevents occurs after one mouseclick.
+     * remembers, if mousePressed() was called before. Workaround, because dozens of mouseevents
+     * occurs after one mouseclick.
      */
     protected boolean mousePressed = false;
 
     /**
-     * @param itemListener will be notified when Checkbox will be
-     * checked/unchecked
+     * @param itemListener will be notified when Checkbox will be checked/unchecked
      */
     public CheckBoxHeader(ItemListener itemListener) {
         rendererComponent = this;
@@ -45,6 +44,7 @@ public class CheckBoxHeader extends JCheckBox implements TableCellRenderer, Mous
     //pasted from javax.swing.table.TableColumn.createDefaultHeaderRenderer()
     //with some slight modifications.
     //implements TableCellRenderer
+    @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
@@ -84,8 +84,10 @@ public class CheckBoxHeader extends JCheckBox implements TableCellRenderer, Mous
      * ************** Implementation of MouseListener *****************
      */
     /**
-     * Calls doClick(), because the CheckBox doesn't receive any mouseevents
-     * itself. (because it is in a CellRendererPane).
+     * Calls doClick(), because the CheckBox doesn't receive any mouseevents itself. (because it is
+     * in a CellRendererPane).
+     *
+     * @param e
      */
     protected void handleClickEvent(MouseEvent e) {
         // Workaround: dozens of mouseevents occur for only one mouse click.
@@ -108,25 +110,30 @@ public class CheckBoxHeader extends JCheckBox implements TableCellRenderer, Mous
         }
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         handleClickEvent(e);
         //Header doesn't repaint itself properly
         ((JTableHeader) e.getSource()).repaint();
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         mousePressed = true;
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         //works - problem: works even if column is dragged or resized ...
         //handleClickEvent(e);
         //properly repainting by the Header
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 }

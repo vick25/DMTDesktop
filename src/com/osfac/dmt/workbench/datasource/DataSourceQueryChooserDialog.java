@@ -2,22 +2,36 @@ package com.osfac.dmt.workbench.datasource;
 
 import com.osfac.dmt.I18N;
 import com.osfac.dmt.workbench.ui.OKCancelPanel;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import org.openjump.core.CheckOS;
 
 /**
- * Contains the various DataSourceQueryChooser panels, regardless of whether
- * they are for files, databases, web services, or other kinds of DataSources.
- * <p> A bit confusing for files, as there are two "format" comboboxes for the
- * user to choose from: one for the DataSource type, and another for the file
- * extension. In the future, file DataSources may have their own dialog,
- * eliminating the first combobox.
+ * Contains the various DataSourceQueryChooser panels, regardless of whether they are for files,
+ * databases, web services, or other kinds of DataSources.
+ * <p>
+ * A bit confusing for files, as there are two "format" comboboxes for the user to choose from: one
+ * for the DataSource type, and another for the file extension. In the future, file DataSources may
+ * have their own dialog, eliminating the first combobox.
  */
 public class DataSourceQueryChooserDialog extends JDialog {
 
@@ -50,11 +64,13 @@ public class DataSourceQueryChooserDialog extends JDialog {
             ex.printStackTrace();
         }
         addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentShown(ComponentEvent e) {
                 okCancelPanel.setOKPressed(false);
             }
         });
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 //User may have hit OK, got a validation-error dialog, then hit the
                 //X button. [Bob Boseko]
@@ -97,11 +113,13 @@ public class DataSourceQueryChooserDialog extends JDialog {
         formatPanel.setBorder(BorderFactory.createEtchedBorder());
         formatLabel.setText(I18N.get("datasource.DataSourceQueryChooserDialog.format"));
         formatComboBox.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 formatComboBox_actionPerformed(e);
             }
         });
         okCancelPanel.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 okCancelPanel_actionPerformed(e);
             }
@@ -112,17 +130,16 @@ public class DataSourceQueryChooserDialog extends JDialog {
         this.getContentPane().add(okCancelPanel, BorderLayout.SOUTH);
         formatPanel.add(formatComboBox,
                 new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(16, 4, 16, 4), 0, 0));
+                        GridBagConstraints.WEST, GridBagConstraints.NONE,
+                        new Insets(16, 4, 16, 4), 0, 0));
         formatPanel.add(formatLabel,
                 new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.EAST, GridBagConstraints.NONE,
-                new Insets(16, 4, 16, 4), 0, 0));
+                        GridBagConstraints.EAST, GridBagConstraints.NONE,
+                        new Insets(16, 4, 16, 4), 0, 0));
     }
 
     /**
-     * @return true if the user hit OK; false if the user hit Cancel or the
-     * Close Window button.
+     * @return true if the user hit OK; false if the user hit Cancel or the Close Window button.
      */
     public boolean wasOKPressed() {
         return okCancelPanel.wasOKPressed();

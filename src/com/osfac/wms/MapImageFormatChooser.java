@@ -29,6 +29,8 @@ public class MapImageFormatChooser {
 
     /**
      * Creates a new instance of MapImageFormatChooser.
+     *
+     * @param wmsVersion
      */
     public MapImageFormatChooser(String wmsVersion) {
         this.transparencyRequired = false;
@@ -39,15 +41,13 @@ public class MapImageFormatChooser {
     }
 
     /**
-     * Returns true if the specified format is known by the MapFormatChooser,
-     * false otherwise. The MapFormatChooser can only reliably select between
-     * formats which it knows; it will only return an unknown format if there
-     * are no known formats to select from. [UT] changed to accept WMS 1.0 and
-     * 1.1.1 image formats
+     * Returns true if the specified format is known by the MapFormatChooser, false otherwise. The
+     * MapFormatChooser can only reliably select between formats which it knows; it will only return
+     * an unknown format if there are no known formats to select from. [UT] changed to accept WMS
+     * 1.0 and 1.1.1 image formats
      *
      * @param format the format which is in question
-     * @return true if the specified format is known by the MapFormatChooser,
-     * false otherwise
+     * @return true if the specified format is known by the MapFormatChooser, false otherwise
      */
     static public boolean isKnownFormat(String format) {
         for (int i = 0; i < IMAGE_FORMATS.length; i++) {
@@ -65,7 +65,7 @@ public class MapImageFormatChooser {
      * If transparency is required it takes priority over lossy compression.
      * However, if no format that supports transparency is available, the next best
      * format will be selected.
-     * @param transparencyRequired true if the image format chosen needs to support 
+     * @param transparencyRequired true if the image format chosen needs to support
      *                             transparency
      */
     public void setTransparencyRequired(boolean transparencyRequired) {
@@ -86,10 +86,10 @@ public class MapImageFormatChooser {
     /*
      * Returns a format String from the Array of available formats which best
      * matches the requirements and preferences specified. If there are no image
-     * formats available which can be used by the WMS image handling code, then 
+     * formats available which can be used by the WMS image handling code, then
      * null is returned.
      * @param formats the array of available formats to choose from
-     * @return the chosen format string from Array of available formats, or null 
+     * @return the chosen format string from Array of available formats, or null
      *         if none of the available formats are known
      */
     public String chooseFormat(String[] formats) {

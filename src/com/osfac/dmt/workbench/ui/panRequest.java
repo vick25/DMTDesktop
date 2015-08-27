@@ -1,6 +1,11 @@
 package com.osfac.dmt.workbench.ui;
 
-import com.jidesoft.grid.*;
+import com.jidesoft.grid.CellStyle;
+import com.jidesoft.grid.CellStyleTable;
+import com.jidesoft.grid.HyperlinkTableCellEditorRenderer;
+import com.jidesoft.grid.RolloverTableUtils;
+import com.jidesoft.grid.StyleModel;
+import com.jidesoft.grid.TableUtils;
 import com.osfac.dmt.Config;
 import com.osfac.dmt.I18N;
 import com.osfac.dmt.form.ReviewDataRequestForm;
@@ -13,7 +18,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -68,14 +77,14 @@ public class panRequest extends javax.swing.JPanel {
                 }
                 table.setValueAt(res.getString("dmt_delivery.id_delivery"), i, 0);
                 table.setValueAt(Config.dateFormat.format(res.getDate("request_date")) + "/"
-                        + "" + I18N.get("Text.REQUEST") + "(" + (i + 1) + ")", i, 1);
+                        + I18N.get("Text.REQUEST") + "(" + (i + 1) + ")", i, 1);
                 i++;
             }
             TableUtils.autoResizeAllColumns(table);
             TableUtils.autoResizeAllRows(table);
         } catch (SQLException ex) {
-//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-//                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+//                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -85,6 +94,7 @@ public class panRequest extends javax.swing.JPanel {
 
         HyperlinkTableCellEditorRenderer renderer = new HyperlinkTableCellEditorRenderer();
         renderer.setActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 new ReviewDataRequestForm(DMTWorkbench.frame, true, Integer.parseInt(
                         table.getValueAt(table.getRolloverRow(), 0).toString())).setVisible(true);
@@ -120,15 +130,11 @@ public class panRequest extends javax.swing.JPanel {
             ps.setString(1, value);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
-                if (res.getString(1).equals("No")) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return !res.getString(1).equals("No");
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return false;
     }
@@ -149,6 +155,7 @@ public class panRequest extends javax.swing.JPanel {
             return true;
         }
 
+        @Override
         public CellStyle getCellStyleAt(int rowIndex, int columnIndex) {
             if (columnIndex == table.getColumnCount() - 1 && !table.getValueAt(rowIndex, 1).toString().equals("")) {
                 if (isRequestPerformed(rowIndex)) {
@@ -161,14 +168,17 @@ public class panRequest extends javax.swing.JPanel {
             }
         }
 
+        @Override
         public boolean isCellStyleOn() {
             return true;
         }
 
+        @Override
         public int getColumnCount() {
             return columnNames.length;
         }
 
+        @Override
         public int getRowCount() {
             return Data[0].size();
         }
@@ -178,6 +188,7 @@ public class panRequest extends javax.swing.JPanel {
             return columnNames[col];
         }
 
+        @Override
         public Object getValueAt(int row, int col) {
             return Data[col].get(row);
         }
@@ -279,6 +290,7 @@ public class panRequest extends javax.swing.JPanel {
         BClear.setText(bundle.getString("panRequest.BClear.text")); // NOI18N
         BClear.setFocusable(false);
         BClear.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BClearActionPerformed(evt);
             }
@@ -290,19 +302,20 @@ public class panRequest extends javax.swing.JPanel {
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(pan, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(BClear, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)));
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(BClear, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(pan, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
+                        .addGap(5, 5, 5)
+                        .addComponent(pan, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
     }
 
     private void BClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BClearActionPerformed
-        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("panRequest.Cofirm-message-clear"), I18N.get("Text.Confirm"), 0) == 0) {
+        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("panRequest.Cofirm-message-clear"),
+                I18N.get("Text.Confirm"), 0) == 0) {
             try {
                 PreparedStatement ps = Config.con.prepareStatement("TRUNCATE TABLE `dmt_requester`");
                 int result = ps.executeUpdate();
@@ -310,7 +323,8 @@ public class panRequest extends javax.swing.JPanel {
                 result = ps.executeUpdate();
                 cleanTable();
             } catch (SQLException ex) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        ex.getMessage(), null, null, ex, Level.SEVERE, null));
             }
         }
     }//GEN-LAST:event_BClearActionPerformed

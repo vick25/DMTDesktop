@@ -28,8 +28,8 @@ import org.apache.log4j.Logger;
  *  And use jump standard menus
  * </pre>
  *
- * Code example : [Michael Michaud 2007-03-23 : the following code example is no
- * more valid and has to be changed]
+ * Code example : [Michael Michaud 2007-03-23 : the following code example is no more valid and has
+ * to be changed]
  *
  * <pre>
  * public class PrintPlugIn extends AbstractPlugIn
@@ -69,8 +69,8 @@ public final class I18N {
     // STanner changed the place where are stored bundles. Now are in /language
     // public static ResourceBundle rb =
     // ResourceBundle.getBundle("com.osfac.dmt.jump");
-    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle("language/dmt_"
-            + "" + Config.pref.get(SettingKeyFactory.Language.ABREV, "en"));
+    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle(new StringBuilder("language/dmt_").
+            append(Config.pref.get(SettingKeyFactory.Language.ABREV, "en")).toString());
 //    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle("language/dmt_en");
     // [Michael Michaud 2007-03-23] plugInsResourceBundle is deactivated because
     // all the methods
@@ -105,8 +105,8 @@ public final class I18N {
     }
 
     /**
-     * Set the class loader used to load resource bundles, must only be called
-     * by the plug-in loader.
+     * Set the class loader used to load resource bundles, must only be called by the plug-in
+     * loader.
      *
      * @param classLoader the classLoader to set
      */
@@ -115,9 +115,8 @@ public final class I18N {
     }
 
     /**
-     * Get the I18N text from the language file associated with this instance.
-     * If no label is defined then a default string is created from the last
-     * part of the key.
+     * Get the I18N text from the language file associated with this instance. If no label is
+     * defined then a default string is created from the last part of the key.
      *
      * @param key The key of the text in the language file.
      * @return The I18Nized text.
@@ -127,16 +126,15 @@ public final class I18N {
             return resourceBundle.getString(key);
         } catch (java.util.MissingResourceException e) {
             String[] labelpath = key.split("\\.");
-            LOG.debug("No resource bundle or no translation found for the key : "
-                    + key);
+            LOG.debug(new StringBuilder("No resource bundle or no translation found for the key : ").
+                    append(key).toString());
             return labelpath[labelpath.length - 1];
         }
     }
 
     /**
-     * Get the I18N text from the language file associated with the specified
-     * category. If no label is defined then a default string is created from
-     * the last part of the key.
+     * Get the I18N text from the language file associated with the specified category. If no label
+     * is defined then a default string is created from the last part of the key.
      *
      * @param category The category.
      * @param key The key of the text in the language file.
@@ -148,8 +146,8 @@ public final class I18N {
     }
 
     /**
-     * Get the I18N instance for the category. A resource file must exist in the
-     * resource path for language/jump for the category.
+     * Get the I18N instance for the category. A resource file must exist in the resource path for
+     * language/jump for the category.
      *
      * @param category The category.
      * @return The instance.
@@ -157,7 +155,7 @@ public final class I18N {
     public static I18N getInstance(final String category) {
         I18N instance = instances.get(category);
         if (instance == null) {
-            String resourcePath = category.replace('.', '/') + "/language/dmt";
+            String resourcePath = new StringBuilder(category.replace('.', '/')).append("/language/dmt").toString();
             instance = new I18N(resourcePath);
             instances.put(category, instance);
         }
@@ -178,30 +176,29 @@ public final class I18N {
         String[] lc = localeCode.split("_");
         Locale locale = Locale.getDefault();
         if (lc.length > 1) {
-            LOG.debug("lang:" + lc[0] + " " + "country:" + lc[1]);
+            LOG.debug(new StringBuilder("lang:").append(lc[0]).append(" ").append("country:").append(lc[1]).toString());
             locale = new Locale(lc[0], lc[1]);
         } else if (lc.length > 0) {
-            LOG.debug("lang:" + lc[0]);
+            LOG.debug(new StringBuilder("lang:").append(lc[0]).toString());
             locale = new Locale(lc[0]);
         } else {
-            LOG.debug(localeCode
-                    + " is an illegal argument to define lang [and country]");
+            LOG.debug(new StringBuilder(localeCode).
+                    append(" is an illegal argument to define lang [and country]").toString());
         }
 
         return locale;
     }
 
     /**
-     * Load file specified in command line (-i18n lang_country) (lang_country
-     * :language 2 letters + "_" + country 2 letters) Tries first to extract
-     * lang and country, and if only lang is specified, loads the corresponding
-     * resource bundle.
+     * Load file specified in command line (-i18n lang_country) (lang_country :language 2 letters +
+     * "_" + country 2 letters) Tries first to extract lang and country, and if only lang is
+     * specified, loads the corresponding resource bundle.
      *
      * @param langcountry
      */
     public static void loadFile(final String langcountry) {
-        DMTResourceBundle = ResourceBundle.getBundle("language/dmt_"
-                + "" + Config.pref.get(SettingKeyFactory.Language.ABREV, "en"), fromCode(langcountry));
+        DMTResourceBundle = ResourceBundle.getBundle(new StringBuilder("language/dmt_").append(Config.pref.get(SettingKeyFactory.Language.ABREV, "en")).toString(),
+                fromCode(langcountry));
     }
 
     public static void applyToRuntime() {
@@ -215,32 +212,32 @@ public final class I18N {
      * Process text with the LOCALE 'jump_<locale>.properties' file
      *
      * @param label
-     * @return i18n label [Michael Michaud 2007-03-23] If no resourcebundle is
-     * found, returns a default string which is the last part of the label
+     * @return i18n label [Michael Michaud 2007-03-23] If no resourcebundle is found, returns a
+     * default string which is the last part of the label
      */
     public static String get(final String label) {
         try {
             return DMTResourceBundle.getString(label);
         } catch (java.util.MissingResourceException e) {
             String[] labelpath = label.split("\\.");
-            LOG.debug("No resource bundle or no translation found for the key : " + label);
+            LOG.debug(new StringBuilder("No resource bundle or no translation found for the key : ").append(label).toString());
             return labelpath[labelpath.length - 1];
         }
     }
 
     /**
-     * Get the short signature for LOCALE (letters extension :language 2 letters
-     * + "_" + country 2 letters)
+     * Get the short signature for LOCALE (letters extension :language 2 letters + "_" + country 2
+     * letters)
      *
      * @return string signature for LOCALE
      */
     public static String getLocale() {
-        return DMTResourceBundle.getLocale().getLanguage() + "_" + DMTResourceBundle.getLocale().getCountry();
+        return new StringBuilder(DMTResourceBundle.getLocale().getLanguage()).
+                append("_").append(DMTResourceBundle.getLocale().getCountry()).toString();
     }
 
     /**
-     * Get the short signature for language (letters extension :language 2
-     * letters)
+     * Get the short signature for language (letters extension :language 2 letters)
      *
      * @return string signature for language
      */
@@ -268,9 +265,8 @@ public final class I18N {
     }
 
     /**
-     * Process text with the LOCALE 'jump_<locale>.properties' file If no
-     * resourcebundle is found, returns default string contained inside
-     * com.osfac.dmt.jump
+     * Process text with the LOCALE 'jump_<locale>.properties' file If no resourcebundle is found,
+     * returns default string contained inside com.osfac.dmt.jump
      *
      * @param label with argument insertion : {0}
      * @param objects
@@ -282,8 +278,8 @@ public final class I18N {
             return mformat.format(objects);
         } catch (java.util.MissingResourceException e) {
             final String[] labelpath = label.split("\\.");
-            LOG.warn(e.getMessage() + " no default value, the resource key is used: "
-                    + labelpath[labelpath.length - 1]);
+            LOG.warn(new StringBuilder(e.getMessage()).append(" no default value, the resource key is used: ").
+                    append(labelpath[labelpath.length - 1]).toString());
             final MessageFormat mformat = new MessageFormat(
                     labelpath[labelpath.length - 1]);
             return mformat.format(objects);
@@ -291,9 +287,8 @@ public final class I18N {
     }
 
     /**
-     * Get the I18N text from the language file associated with the specified
-     * category. If no label is defined then a default string is created from
-     * the last part of the key.
+     * Get the I18N text from the language file associated with the specified category. If no label
+     * is defined then a default string is created from the last part of the key.
      *
      * @param category The category.
      * @param label with argument insertion : {0}

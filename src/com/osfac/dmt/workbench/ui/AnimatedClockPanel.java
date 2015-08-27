@@ -17,12 +17,12 @@ import javax.swing.Timer;
 public class AnimatedClockPanel extends JPanel {
 
     private ArrayList queue = new ArrayList();
-    private Timer timer = new Timer(250,
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    nextImage();
-                }
-            });
+    private Timer timer = new Timer(250, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            nextImage();
+        }
+    });
     private JLabel label = new JLabel();
     private BorderLayout borderLayout1 = new BorderLayout();
 

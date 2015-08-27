@@ -53,6 +53,7 @@ public class Planar {
         z = 0;
     }
 
+    @Override
     public String toString() {
         return x + ", " + y;
     }

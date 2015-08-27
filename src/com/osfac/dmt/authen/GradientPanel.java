@@ -2,11 +2,16 @@ package com.osfac.dmt.authen;
 
 import com.osfac.dmt.Config;
 import com.osfac.dmt.setting.SettingKeyFactory;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
 import javax.swing.JPanel;
 
 public class GradientPanel extends JPanel {
 
+    @Override
     public void paintComponent(Graphics g) {
         int width = getWidth();
         int height = getHeight();
@@ -38,7 +43,6 @@ public class GradientPanel extends JPanel {
 
 //        gradientStart = new Color(183, 234, 98, 200);
 //        gradientEnd = new Color(220, 255, 149, 255);
-
         painter = new GradientPaint(0, 0, gradientEnd,
                 0, height / 2, gradientStart);
         g2.setPaint(painter);

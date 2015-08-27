@@ -1,10 +1,15 @@
 package com.osfac.dmt.algorithm;
 
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.LineSegment;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * Computes the Euclidean distance (L2 metric) from a Point to a Geometry. Also
- * computes two points which are separated by the distance.
+ * Computes the Euclidean distance (L2 metric) from a Point to a Geometry. Also computes two points
+ * which are separated by the distance.
  */
 public class EuclideanDistanceToPoint {
 

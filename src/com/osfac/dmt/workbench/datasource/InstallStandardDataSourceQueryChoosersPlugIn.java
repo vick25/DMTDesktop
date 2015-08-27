@@ -31,8 +31,7 @@ import org.openjump.core.ui.swing.factory.field.ComboBoxFieldComponentFactory;
 import org.openjump.swing.factory.field.FieldComponentFactory;
 
 /**
- * Adds to the JUMP Workbench the UIs for opening and saving files with the
- * basic file formats.
+ * Adds to the JUMP Workbench the UIs for opening and saving files with the basic file formats.
  */
 public class InstallStandardDataSourceQueryChoosersPlugIn extends AbstractPlugIn {
 
@@ -50,11 +49,12 @@ public class InstallStandardDataSourceQueryChoosersPlugIn extends AbstractPlugIn
                 description,
                 extensions(readerWriterDataSourceClass),
                 context) {
-            protected void addFileFilters(JFileChooser chooser) {
-                super.addFileFilters(chooser);
-                InstallStandardDataSourceQueryChoosersPlugIn.addCompressedFileFilter(description, chooser);
-            }
-        });
+                    @Override
+                    protected void addFileFilters(JFileChooser chooser) {
+                        super.addFileFilters(chooser);
+                        InstallStandardDataSourceQueryChoosersPlugIn.addCompressedFileFilter(description, chooser);
+                    }
+                });
 
         if (readerWriterDataSourceClass != StandardReaderWriterFileDataSource.Shapefile.class) {
             chooserManager.addSaveDataSourceQueryChooser(new SaveFileDataSourceQueryChooser(
@@ -69,36 +69,38 @@ public class InstallStandardDataSourceQueryChoosersPlugIn extends AbstractPlugIn
                     description,
                     extensions(readerWriterDataSourceClass),
                     context) {
-                private JComponent comboboxFieldComponent;
+                        private JComponent comboboxFieldComponent;
 
-                protected Map toProperties(File file) {
-                    HashMap properties = new HashMap(super.toProperties(file));
-                    String charsetName = Charset.defaultCharset().name();
-                    if (comboboxFieldComponent instanceof ComboBoxComponentPanel) {
-                        charsetName = (String) ((ComboBoxComponentPanel) comboboxFieldComponent).getSelectedItem();
-                    }
-                    properties.put("charset", charsetName);
+                        @Override
+                        protected Map toProperties(File file) {
+                            HashMap properties = new HashMap(super.toProperties(file));
+                            String charsetName = Charset.defaultCharset().name();
+                            if (comboboxFieldComponent instanceof ComboBoxComponentPanel) {
+                                charsetName = (String) ((ComboBoxComponentPanel) comboboxFieldComponent).getSelectedItem();
+                            }
+                            properties.put("charset", charsetName);
 
-                    return properties;
-                }
+                            return properties;
+                        }
 
-                protected Component getSouthComponent1() {
-                    boolean showCharsetSelection = false;
-                    Object showCharsetSelectionObject = PersistentBlackboardPlugIn.get(context.getBlackboard()).get(DatasetOptionsPanel.BB_DATASET_OPTIONS_SHOW_CHARSET_SELECTION);
-                    if (showCharsetSelectionObject instanceof Boolean) {
-                        showCharsetSelection = ((Boolean) showCharsetSelectionObject).booleanValue();
-                    }
-                    if (showCharsetSelection) {
-                        FieldComponentFactory fieldComponentFactory = new ComboBoxFieldComponentFactory(context, I18N.get("org.openjump.core.ui.io.file.DataSourceFileLayerLoader.charset") + ":", Charset.availableCharsets().keySet().toArray());
-                        comboboxFieldComponent = fieldComponentFactory.createComponent();
-                        fieldComponentFactory.setValue(comboboxFieldComponent, Charset.defaultCharset().name());
-                        return comboboxFieldComponent;
-                    } else {
-                        return new Component() {
-                        };
-                    }
-                }
-            });
+                        @Override
+                        protected Component getSouthComponent1() {
+                            boolean showCharsetSelection = false;
+                            Object showCharsetSelectionObject = PersistentBlackboardPlugIn.get(context.getBlackboard()).get(DatasetOptionsPanel.BB_DATASET_OPTIONS_SHOW_CHARSET_SELECTION);
+                            if (showCharsetSelectionObject instanceof Boolean) {
+                                showCharsetSelection = ((Boolean) showCharsetSelectionObject).booleanValue();
+                            }
+                            if (showCharsetSelection) {
+                                FieldComponentFactory fieldComponentFactory = new ComboBoxFieldComponentFactory(context, I18N.get("org.openjump.core.ui.io.file.DataSourceFileLayerLoader.charset") + ":", Charset.availableCharsets().keySet().toArray());
+                                comboboxFieldComponent = fieldComponentFactory.createComponent();
+                                fieldComponentFactory.setValue(comboboxFieldComponent, Charset.defaultCharset().name());
+                                return comboboxFieldComponent;
+                            } else {
+                                return new Component() {
+                                };
+                            }
+                        }
+                    });
 
         }
     }
@@ -115,6 +117,7 @@ public class InstallStandardDataSourceQueryChoosersPlugIn extends AbstractPlugIn
         return exts;
     }
 
+    @Override
     public void initialize(final PlugInContext context) throws Exception {
         addFileDataSourceQueryChoosers(
                 new JMLReader(),

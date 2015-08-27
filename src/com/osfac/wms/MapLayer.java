@@ -1,7 +1,9 @@
 package com.osfac.wms;
 
 import com.osfac.dmt.util.CollectionUtil;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Represents a WMS Layer.
@@ -53,8 +55,8 @@ public class MapLayer {
 // ---------------------------------------- MapLayer getAllBoundingBoxList ( )
 
     /**
-     * @return All BoundingBoxes If there is no BoundingBox for this MapLayer
-     * the parent-BoundingBox will be taken. [uwe dalluege]
+     * @return All BoundingBoxes If there is no BoundingBox for this MapLayer the parent-BoundingBox
+     * will be taken. [uwe dalluege]
      */
     public ArrayList getAllBoundingBoxList() {
         ArrayList allBoundingBoxList = new ArrayList();
@@ -64,7 +66,7 @@ public class MapLayer {
         if (allBoundingBoxList.size() > 0) {
             return allBoundingBoxList;
         }
-// ---------------------------------------- MapLayer getAllBoundingBoxList ( )  	
+// ---------------------------------------- MapLayer getAllBoundingBoxList ( )
         while (mapLayer != null) {
             mapLayer = mapLayer.getParent();
             if (mapLayer == null) {
@@ -75,10 +77,10 @@ public class MapLayer {
                 return allBoundingBoxList;
             }
         }
-// ---------------------------------------- MapLayer getAllBoundingBoxList ( )  	
+// ---------------------------------------- MapLayer getAllBoundingBoxList ( )
         return allBoundingBoxList;
     }
-// ---------------------------------------- MapLayer getAllBoundingBoxList ( )  
+// ---------------------------------------- MapLayer getAllBoundingBoxList ( )
 
     /**
      * Returns the number of sub-layers that this MapLayer has.
@@ -102,19 +104,16 @@ public class MapLayer {
     /**
      * Gets a copy of the list of the sublayers of this layer.
      *
-     * @return a copy of the Arraylist containing all the sub-layers of this
-     * layer
+     * @return a copy of the Arraylist containing all the sub-layers of this layer
      */
     public ArrayList getSubLayerList() {
         return (ArrayList) subLayers.clone();
     }
 
     /**
-     * Returns a list of all the layers in order of a root-left-right traversal
-     * of the layer tree.
+     * Returns a list of all the layers in order of a root-left-right traversal of the layer tree.
      *
-     * @return a list of all the layers in order of a root-left-right traversal
-     * of the layer tree.
+     * @return a list of all the layers in order of a root-left-right traversal of the layer tree.
      */
     public ArrayList getLayerList() {
         ArrayList list = new ArrayList();
@@ -127,8 +126,7 @@ public class MapLayer {
     }
 
     /**
-     * Gets the title of this MapLayer. The title of a layer should be used for
-     * display purposes.
+     * Gets the title of this MapLayer. The title of a layer should be used for display purposes.
      *
      * @return the title of this Layer
      */
@@ -137,11 +135,10 @@ public class MapLayer {
     }
 
     /**
-     * Gets the name of this Layer. The name of a layer is its 'back-end', ugly
-     * name, which generally shouldn't need to be used by others but is
-     * available anyway. Layers which do not have any data associated with them,
-     * such as container or grouping layers, might not have a name, in which
-     * case null will be returned.
+     * Gets the name of this Layer. The name of a layer is its 'back-end', ugly name, which
+     * generally shouldn't need to be used by others but is available anyway. Layers which do not
+     * have any data associated with them, such as container or grouping layers, might not have a
+     * name, in which case null will be returned.
      *
      * @return the name of the layer, or null if it doesn't have a name
      */
@@ -152,21 +149,19 @@ public class MapLayer {
     /**
      * Gets the parent MapLayer of this MapLayer.
      *
-     * @return the parent layer of this MapLayer, or null if the layer has no
-     * parent.
+     * @return the parent layer of this MapLayer, or null if the layer has no parent.
      */
     public MapLayer getParent() {
         return parent;
     }
 
     /**
-     * Gets the LatLonBoundingBox for this layer. If this layer doesn't have a
-     * LatLonBoundingBox specified, we recursively ask the parent layer for its
-     * bounding box. The WMS spec says that each layer should either have its
-     * own LatLonBoundingBox, or inherit one from its parent, so this recursive
-     * call should be successful. If not, null is returned. However, if a
-     * bounding box is returned, it will have the SRS string "LatLon". Note that
-     * the BoundingBox is not necessarily "tight".
+     * Gets the LatLonBoundingBox for this layer. If this layer doesn't have a LatLonBoundingBox
+     * specified, we recursively ask the parent layer for its bounding box. The WMS spec says that
+     * each layer should either have its own LatLonBoundingBox, or inherit one from its parent, so
+     * this recursive call should be successful. If not, null is returned. However, if a bounding
+     * box is returned, it will have the SRS string "LatLon". Note that the BoundingBox is not
+     * necessarily "tight".
      *
      * @return the BoundingBox for this layer, or null if the BBox is unknown
      */
@@ -181,16 +176,14 @@ public class MapLayer {
         return null;
     }
 
-//----------------------------------------- MapLayer getLatLonBoundingBox ( )   
+//----------------------------------------- MapLayer getLatLonBoundingBox ( )
     /**
-     * I think this name is better [uwe dalluege] Gets the LatLonBoundingBox for
-     * this layer. If this layer doesn't have a LatLonBoundingBox specified, we
-     * recursively ask the parent layer for its bounding box. The WMS spec says
-     * that each layer should either have its own LatLonBoundingBox, or inherit
-     * one from its parent, so this recursive call should be successful. If not,
-     * null is returned. However, if a bounding box is returned, it will have
-     * the SRS string "LatLon". Note that the BoundingBox is not necessarily
-     * "tight".
+     * I think this name is better [uwe dalluege] Gets the LatLonBoundingBox for this layer. If this
+     * layer doesn't have a LatLonBoundingBox specified, we recursively ask the parent layer for its
+     * bounding box. The WMS spec says that each layer should either have its own LatLonBoundingBox,
+     * or inherit one from its parent, so this recursive call should be successful. If not, null is
+     * returned. However, if a bounding box is returned, it will have the SRS string "LatLon". Note
+     * that the BoundingBox is not necessarily "tight".
      *
      * @return the BoundingBox for this layer, or null if the BBox is unknown
      */
@@ -204,8 +197,8 @@ public class MapLayer {
         }
         return null;
     }
-// ----------------------------------------- MapLayer getLatLonBoundingBox ( )  
-//-------------------------------------------- MapLayer getBoundingBoxList ( )  
+// ----------------------------------------- MapLayer getLatLonBoundingBox ( )
+//-------------------------------------------- MapLayer getBoundingBoxList ( )
 
     /**
      * Gets the BoundingBoxList for this Layer
@@ -216,11 +209,11 @@ public class MapLayer {
     public ArrayList getBoundingBoxList() {// [uwe dalluege]
         return (ArrayList) boundingBoxList.clone();
     }
-//--------------------------------------------- MapLayer getBoundingBoxList ( )  
+//--------------------------------------------- MapLayer getBoundingBoxList ( )
 
     /**
-     * Returns a copy of the list of supported SRS's. Each SRS is a string in
-     * the format described by the WMS specification, such as "EPSG:1234".
+     * Returns a copy of the list of supported SRS's. Each SRS is a string in the format described
+     * by the WMS specification, such as "EPSG:1234".
      *
      * @return a copy of the list of supported SRS's
      */
@@ -242,12 +235,13 @@ public class MapLayer {
     }
 
     /**
-     * Returns a somewhat nicely-formatted string representing all of the
-     * details of this layer and its sub-layers (recursively).
+     * Returns a somewhat nicely-formatted string representing all of the details of this layer and
+     * its sub-layers (recursively).
      *
-     * @return a somewhat nicely-formatted string representing all of the
-     * details of this layer and its sub-layers (recursively).
+     * @return a somewhat nicely-formatted string representing all of the details of this layer and
+     * its sub-layers (recursively).
      */
+    @Override
     public String toString() {
         StringBuffer s = new StringBuffer("WMSLayer {\n"
                 + "  name: \"" + name + "\"\n"

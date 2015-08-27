@@ -1,8 +1,7 @@
 package com.osfac.dmt.coordsys;
 
 /**
- * Utility class, holds constants associated with Radius for various
- * projections.
+ * Utility class, holds constants associated with Radius for various projections.
  *
  * @author $Author: javamap $
  * @version $Revision: 4 $

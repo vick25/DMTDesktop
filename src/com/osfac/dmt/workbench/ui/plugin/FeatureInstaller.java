@@ -72,7 +72,7 @@ public class FeatureInstaller {
     public MultiEnableCheck createLayersSelectedCheck() {
         return new MultiEnableCheck().add(
                 checkFactory.createWindowWithLayerNamePanelMustBeActiveCheck()).add(
-                checkFactory.createAtLeastNLayersMustBeSelectedCheck(1));
+                        checkFactory.createAtLeastNLayersMustBeSelectedCheck(1));
     }
 
     /**
@@ -81,7 +81,7 @@ public class FeatureInstaller {
     public MultiEnableCheck createOneLayerSelectedCheck() {
         return new MultiEnableCheck().add(
                 checkFactory.createWindowWithLayerNamePanelMustBeActiveCheck()).add(
-                checkFactory.createExactlyNLayersMustBeSelectedCheck(1));
+                        checkFactory.createExactlyNLayersMustBeSelectedCheck(1));
     }
 
     /**
@@ -90,7 +90,7 @@ public class FeatureInstaller {
     public MultiEnableCheck createVectorsExistCheck() {
         return new MultiEnableCheck().add(
                 checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()).add(
-                checkFactory.createAtLeastNVectorsMustBeDrawnCheck(1));
+                        checkFactory.createAtLeastNVectorsMustBeDrawnCheck(1));
     }
 
     /**
@@ -99,13 +99,13 @@ public class FeatureInstaller {
     public MultiEnableCheck createFenceExistsCheck() {
         return new MultiEnableCheck().add(
                 checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()).add(
-                checkFactory.createFenceMustBeDrawnCheck());
+                        checkFactory.createFenceMustBeDrawnCheck());
     }
 
     public void addMenuSeparator(String menu) {
         addMenuSeparator(new String[]{
-                    menu
-                });
+            menu
+        });
     }
 
     public void addMenuSeparator(String[] menuPath) {
@@ -152,20 +152,20 @@ public class FeatureInstaller {
     public void addLayerViewMenuItem(PlugIn executable, String menuName,
             String menuItemName) {
         addLayerViewMenuItem(executable, new String[]{
-                    menuName
-                }, menuItemName);
+            menuName
+        }, menuItemName);
     }
 
     public void addLayerNameViewMenuItem(PlugIn executable, String menuName,
             String menuItemName) {
         addLayerNameViewMenuItem(executable, new String[]{
-                    menuName
-                }, menuItemName);
+            menuName
+        }, menuItemName);
     }
 
     /**
-     * Add a menu item to the main menu that is enabled only if the active
-     * internal frame is a LayerViewPanelProxy.
+     * Add a menu item to the main menu that is enabled only if the active internal frame is a
+     * LayerViewPanelProxy.
      */
     public void addLayerViewMenuItem(PlugIn executable, String[] menuPath,
             String menuItemName) {
@@ -174,20 +174,20 @@ public class FeatureInstaller {
     }
 
     /**
-     * Add a menu item to the main menu that is enabled only if the active
-     * internal frame is a LayerViewPanelProxy and a LayerNamePanelProxy.
+     * Add a menu item to the main menu that is enabled only if the active internal frame is a
+     * LayerViewPanelProxy and a LayerNamePanelProxy.
      */
     public void addLayerNameViewMenuItem(PlugIn executable, String[] menuPath,
             String menuItemName) {
         addMainMenuItem(executable, menuPath, menuItemName, false, null,
                 new MultiEnableCheck().add(
-                checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()).add(
-                checkFactory.createWindowWithLayerNamePanelMustBeActiveCheck()));
+                        checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck()).add(
+                        checkFactory.createWindowWithLayerNamePanelMustBeActiveCheck()));
     }
 
     /**
-     * @param menuPath separate items with slashes; items will be created if
-     * they do not already exist
+     * @param menuPath separate items with slashes; items will be created if they do not already
+     * exist
      * @param menuItemName name of the menu item
      * @param checkBox whether to create a JCheckBoxMenuItem or a JMenuItem
      * @param icon an Icon or null
@@ -226,9 +226,8 @@ public class FeatureInstaller {
      *
      * @param menuPath path from the main menu to the menu item
      * @param plugin the plugin associated to this menu item
-     * @param pos defines the position of the menu item in the menu -1 adds
-     * menuItem at the end except for FILE menu where -1 adds menuItem before
-     * the separator preceding exit menu item
+     * @param pos defines the position of the menu item in the menu -1 adds menuItem at the end
+     * except for FILE menu where -1 adds menuItem before the separator preceding exit menu item
      */
     public JMenuItem addMainMenuItem(final String[] menuPath,
             final AbstractUiPlugIn plugin,
@@ -257,9 +256,8 @@ public class FeatureInstaller {
      * @param menuPath path from the main menu to the menu item
      * @param plugin the plugin associated to this menu item
      * @param enableCheck conditions making the plugin enabled
-     * @param pos defines the position of the menu item in the menu -1 adds
-     * menuItem at the end except for FILE menu where -1 adds menuItem before
-     * the separator preceding exit menu item
+     * @param pos defines the position of the menu item in the menu -1 adds menuItem at the end
+     * except for FILE menu where -1 adds menuItem before the separator preceding exit menu item
      */
     public JMenuItem addMainMenuItem(final String[] menuPath,
             final AbstractUiPlugIn plugin,
@@ -274,11 +272,9 @@ public class FeatureInstaller {
      *
      * @param menuPath path from the main menu to the menu item
      * @param plugin the plugin associated to this menu item
-     * @param menuItem the menu item (JMenuItem, JCheckBoxMenuItem, JMenu,
-     * JRadioButtonMenuItem)
-     * @param pos defines the position of the menu item in the menu -1 adds
-     * menuItem at the end except for FILE menu where -1 adds menuItem before
-     * the separator preceding exit menu item
+     * @param menuItem the menu item (JMenuItem, JCheckBoxMenuItem, JMenu, JRadioButtonMenuItem)
+     * @param pos defines the position of the menu item in the menu -1 adds menuItem at the end
+     * except for FILE menu where -1 adds menuItem before the separator preceding exit menu item
      */
     //Added by Michael Michaud on 2008-04-06
     //This method makes it possible to add any subclasses of JMenuItem
@@ -294,12 +290,11 @@ public class FeatureInstaller {
      *
      * @param menuPath the menu path made of the menu and submenu names
      * @param plugin the plugin to execute with this item
-     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or
-     * JRadioButtonMenuItem) to the parent menu
+     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or JRadioButtonMenuItem) to the parent
+     * menu
      * @param enableCheck conditions making the plugin enabled
-     * @param pos defines the position of the menu item in the menu -1 adds
-     * menuItem at the end except for FILE menu where -1 adds menuItem before
-     * the separator preceding exit menu item
+     * @param pos defines the position of the menu item in the menu -1 adds menuItem at the end
+     * except for FILE menu where -1 adds menuItem before the separator preceding exit menu item
      */
     // [mmichaud 2011-10-01]
     public JMenuItem addMainMenuItem(final String[] menuPath,
@@ -314,14 +309,13 @@ public class FeatureInstaller {
     }
 
     /**
-     * New generic addMainMenuItem method. Adds menuItem at the end of the menu
-     * except for FILE menu where menuItem is added before the separator
-     * preceding exit menu item
+     * New generic addMainMenuItem method. Adds menuItem at the end of the menu except for FILE menu
+     * where menuItem is added before the separator preceding exit menu item
      *
      * @param plugin the plugin to execute with this item
      * @param menuPath the menu path made of the menu and submenu names
-     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or
-     * JRadioButtonMenuItem) to the parent menu
+     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or JRadioButtonMenuItem) to the parent
+     * menu
      * @param enableCheck conditions making the plugin enabled
      */
     // [mmichaud 2011-10-20]
@@ -335,12 +329,11 @@ public class FeatureInstaller {
      *
      * @param plugin the plugin to execute with this item
      * @param menuPath the menu path made of the menu and submenu names
-     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or
-     * JRadioButtonMenuItem) to the parent menu
+     * @param menuItem the JMenuItem (or JCheckBoxMenuItem or JRadioButtonMenuItem) to the parent
+     * menu
      * @param enableCheck conditions making the plugin enabled
-     * @param pos defines the position of menuItem in the menu -1 adds menuItem
-     * at the end of the menu except for FILE menu where -1 adds menuItem before
-     * the separator preceding exit menuItem
+     * @param pos defines the position of menuItem in the menu -1 adds menuItem at the end of the
+     * menu except for FILE menu where -1 adds menuItem before the separator preceding exit menuItem
      */
     // [mmichaud 2011-09-13]
     public JMenuItem addMainMenuItem(PlugIn plugin, String[] menuPath,
@@ -523,9 +516,8 @@ public class FeatureInstaller {
     }
 
     /**
-     * Add a menu item to a JPopupMenu with optional submenus defined by
-     * menuPath Added by mmichaud on 2011-03-20 to reorganize LayerNamePanel
-     * JPopupMenu
+     * Add a menu item to a JPopupMenu with optional submenus defined by menuPath Added by mmichaud
+     * on 2011-03-20 to reorganize LayerNamePanel JPopupMenu
      */
     public void addPopupMenuItem(JPopupMenu popupMenu, PlugIn executable,
             String[] menuPath, String menuItemName, boolean checkBox, Icon icon, EnableCheck enableCheck) {
@@ -674,9 +666,9 @@ public class FeatureInstaller {
     }
 
     /**
-     * Workaround for Java Bug 4809393: "Menus disappear prematurely after
-     * displaying modal dialog" Evidently fixed in Java 1.5. The workaround is
-     * to wrap #actionPerformed with SwingUtilities#invokeLater.
+     * Workaround for Java Bug 4809393: "Menus disappear prematurely after displaying modal dialog"
+     * Evidently fixed in Java 1.5. The workaround is to wrap #actionPerformed with
+     * SwingUtilities#invokeLater.
      */
     public void addMainMenuItemWithJava14Fix(PlugIn executable,
             String[] menuPath, String menuItemName, boolean checkBox, Icon icon,
@@ -749,7 +741,6 @@ public class FeatureInstaller {
 
         //this plugin not on list of repeats
         //so pull down existing repeats and add this to top
-
         for (int i = RepeatableMenuItemArray.length - 1; i > 0; i--) {
             if (RepeatableMenuItemArray[i - 1] == null) //nothing to move
             {
@@ -851,8 +842,8 @@ public class FeatureInstaller {
     }
 
     /**
-     * @author Larry Becker Needed this class to be not anonymous so it's type
-     * could be determined at runtime.
+     * @author Larry Becker Needed this class to be not anonymous so it's type could be determined
+     * at runtime.
      */
     public class JumpMenuListener implements MenuListener {
 

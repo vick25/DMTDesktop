@@ -67,7 +67,8 @@ public class Config {
                     password = "OsfacLab01";
                     host = pref.get(SettingKeyFactory.Connection.HOST, host);
                 }
-                con = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
+                con = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(host).
+                        append("/").append(database).toString(), username, password);
                 optionsDialog = SettingOptionsDialog.showOptionsDialog();
                 df.setMaximumFractionDigits(2);
                 df.setMinimumFractionDigits(2);
@@ -75,13 +76,13 @@ public class Config {
                 dateFormat = new SimpleDateFormat(I18N.get("language.format.date"), new DateFormatSymbols());
             } catch (SQLException e) {
                 JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                        I18N.get("com.osfac.dmt.Config.Database-Unable")
-                        + e.getMessage(), null, null, e, Level.SEVERE, null));
+                        new StringBuilder(I18N.get("com.osfac.dmt.Config.Database-Unable")).append(e.getMessage()).toString(),
+                        null, null, e, Level.SEVERE, null));
                 if (isLiteVersion()) {
                     System.exit(0);
                 } else {
-                    if (JOptionPane.showConfirmDialog(null, I18N.get("com.osfac.dmt.Config.Database-Wrong-IP-Address"
-                            + ""), I18N.get("Text.Confirm"), 0) == 0) {
+                    if (JOptionPane.showConfirmDialog(null, I18N.get("com.osfac.dmt.Config.Database-Wrong-IP-Address"),
+                            I18N.get("Text.Confirm"), 0) == 0) {
                         new ChangeIP(DMTWorkbench.frame, true, true).setVisible(true);
                     } else {
                         System.exit(0);
@@ -89,8 +90,8 @@ public class Config {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
             System.exit(0);
         }
     }
@@ -102,7 +103,7 @@ public class Config {
             username = "admin";
             password = "OsfacLab01";
             host = pref.get(SettingKeyFactory.Connection.HOST, host);
-            con = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
+            con = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(host).append("/").append(database).toString(), username, password);
             if (!withoutError) {
                 optionsDialog = SettingOptionsDialog.showOptionsDialog();
                 df.setMaximumFractionDigits(2);
@@ -111,13 +112,12 @@ public class Config {
             }
         } catch (SQLException e) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                    I18N.get("com.osfac.dmt.Config.Database-Unable")
-                    + e.getMessage(), null, null, e, Level.SEVERE, null));
+                    new StringBuilder(I18N.get("com.osfac.dmt.Config.Database-Unable")).append(e.getMessage()).toString(), null, null, e, Level.SEVERE, null));
             if (isLiteVersion()) {
                 System.exit(0);
             } else {
-                if (JOptionPane.showConfirmDialog(null, I18N.get("com.osfac.dmt.Config.Database-Wrong-IP-Address"
-                        + ""), I18N.get("Text.Confirm"), 0) == 0) {
+                if (JOptionPane.showConfirmDialog(null, I18N.get("com.osfac.dmt.Config.Database-Wrong-IP-Address"),
+                        I18N.get("Text.Confirm"), 0) == 0) {
                     new ChangeIP(DMTWorkbench.frame, true, true).setVisible(true);
                 } else {
                     System.exit(0);
@@ -135,11 +135,11 @@ public class Config {
     }
 
     public static boolean isSimpleUser() {
-        return WorkbenchFrame.idUser != 1;
+        return WorkbenchFrame.idUser != 7;
     }
 
     public static boolean isAdministrator() {
-        return WorkbenchFrame.idUser == 1;
+        return WorkbenchFrame.idUser == 7;
     }
 
     public static void setDefaultLocale(int index) {
@@ -163,8 +163,8 @@ public class Config {
                 return ress.getDouble(1);
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return 0.0;
     }
@@ -189,8 +189,8 @@ public class Config {
         if (m.matches()) {
             return m.matches();
         } else {
-            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("com.osfac.dmt.Config.Email-Not-Valid"
-                    + ""), I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("com.osfac.dmt.Config.Email-Not-Valid"),
+                    I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
             txtEmail.requestFocus();
             return false;
         }
@@ -198,17 +198,20 @@ public class Config {
 
     public static void saveIPValue(String IPAddress) {
         pref.put(SettingKeyFactory.Connection.HOST, IPAddress);
-        String quickLookSource = Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://"
-                + "" + IPAddress);
+        String quickLookSource = Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, new StringBuilder("http://")
+                .append(IPAddress).toString());
         if (!quickLookSource.contains("www.osfac.net")) {
-            Config.pref.put(SettingKeyFactory.OtherFeatures.HOST, "http://" + IPAddress);
+            Config.pref.put(SettingKeyFactory.OtherFeatures.HOST, new StringBuilder("http://")
+                    .append(IPAddress).toString());
         }
         if (withoutError) {
-            OtherFeatures.RBHostProvider.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " " + "http://" + IPAddress);
+            OtherFeatures.RBHostProvider.setText(new StringBuilder(I18N.get("com.osfac.dmt.Config.Server-Text")).
+                    append(" ").append("http://").append(IPAddress).toString());
             OtherFeatures.txtIP.setText(IPAddress);
         }
         if (!ChangeIP.useAtBegining) {
-            PanAuthen.BServerIP.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " " + IPAddress);
+            PanAuthen.BServerIP.setText(new StringBuilder(I18N.get("com.osfac.dmt.Config.Server-Text")).
+                    append(" ").append(IPAddress).toString());
         }
         host = IPAddress;
     }
@@ -244,7 +247,8 @@ public class Config {
     }
 
     public static String requiredField(String text) {
-        return "<html>" + text + "<font color=" + "red" + ">*</font></html>";
+        return new StringBuilder("<html>").append(text).append("<font color=").append("red")
+                .append(">*</font></html>").toString();
     }
 
     public static String capitalFirstLetter(String s) {
@@ -351,33 +355,34 @@ public class Config {
     }
 
     public static String[] getAllCountry() {
-        String[] tab = new String[]{"AFGHANISTAN", "ALAND", "ALBANIA", "ALGERIA", "AMERICAN SAMOA", "ANDORRA", ""
-            + "ANGOLA", "ARGENTINA", "ARMENIA", "ARUBA", "AUSTRALIA", "AUSTRIA", "AZERBAIJAN", "BAHAMAS", ""
-            + "BAHRAIN", "BANGLADESH", "BARBADOS", "BELARUS", "BELGIUM", "BELIZE", "BENIN", "BERMUDA", ""
-            + "BHUTAN", "BOLIVIA", "BOSNIA AND HERZEGOVINA", "BOTSWANA", "BOUVET ISLAND", "BRAZIL", "BRITISH", ""
-            + "BRUNEI DARUSSALAM", "BULGARIA", "BURKINA FASO", "BURUNDI", "CAMBODIA", "CAMEROON", "CANADA", ""
-            + "CAPE VERDE", "CAYMAN ISLANDS", "CENTRAL AFRICAN REPUBLIC", "CHAD", "CHILE", "CHINA", "CHRISTMAS ISLAND"
-            + "", "COCOS ISLANDS", "COMOROS", "CONGO", "COOK ISLANDS", "COSTA RICA", "COTE D'IVOIRE", "CROATIA", ""
-            + "CUBA", "CURACAO", "CYPRUS", "CZECH REPUBLIC", "DENMARK", "DJIBOUTI", "DOMINIQUE", "DR CONGO", ""
-            + "ECUADOR", "EGYPT", "ERITREA", "ESTONIA", "ETHIOPIA", "FAROE ISLANDS", "FIJI", "FINLAND", ""
-            + "FRANCE", "GABON", "GAMBIA", "GEORGIA", "GERMANY", "GHANA", "GIBRALTAR", "GREECE", "GREENLAND", ""
-            + "GRENADA", "GUADELOUPE", "GUAM", "GUATEMALA", "GUERNSEY", "GUINEA", "GUINEA EQ.", "GUINEA-BISSAU", ""
-            + "GUYANA", "HAITI", "HONDURAS", "HONG KONG", "HUNGARY", "ICELAND", "INDIA", "INDONESIA", "IRAN", ""
-            + "IRAQ", "IRELAND", "ISLE OF MAN", "ISRAEL", "ITALY", "JAMAICA", "JAPAN", "JERSEY", "JORDAN", ""
-            + "KAZAKHSTAN", "KENYA", "KIRIBATI", "KUWAIT", "KYRGYZSTAN", "LAOS", "LATVIA", "LEBANON", "LESOTHO"
-            + "", "LIBERIA", "LIBYA", "LIECHTENSTEIN", "LITHUANIA", "LUXEMBOURG", "MACEDONIA", "MADAGASCAR", ""
-            + "MALAWI", "MALAYSIA", "MALDIVES", "MALI", "MALTA", "MARTINIQUE", "MAURICE", "MAURITANIA", "MAYOTTE"
-            + "", "MEXICO", "MOLDOVA", "MONACO", "MONGOLIA", "MONTENEGRO", "MONTSERRAT", "MOROCCO", "MOZAMBIQUE"
-            + "", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NETHERLANDS", "NEW CALEDONIA", "NEW ZEALAND", "NICARAGUA"
-            + "", "NIGER", "NIGERIA", "NORTH KOREA", "NORWAY", "OMAN", "PAKISTAN", "PALAU", "PALESTINE", "PANAMA", ""
-            + "PARAGUAY", "PERU", "PHILIPPINES", "PITCAIRN", "POLAND", "PORTUGAL", "PUERTO RICO", "QATAR"
-            + "", "R. DOMINICAN", "ROMANIA", "RUSSIA", "RWANDA", "SALOMON", "SAMOA", "SAO TOME AND PRINCIPE", ""
-            + "SAUDI ARABIA", "SENEGAL", "SERBIA", "SEYCHELLES", "SIERRA LEONE", "SINGAPORE", "SLOVAKIA", "SLOVENIA"
-            + "", "SOMALIA", "SOUTH AFRICA", "SOUTH KOREA", "SPAIN", "SRI LANKA", "SUDAN", "SURINAME", "SWAZILAND", ""
-            + "SWEDEN", "SWITZERLAND", "SYRIA", "TAIWAN", "TAJIKISTAN", "TANZANIA", "THAILAND", "THE MEETING", ""
-            + "TIMOR-LESTE", "TOGO", "TOKELAU", "TONGA", "TRINIDAD AND TOBAGO", "TUNISIA", "TURKEY", "TURKMENISTAN"
-            + "", "TUVALU", "U.S.A", "UGANDA", "UKRAINE", "UNITED ARAB EMIRATES", "UNITED KINGDOM", "URUGUAY", "UZBEKISTAN"
-            + "", "VANUATU", "VENEZUELA", "VIET NAM", "WALLIS AND FUTUNA", "WESTERN SAHARA", "YEMEN", "ZAMBIA", "ZIMBABWE"};
+        String[] tab = new String[]{"AFGHANISTAN", "ALAND", "ALBANIA", "ALGERIA", "AMERICAN SAMOA", "ANDORRA",
+            "ANGOLA", "ARGENTINA", "ARMENIA", "ARUBA", "AUSTRALIA", "AUSTRIA", "AZERBAIJAN", "BAHAMAS",
+            "BAHRAIN", "BANGLADESH", "BARBADOS", "BELARUS", "BELGIUM", "BELIZE", "BENIN", "BERMUDA",
+            "BHUTAN", "BOLIVIA", "BOSNIA AND HERZEGOVINA", "BOTSWANA", "BOUVET ISLAND", "BRAZIL", "BRITISH",
+            "BRUNEI DARUSSALAM", "BULGARIA", "BURKINA FASO", "BURUNDI", "CAMBODIA", "CAMEROON", "CANADA",
+            "CAPE VERDE", "CAYMAN ISLANDS", "CENTRAL AFRICAN REPUBLIC", "CHAD", "CHILE", "CHINA", "CHRISTMAS ISLAND",
+            "COCOS ISLANDS", "COMOROS", "CONGO", "COOK ISLANDS", "COSTA RICA", "COTE D'IVOIRE", "CROATIA",
+            "CUBA", "CURACAO", "CYPRUS", "CZECH REPUBLIC", "DENMARK", "DJIBOUTI", "DOMINIQUE", "DR CONGO",
+            "ECUADOR", "EGYPT", "ERITREA", "ESTONIA", "ETHIOPIA", "FAROE ISLANDS", "FIJI", "FINLAND",
+            "FRANCE", "GABON", "GAMBIA", "GEORGIA", "GERMANY", "GHANA", "GIBRALTAR", "GREECE", "GREENLAND",
+            "GRENADA", "GUADELOUPE", "GUAM", "GUATEMALA", "GUERNSEY", "GUINEA", "GUINEA EQ.", "GUINEA-BISSAU",
+            "GUYANA", "HAITI", "HONDURAS", "HONG KONG", "HUNGARY", "ICELAND", "INDIA", "INDONESIA", "IRAN",
+            "IRAQ", "IRELAND", "ISLE OF MAN", "ISRAEL", "ITALY", "JAMAICA", "JAPAN", "JERSEY", "JORDAN",
+            "KAZAKHSTAN", "KENYA", "KIRIBATI", "KUWAIT", "KYRGYZSTAN", "LAOS", "LATVIA", "LEBANON", "LESOTHO",
+            "LIBERIA", "LIBYA", "LIECHTENSTEIN", "LITHUANIA", "LUXEMBOURG", "MACEDONIA", "MADAGASCAR",
+            "MALAWI", "MALAYSIA", "MALDIVES", "MALI", "MALTA", "MARTINIQUE", "MAURICE", "MAURITANIA", "MAYOTTE",
+            "MEXICO", "MOLDOVA", "MONACO", "MONGOLIA", "MONTENEGRO", "MONTSERRAT", "MOROCCO", "MOZAMBIQUE",
+            "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NETHERLANDS", "NEW CALEDONIA", "NEW ZEALAND", "NICARAGUA",
+            "NIGER", "NIGERIA", "NORTH KOREA", "NORWAY", "OMAN", "PAKISTAN", "PALAU", "PALESTINE", "PANAMA",
+            "PARAGUAY", "PERU", "PHILIPPINES", "PITCAIRN", "POLAND", "PORTUGAL", "PUERTO RICO", "QATAR",
+            "R. DOMINICAN", "ROMANIA", "RUSSIA", "RWANDA", "SALOMON", "SAMOA", "SAO TOME AND PRINCIPE",
+            "SAUDI ARABIA", "SENEGAL", "SERBIA", "SEYCHELLES", "SIERRA LEONE", "SINGAPORE", "SLOVAKIA",
+            "SLOVENIA", "SOMALIA", "SOUTH AFRICA", "SOUTH KOREA", "SPAIN", "SRI LANKA", "SUDAN", "SURINAME", "SWAZILAND",
+            "SWEDEN", "SWITZERLAND", "SYRIA", "TAIWAN", "TAJIKISTAN", "TANZANIA", "THAILAND", "THE MEETING",
+            "TIMOR-LESTE", "TOGO", "TOKELAU", "TONGA", "TRINIDAD AND TOBAGO", "TUNISIA", "TURKEY", "TURKMENISTAN",
+            "TUVALU", "U.S.A", "UGANDA", "UKRAINE", "UNITED ARAB EMIRATES", "UNITED KINGDOM", "URUGUAY",
+            "UZBEKISTAN", "VANUATU", "VENEZUELA", "VIET NAM", "WALLIS AND FUTUNA", "WESTERN SAHARA",
+            "YEMEN", "ZAMBIA", "ZIMBABWE"};
         return tab;
     }
 
@@ -404,26 +409,31 @@ public class Config {
         textArea.setLineWrap(true);
         final DefaultOverlayable olay = new DefaultOverlayable(new JScrollPane(textArea));
         textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 if (textArea.getDocument().getLength() > 0) {
                     olay.setOverlayVisible(false);
                 }
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 if (textArea.getDocument().getLength() == 0) {
                     olay.setOverlayVisible(true);
                 }
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
         textArea.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
                 olay.setOverlayVisible(false);
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 olay.setOverlayVisible(textArea.getDocument().getLength() == 0);
             }
@@ -493,7 +503,7 @@ public class Config {
 //
     public static final String LITE_VERSION = "LITE";
     public static final String FULL_VERSION = "FULL";
-//    
+//
 //    private static String database = "dbosfacdmt";
 //    private static String host = "dbosfacdmt.db.8487892.hostedresource.com";
 //    private static String username = "dbosfacdmt";

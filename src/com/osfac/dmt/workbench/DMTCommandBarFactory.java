@@ -1,6 +1,9 @@
 package com.osfac.dmt.workbench;
 
-import com.jidesoft.action.*;
+import com.jidesoft.action.CommandBar;
+import com.jidesoft.action.CommandBarFactory;
+import com.jidesoft.action.DefaultDockableBarDockableHolder;
+import com.jidesoft.action.DockableBarContext;
 import com.jidesoft.docking.DefaultDockingManager;
 import com.jidesoft.docking.DockContext;
 import com.jidesoft.docking.DockableFrame;
@@ -23,8 +26,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JPopupMenu.Separator;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -187,6 +200,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         JMenuItem item;
         item = new JMenuItem(I18N.get("WindowMenu.Load-Default-Layout"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     parent.getLayoutPersistence().loadLayoutData();
@@ -196,6 +210,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.add(item, 0);
         item = new JMenuItem(I18N.get("WindowMenu.Load-Design-Layout"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     parent.getLayoutPersistence().loadLayoutDataFrom("design");
@@ -206,6 +221,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.add(new JPopupMenu.Separator(), 2);
         item = new JMenuItem(I18N.get("WindowMenu.Save-as-Default-Layout"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     parent.getLayoutPersistence().saveLayoutData();
@@ -215,6 +231,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.add(item, 3);
         item = new JMenuItem(I18N.get("WindowMenu.Save-as-Design-Layout"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     parent.getLayoutPersistence().saveLayoutDataAs("design");
@@ -225,6 +242,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.add(new JPopupMenu.Separator(), 5);
         item = new JMenuItem(I18N.get("WindowMenu.Reset-Layout"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     parent.getLayoutPersistence().resetToDefault();
@@ -237,6 +255,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         item.addActionListener(new AbstractAction() {
             private static final long serialVersionUID = 4119879332837884473L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder && parent.getLayoutPersistence() != null) {
                     try {
@@ -267,6 +286,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.add(item, 8);
         item = new JMenuItem(I18N.get("WindowMenu.Load-XML-Layout-from"));
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (parent instanceof DefaultDockableBarDockableHolder) {
                     JFileChooser chooser = new JFileChooser() {
@@ -291,6 +311,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         item = new JMenuItem(I18N.get("WindowMenu.Toggle-Auto-Hide-All"));
         item.setMnemonic('T');
         item.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (!_autohideAll) {
                     _fullScreenLayout = parent.getDockingManager().getLayoutRawData();
@@ -314,6 +335,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         JCheckBoxMenuItem checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Frames-Floatable"));
         checkBoxMenuItem.setMnemonic('F');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setFloatable(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -326,6 +348,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Frames-Autohidable"));
         checkBoxMenuItem.setMnemonic('A');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setAutohidable(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -337,6 +360,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Frames-Hidable"));
         checkBoxMenuItem.setMnemonic('H');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setHidable(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -349,6 +373,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Frames-Rearrangable"));
         checkBoxMenuItem.setMnemonic('R');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setRearrangable(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -361,6 +386,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Frames-Resizable"));
         checkBoxMenuItem.setMnemonic('S');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setResizable(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -377,6 +403,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Close-Button"));
         checkBoxMenuItem.setMnemonic('C');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
                 toggleButton(selected, DockableFrame.BUTTON_CLOSE);
@@ -388,6 +415,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Autohide-Button"));
         checkBoxMenuItem.setMnemonic('A');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
                 toggleButton(selected, DockableFrame.BUTTON_AUTOHIDE);
@@ -399,6 +427,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Float-Button"));
         checkBoxMenuItem.setMnemonic('F');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
                 toggleButton(selected, DockableFrame.BUTTON_FLOATING);
@@ -410,6 +439,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Maximize-Button"));
         checkBoxMenuItem.setMnemonic('M');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
                 toggleButton(selected, DockableFrame.BUTTON_MAXIMIZE);
@@ -425,18 +455,19 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Continuous-Layout"));
         checkBoxMenuItem.setMnemonic('C');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setContinuousLayout(((JCheckBoxMenuItem) e.getSource()).isSelected());
                     if (parent.getDockingManager().isContinuousLayout()) {
-                        Lm.showPopupMessageBox("<HTML>"
-                                + "<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Continuous Layout</FONT></B><FONT FACE='Tahoma'>"
-                                + "<FONT FACE='Tahoma' SIZE='3'><BR><BR><B>An option to continuously layout affected components during resizing."
-                                + "<BR></B><BR>This is the same option as in JSplitPane. If the option is true, when you resize"
-                                + "<BR>the JSplitPane's divider, it will continuously redisplay and laid out during user"
-                                + "<BR>intervention."
-                                + "<BR><BR>Default: off</FONT>"
-                                + "<BR></HTML>");
+                        Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                                append("<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Continuous Layout</FONT></B><FONT FACE='Tahoma'>").
+                                append("<FONT FACE='Tahoma' SIZE='3'><BR><BR><B>An option to continuously layout affected components during resizing.").
+                                append("<BR></B><BR>This is the same option as in JSplitPane. If the option is true, when you resize").
+                                append("<BR>the JSplitPane's divider, it will continuously redisplay and laid out during user").
+                                append("<BR>intervention.").
+                                append("<BR><BR>Default: off</FONT>").
+                                append("<BR></HTML>").toString());
                     }
                 }
             }
@@ -449,19 +480,20 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Show-Gripper"));
         checkBoxMenuItem.setMnemonic('S');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setShowGripper(((JCheckBoxMenuItem) e.getSource()).isSelected());
                     if (parent.getDockingManager().isShowGripper()) {
-                        Lm.showPopupMessageBox("<HTML>"
-                                + "<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>Show Gripper</B><BR></FONT><BR></FONT>"
-                                + "<FONT FACE='Tahoma' SIZE='3'><B>An option to give user a visual hint that the dockable frame can be dragged<BR></B>"
-                                + "<BR>Normal tabs in JTabbedPane can not be dragged. However in our demo, "
-                                + "<BR>most of them can be dragged. To make it obvious to user, we added an "
-                                + "<BR>option so that a gripper is painted on the tab or the title bar of those "
-                                + "<BR>dockable frames which can be dragged."
-                                + "<BR><BR>Default: off</FONT><BR>"
-                                + "</HTML>");
+                        Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                                append("<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>Show Gripper</B><BR></FONT><BR></FONT>").
+                                append("<FONT FACE='Tahoma' SIZE='3'><B>An option to give user a visual hint that the dockable frame can be dragged<BR></B>").
+                                append("<BR>Normal tabs in JTabbedPane can not be dragged. However in our demo, ").
+                                append("<BR>most of them can be dragged. To make it obvious to user, we added an ").
+                                append("<BR>option so that a gripper is painted on the tab or the title bar of those ").
+                                append("<BR>dockable frames which can be dragged.").
+                                append("<BR><BR>Default: off</FONT><BR>").
+                                append("</HTML>").toString());
                     }
                 }
             }
@@ -472,15 +504,16 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Show-TitleBar"));
         checkBoxMenuItem.setMnemonic('T');
         checkBoxMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setShowTitleBar(((JCheckBoxMenuItem) e.getSource()).isSelected());
                     if (parent.getDockingManager().isShowTitleBar()) {
-                        Lm.showPopupMessageBox("<HTML>"
-                                + "<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>Show TitleBar</B><BR></FONT><BR></FONT>"
-                                + "<FONT FACE='Tahoma' SIZE='3'><B>An option to show/hide dockable frame's title bar<BR></B>"
-                                + "<BR><BR>Default: on</FONT><BR>"
-                                + "</HTML>");
+                        Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                                append("<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>Show TitleBar</B><BR></FONT><BR></FONT>").
+                                append("<FONT FACE='Tahoma' SIZE='3'><B>An option to show/hide dockable frame's title bar<BR></B>").
+                                append("<BR><BR>Default: on</FONT><BR>").
+                                append("</HTML>").toString());
                     }
                 }
             }
@@ -491,19 +524,20 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.SideBar-Rollover"));
         checkBoxMenuItem.setMnemonic('A');
         checkBoxMenuItem.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setSidebarRollover(((JCheckBoxMenuItem) e.getSource()).isSelected());
                     if (parent.getDockingManager().isSidebarRollover()) {
-                        Lm.showPopupMessageBox("<HTML>"
-                                + "<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>SideBar Rollover</B><BR></FONT><BR></FONT>"
-                                + "<FONT FACE='Tahoma' SIZE='3'><B>An option to control the sensibility of tabs on sidebar<BR></B>"
-                                + "<BR>Each tab on four sidebars is corresponding to a dockable frame. Usually when "
-                                + "<BR>user moves mouse over the tab, the dockable frame will show up. However in Eclipse"
-                                + "<BR>you must click on it to show the dockable frame. This option will allow you to "
-                                + "<BR>control the sensibility of it."
-                                + "<BR><BR>Default: on</FONT><BR>"
-                                + "</HTML>");
+                        Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                                append("<FONT FACE='Tahoma' SIZE='4'><FONT COLOR='#0000FF'><B>SideBar Rollover</B><BR></FONT><BR></FONT>").
+                                append("<FONT FACE='Tahoma' SIZE='3'><B>An option to control the sensibility of tabs on sidebar<BR></B>").
+                                append("<BR>Each tab on four sidebars is corresponding to a dockable frame. Usually when ").
+                                append("<BR>user moves mouse over the tab, the dockable frame will show up. However in Eclipse").
+                                append("<BR>you must click on it to show the dockable frame. This option will allow you to ").
+                                append("<BR>control the sensibility of it.").
+                                append("<BR><BR>Default: on</FONT><BR>").
+                                append("</HTML>").toString());
                     }
                 }
             }
@@ -516,26 +550,27 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem(I18N.get("Text.Draw-Full-Outline-When-Dragging"));
         radioButtonMenuItem1.setMnemonic('D');
         radioButtonMenuItem1.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JRadioButtonMenuItem) {
                     parent.getDockingManager().setOutlineMode(DefaultDockingManager.FULL_OUTLINE_MODE);
-                    Lm.showPopupMessageBox("<HTML>"
-                            + "<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>"
-                            + "<FONT SIZE='4'>"
-                            + "<FONT COLOR='#0000FF' SIZE='3'><BR><BR><B>An option of how to paint the outline during dragging.</B></FONT>"
-                            + "<BR><BR><FONT SIZE='3'>Since our demo is purely based on Swing, and there is no way to have transparent native "
-                            + "<BR>window using Swing. So we have to develop workarounds to paint the outline of a dragging frame. "
-                            + "<BR>As a result, we get two ways to draw the outline. Since neither is perfect, we just leave it as "
-                            + "<BR>an option to user to choose. You can try each of the option and see which one you like most."
-                            + "<BR><B><BR>Option 1: PARTIAL_OUTLINE_MODE</B><BR>Pros: Fast, very smooth, works the best if user "
-                            + "of your application always keeps it as full screen"
-                            + "<BR>Cons: Partial outline or no outline at all if outside main frame although it's there wherever "
-                            + "your mouse is."
-                            + "<BR><BR><B>Option 2: FULL_OUTLINE_MODE</B>"
-                            + "<BR>Pros: It always draw the full outline"
-                            + "<BR>Cons: Sometimes it's flickering. Slower comparing with partial outline mode."
-                            + "<BR><BR>Default: PARTIAL_OUTLINE_MODE</FONT>"
-                            + "<BR></HTML>");
+                    Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                            append("<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>").
+                            append("<FONT SIZE='4'>").
+                            append("<FONT COLOR='#0000FF' SIZE='3'><BR><BR><B>An option of how to paint the outline during dragging.</B></FONT>").
+                            append("<BR><BR><FONT SIZE='3'>Since our demo is purely based on Swing, and there is no way to have transparent native ").
+                            append("<BR>window using Swing. So we have to develop workarounds to paint the outline of a dragging frame. ").
+                            append("<BR>As a result, we get two ways to draw the outline. Since neither is perfect, we just leave it as ").
+                            append("<BR>an option to user to choose. You can try each of the option and see which one you like most.").
+                            append("<BR><B><BR>Option 1: PARTIAL_OUTLINE_MODE</B><BR>Pros: Fast, very smooth, works the best if user ").
+                            append("of your application always keeps it as full screen").
+                            append("<BR>Cons: Partial outline or no outline at all if outside main frame although it's there wherever ").
+                            append("your mouse is.").
+                            append("<BR><BR><B>Option 2: FULL_OUTLINE_MODE</B>").
+                            append("<BR>Pros: It always draw the full outline").
+                            append("<BR>Cons: Sometimes it's flickering. Slower comparing with partial outline mode.").
+                            append("<BR><BR>Default: PARTIAL_OUTLINE_MODE</FONT>").
+                            append("<BR></HTML>").toString());
                 }
             }
         });
@@ -545,23 +580,24 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem(I18N.get("Text.Draw-Partial-Outline-When-Dragging"));
         radioButtonMenuItem2.setMnemonic('P');
         radioButtonMenuItem2.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JRadioButtonMenuItem) {
                     parent.getDockingManager().setOutlineMode(DefaultDockingManager.PARTIAL_OUTLINE_MODE);
-                    Lm.showPopupMessageBox("<HTML>"
-                            + "<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>"
-                            + "<FONT SIZE='4'><FONT COLOR='#0000FF'><BR></FONT><BR></FONT><B>An option of how to paint the outline during dragging. "
-                            + "<BR><BR></B>Since our demo is purely based on Swing, and there is no way to have transparent native "
-                            + "<BR>window using Swing. So we have to develop workarounds to paint the outline of a dragging frame. "
-                            + "<BR>As a result, we get two ways to draw the outline. Since neither is perfect, we just leave it as "
-                            + "<BR>an option to user to choose. You can try each of the option and see which one you like most."
-                            + "<BR><B><BR>Option 1: PARTIAL_OUTLINE_MODE</B>"
-                            + "<BR>Pros: Fast, very smooth"
-                            + "<BR>Cons: Partial outline or no outline at all if outside main frame although it&#39;s there wherever your mouse is."
-                            + "<BR><BR><B>Option 2: FULL_OUTLINE_MODE</B>"
-                            + "<BR>Pros: It always draw the full outline<BR>Cons: Sometimes it&#39;s flickering. Slower comparing with partial outline mode.</FONT>"
-                            + "<BR><BR><FONT FACE='Tahoma'>Default: PARTIAL_OUTLINE_MODE</FONT>"
-                            + "<BR></HTML>");
+                    Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                            append("<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>").
+                            append("<FONT SIZE='4'><FONT COLOR='#0000FF'><BR></FONT><BR></FONT><B>An option of how to paint the outline during dragging. ").
+                            append("<BR><BR></B>Since our demo is purely based on Swing, and there is no way to have transparent native ").
+                            append("<BR>window using Swing. So we have to develop workarounds to paint the outline of a dragging frame. ").
+                            append("<BR>As a result, we get two ways to draw the outline. Since neither is perfect, we just leave it as ").
+                            append("<BR>an option to user to choose. You can try each of the option and see which one you like most.").
+                            append("<BR><B><BR>Option 1: PARTIAL_OUTLINE_MODE</B>").
+                            append("<BR>Pros: Fast, very smooth").
+                            append("<BR>Cons: Partial outline or no outline at all if outside main frame although it&#39;s there wherever your mouse is.").
+                            append("<BR><BR><B>Option 2: FULL_OUTLINE_MODE</B>").
+                            append("<BR>Pros: It always draw the full outline<BR>Cons: Sometimes it&#39;s flickering. Slower comparing with partial outline mode.</FONT>").
+                            append("<BR><BR><FONT FACE='Tahoma'>Default: PARTIAL_OUTLINE_MODE</FONT>").
+                            append("<BR></HTML>").toString());
                 }
             }
         });
@@ -571,15 +607,16 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem(I18N.get("Text.Draw-Transparent-Pane-When-Dragging"));
         radioButtonMenuItem3.setMnemonic('P');
         radioButtonMenuItem3.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JRadioButtonMenuItem) {
                     parent.getDockingManager().setOutlineMode(DefaultDockingManager.TRANSPARENT_OUTLINE_MODE);
-                    Lm.showPopupMessageBox("<HTML>"
-                            + "<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>"
-                            + "<FONT SIZE='4'><FONT COLOR='#0000FF'><BR></FONT><BR></FONT><B>An option of how to paint the outline during dragging. "
-                            + "<BR><BR></B>Instead of drawing an outline as all other options, this option will draw a transparent pane"
-                            + "<BR>which looks better than the outline only."
-                            + "<BR></HTML>");
+                    Lm.showPopupMessageBox(new StringBuilder("<HTML>").
+                            append("<B><FONT FACE='Tahoma' SIZE='4' COLOR='#0000FF'>Outline Paint Mode</FONT></B><FONT FACE='Tahoma'>").
+                            append("<FONT SIZE='4'><FONT COLOR='#0000FF'><BR></FONT><BR></FONT><B>An option of how to paint the outline during dragging. ").
+                            append("<BR><BR></B>Instead of drawing an outline as all other options, this option will draw a transparent pane").
+                            append("<BR>which looks better than the outline only.").
+                            append("<BR></HTML>").toString());
                 }
             }
         });
@@ -594,6 +631,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Show-Title-on-Outline"));
         checkBoxMenuItem.setMnemonic('O');
         checkBoxMenuItem.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.getDockingManager().setShowTitleOnOutline(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -605,6 +643,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         menu.addSeparator();
         checkBoxMenuItem = new JCheckBoxMenuItem(I18N.get("Text.Always-on-top"));
         checkBoxMenuItem.addActionListener(new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof JCheckBoxMenuItem) {
                     parent.setAlwaysOnTop(((JCheckBoxMenuItem) e.getSource()).isSelected());
@@ -764,8 +803,8 @@ public class DMTCommandBarFactory extends CommandBarFactory {
     }
 
     public DockableFrame createFrameMenuTree() {
-        DockableFrame frame = new DockableFrame(I18N.get("Text.Tutorial-and-Requests"
-                + ""), DMTIconsFactory.getImageIcon(DMTIconsFactory.ShortCut.SHORTCUT));
+        DockableFrame frame = new DockableFrame(I18N.get("Text.Tutorial-and-Requests"),
+                DMTIconsFactory.getImageIcon(DMTIconsFactory.ShortCut.SHORTCUT));
         frame.getContext().setInitMode(DockContext.STATE_FRAMEDOCKED);
         frame.getContext().setInitSide(DockContext.DOCK_SIDE_WEST);
         frame.getContext().setInitIndex(1);
@@ -774,6 +813,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         frame.setFocusable(false);
         return frame;
     }
+
     public static AbstractButton newProject, open, saveDataset, undo, redo;
     public String _lastDirectory = ".";
     private byte[] _fullScreenLayout;

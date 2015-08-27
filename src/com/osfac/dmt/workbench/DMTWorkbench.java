@@ -42,8 +42,7 @@ import javax.swing.plaf.FontUIResource;
 import org.openjump.OpenJumpConfiguration;
 
 /**
- * This class is responsible for setting up and displaying the main JUMP
- * workbench window.
+ * This class is responsible for setting up and displaying the main JUMP workbench window.
  */
 public final class DMTWorkbench {
 
@@ -91,22 +90,27 @@ public final class DMTWorkbench {
     public static WorkbenchFrame frame;
     private DriverManager driverManager = new DriverManager(frame);
     private WorkbenchProperties dummyProperties = new WorkbenchProperties() {
+        @Override
         public List getPlugInClasses() {
             return new ArrayList();
         }
 
+        @Override
         public List getPlugInClasses(ClassLoader classLoader) {
             return new ArrayList();
         }
 
+        @Override
         public List getInputDriverClasses() {
             return new ArrayList();
         }
 
+        @Override
         public List getOutputDriverClasses() {
             return new ArrayList();
         }
 
+        @Override
         public List getConfigurationClasses() {
             return new ArrayList();
         }
@@ -120,7 +124,7 @@ public final class DMTWorkbench {
      * @param o a window to decorate with icon
      */
     public static void setIcon(Object o) {
-        // attach the right icon, depending on 
+        // attach the right icon, depending on
         //  - availability of method setIconImages (java 1.5 vs. 1.6), several icons for different sizes
         //  - underlying object type (JFrame, JInternalFrame, others? )
         // let's go
@@ -162,12 +166,15 @@ public final class DMTWorkbench {
     }
 
     /**
-     * @param s a visible SplashWindow to close when initialization is complete
-     * and the WorkbenchFrame is opened
+     * @param title
+     * @param args
+     * @param monitor
+     * @throws java.lang.Exception
      */
     public DMTWorkbench(String title, String[] args, TaskMonitor monitor) throws Exception {
         Config config = new Config();
-        frame = new WorkbenchFrame(title, context);
+        frame = new WorkbenchFrame(title, context); //Application Main Interface
+
         boolean defaultFileExists = false;
         File defaultFile = null;
         if (commandLine.hasOption(DEFAULT_PLUGINS)) {
@@ -177,9 +184,11 @@ public final class DMTWorkbench {
                 //[sstein 6.July.2008] disabled to enable loading of two properties files
                 //properties = new WorkbenchPropertiesFile(defaultFile, frame);
             } else {
-                System.out.println("OSFAC-DMT: Warning: Default plugins file does not exist: " + defaultFile);
+                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Default plugins file does not exist: ")
+                        .append(defaultFile).toString());
             }
         }
+
         boolean propertiesFileExists = false;
         File propertiesFile = null;
         if (commandLine.hasOption(PROPERTIES_OPTION)) {
@@ -189,9 +198,11 @@ public final class DMTWorkbench {
                 //properties = new WorkbenchPropertiesFile(propertiesFile, frame);
                 propertiesFileExists = true;
             } else {
-                System.out.println("OSFAC-DMT: Warning: Properties file does not exist: " + propertiesFile);
+                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Properties file does not exist: ")
+                        .append(propertiesFile).toString());
             }
         }
+
         if ((defaultFileExists) && (propertiesFileExists)) {
             properties = new WorkbenchPropertiesFile(defaultFile, propertiesFile, frame);
         } else if (defaultFileExists) {
@@ -199,21 +210,24 @@ public final class DMTWorkbench {
         } else if (propertiesFileExists) {
             properties = new WorkbenchPropertiesFile(propertiesFile, frame);
         }
+
         File extensionsDirectory;
         if (commandLine.hasOption(PLUG_IN_DIRECTORY_OPTION)) {
             extensionsDirectory = new File(commandLine.getOption(PLUG_IN_DIRECTORY_OPTION).getArg(0));
             if (!extensionsDirectory.exists()) {
-                System.out.println("OSFAC-DMT: Warning: Extensions directory does not exist: " + extensionsDirectory);
+                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Extensions directory does not exist: ")
+                        .append(extensionsDirectory).toString());
                 extensionsDirectory = null;
             }
         } else {
 //            extensionsDirectory = new File(getClass().getResource(I18N.get("JUMPWorkbench.lib-ext")).toURI());
             extensionsDirectory = new File(I18N.get("JUMPWorkbench.lib-ext"));
             if (!extensionsDirectory.exists()) {
-                // Added further information so that debug user will know where 
+                // Added further information so that debug user will know where
                 // it is actually looking for as the extension directory.
-                System.out.println("OSFAC-DMT: Warning: Extensions directory does not exist: "
-                        + extensionsDirectory + " where homedir = [" + System.getProperty("user.dir") + "]");
+                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Extensions directory does not exist: ")
+                        .append(extensionsDirectory).append(" where homedir = [")
+                        .append(System.getProperty("user.dir")).append("]").toString());
                 extensionsDirectory = null;
             }
         }
@@ -221,6 +235,8 @@ public final class DMTWorkbench {
             String task = commandLine.getOption(INITIAL_PROJECT_FILE).getArg(0);
             this.getBlackboard().put(INITIAL_PROJECT_FILE, task);
         }
+
+        // open files from command line takes place in FirstTaskFramePlugIn
         if (commandLine.hasOption(STATE_OPTION)) {
             File option = new File(commandLine.getOption(STATE_OPTION).getArg(0));
             if (option.isDirectory()) {
@@ -240,6 +256,7 @@ public final class DMTWorkbench {
         driverManager.loadDrivers(properties);
     }
 
+    //Main entry method for the application
     public static void main(String[] args) {
         com.jidesoft.utils.Lm.verifyLicense("OSFAC", "OSFAC-DMT", "vx1xhNgC4CtD2SQc.kC5mp99mO0Bs1d2");
         //Get the previous theme (lookAndFeel) used
@@ -257,15 +274,19 @@ public final class DMTWorkbench {
                 // initialize I18N
                 I18N.loadFile(I18N_SETLOCALE);
             }
+
+            // setFont to switch fonts if defaults cannot display current language
             setFont();
             ProgressMonitor progressMonitor = (ProgressMonitor) progressMonitorClass.newInstance();
             SplashPanel splashPanel = new SplashPanel(splashImage(),
-                    I18N.get("ui.AboutDialog.version") + " " + DMTVersion.CURRENT_VERSION);
+                    new StringBuilder(I18N.get("ui.AboutDialog.version")).append(" ").
+                    append(DMTVersion.CURRENT_VERSION).toString());
             splashPanel.add(progressMonitor, new GridBagConstraints(0, 10, 1, 1, 1,
                     0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 10), 0, 0));
-            main(args, I18N.get("ui.WorkbenchFrame.title") + " "
-                    + "" + I18N.get("JUMPWorkbench.version.number") + " "
-                    + "" + WorkbenchFrame.TypeOfVersion, new DMTConfiguration(), splashPanel, progressMonitor);
+
+            main(args, new StringBuilder(I18N.get("ui.WorkbenchFrame.title")).append(" ")
+                    .append(I18N.get("JUMPWorkbench.version.number")).append(" ")
+                    .append(WorkbenchFrame.TypeOfVersion).toString(), new DMTConfiguration(), splashPanel, progressMonitor);
 //            System.out.println("OJ start took " + PlugInManager.secondsSince(start) + "s alltogether.");
         } catch (Throwable t) {
             WorkbenchFrame.showThrowable(t, null);
@@ -273,16 +294,13 @@ public final class DMTWorkbench {
     }
 
     /**
-     * setupClass is specified as a String to prevent it from being loaded
-     * before we display the splash screen, in case setupClass takes a long time
-     * to load.
+     * setupClass is specified as a String to prevent it from being loaded before we display the
+     * splash screen, in case setupClass takes a long time to load.
      *
      * @param args main application arguments
      * @param title application title
-     * @param setup an object implementing the Setup interface (e.g.
-     * JUMPConfiguration)
-     * @param splashComponent a component to open until the workbench frame is
-     * displayed
+     * @param setup an object implementing the Setup interface (e.g. JUMPConfiguration)
+     * @param splashComponent a component to open until the workbench frame is displayed
      * @param taskMonitor notified of progress of plug-in loading
      */
     public static void main(String[] args, String title, Setup setup, JComponent splashComponent, TaskMonitor taskMonitor) {
@@ -290,17 +308,26 @@ public final class DMTWorkbench {
             SplashWindow splashWindow = new SplashWindow(splashComponent);
             splashWindow.setVisible(true);
             taskMonitor.report(I18N.get("JUMPWorkbench.status.create"));
+
             DMTWorkbench workbench = new DMTWorkbench(title, args, taskMonitor);
             taskMonitor.report(I18N.get("JUMPWorkbench.status.configure-core"));
             setup.setup(workbench.context);
             //must wait until after setup initializes the persistent blackboard to recall settings
+
             WorkbenchFrame _frame = workbench.getFrame();
             taskMonitor.report(I18N.get("JUMPWorkbench.status.restore-state"));
 //            _frame.restore();
             taskMonitor.report(I18N.get("JUMPWorkbench.status.load-extensions"));
-            workbench.context.getWorkbench().getPlugInManager().load();
+
+            workbench.context.getWorkbench().getPlugInManager().load(); //load the plugIn Manager
+
+            /**
+             * The OpenJumpConfiguration class contains some plugins shown as menuitems in the
+             * different application menus
+             */
             OpenJumpConfiguration.postExtensionInitialization(workbench.context);
 //////            Config.optionsDialog = SettingOptionsDialog.showOptionsDialog();
+
             if (Config.isLiteVersion()) {
                 WorkbenchFrame.idUser = 4;
                 _frame.showFrame(splashWindow);
@@ -380,8 +407,7 @@ public final class DMTWorkbench {
     }
 
     /**
-     * The properties file; not to be confused with the WorkbenchContext
-     * properties.
+     * The properties file; not to be confused with the WorkbenchContext properties.
      */
     public WorkbenchProperties getProperties() {
         return properties;
@@ -402,7 +428,7 @@ public final class DMTWorkbench {
         commandLine.addOptionSpec(new OptionSpec(DEFAULT_PLUGINS, 1));
         commandLine.addOptionSpec(new OptionSpec(PLUG_IN_DIRECTORY_OPTION, 1));
         commandLine.addOptionSpec(new OptionSpec(I18N_FILE, 1));
-        //[UT] 17.08.2005 
+        //[UT] 17.08.2005
         commandLine.addOptionSpec(new OptionSpec(INITIAL_PROJECT_FILE, 1));
         commandLine.addOptionSpec(new OptionSpec(STATE_OPTION, 1));
         try {
@@ -418,8 +444,8 @@ public final class DMTWorkbench {
 
     //<<TODO>> Make some properties persistent using a #makePersistent(key) method.
     /**
-     * Expensive data structures can be cached on the blackboard so that several
-     * plug-ins can share them.
+     * Expensive data structures can be cached on the blackboard so that several plug-ins can share
+     * them.
      */
     public Blackboard getBlackboard() {
         return blackboard;
@@ -442,21 +468,26 @@ public final class DMTWorkbench {
 
         protected abstract void addText(String s);
 
+        @Override
         public void report(String description) {
             addText(description);
         }
 
+        @Override
         public void report(int itemsDone, int totalItems, String itemDescription) {
             addText(itemsDone + " / " + totalItems + " " + itemDescription);
         }
 
+        @Override
         public void report(Exception exception) {
             addText(StringUtil.toFriendlyName(exception.getClass().getName()));
         }
 
+        @Override
         public void allowCancellationRequests() {
         }
 
+        @Override
         public boolean isCancelRequested() {
             return false;
         }
@@ -471,6 +502,7 @@ public final class DMTWorkbench {
             ((JLabel) getComponent()).setHorizontalAlignment(JLabel.LEFT);
         }
 
+        @Override
         protected void addText(String s) {
             ((JLabel) getComponent()).setText(s);
         }

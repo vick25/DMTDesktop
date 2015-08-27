@@ -28,10 +28,10 @@ public abstract class ToolboxPlugIn extends AbstractPlugIn {
     protected abstract void initializeToolbox(ToolboxDialog toolbox);
 
     /**
-     * Toolbox subclasses can override this method to implement their own
-     * behaviour when the plug-in is called. Remember to call super.execute to
-     * make the toolbox visible.
+     * Toolbox subclasses can override this method to implement their own behaviour when the plug-in
+     * is called. Remember to call super.execute to make the toolbox visible.
      */
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         reportNothingToUndoYet(context);
         getToolbox(context.getWorkbenchContext()).setVisible(!getToolbox(context.getWorkbenchContext()).isVisible());
@@ -39,19 +39,20 @@ public abstract class ToolboxPlugIn extends AbstractPlugIn {
     }
 
     /**
-     * Creates a menu item with a checkbox beside it that appears when the
-     * toolbox is visible.
+     * Creates a menu item with a checkbox beside it that appears when the toolbox is visible.
      *
      * @param icon null to leave unspecified
      */
     public void createMainMenuItem(String[] menuPath, Icon icon, final WorkbenchContext context)
             throws Exception {
         new FeatureInstaller(context)
-                .addMainMenuItemWithJava14Fix(this, menuPath, getName() + "...", true, icon, new EnableCheck() {
-            public String check(JComponent component) {
-                ((JCheckBoxMenuItem) component).setSelected(getToolbox(context).isVisible());
-                return null;
-            }
-        });
+                .addMainMenuItemWithJava14Fix(this, menuPath, new StringBuilder(getName()).append("...").toString(),
+                        true, icon, new EnableCheck() {
+                    @Override
+                    public String check(JComponent component) {
+                        ((JCheckBoxMenuItem) component).setSelected(getToolbox(context).isVisible());
+                        return null;
+                    }
+                });
     }
 }

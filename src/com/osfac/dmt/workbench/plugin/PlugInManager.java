@@ -9,25 +9,31 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import org.apache.log4j.Logger;
 
 /**
- * Loads plug-ins (or more precisely, Extensions), and any JAR files that they
- * depend on, from the plug-in directory.
+ * Loads plug-ins (or more precisely, Extensions), and any JAR files that they depend on, from the
+ * plug-in directory.
  */
 public class PlugInManager {
 
     private static Logger LOG = Logger.getLogger(PlugInManager.class);
-    private static final String NOT_INITIALIZED =
-            I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.could-not-be-initialized");
-    private static final String LOADING =
-            I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.loading");
-    private static final String LOADING_ERROR =
-            I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.throwable-encountered-loading");
+    private static final String NOT_INITIALIZED
+            = I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.could-not-be-initialized");
+    private static final String LOADING
+            = I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.loading");
+    private static final String LOADING_ERROR
+            = I18N.get("com.osfac.dmt.workbench.plugin.PlugInManager.throwable-encountered-loading");
     private TaskMonitor monitor;
     private WorkbenchContext context;
     private Collection configurations = new ArrayList();
@@ -42,14 +48,14 @@ public class PlugInManager {
                 || plugInDirectory.isDirectory());
         classLoader = plugInDirectory != null ? new URLClassLoader(
                 toURLs((File[]) findFilesRecursively(plugInDirectory).toArray(
-                new File[]{}))) : getClass().getClassLoader();
+                                new File[]{}))) : getClass().getClassLoader();
         I18N.setClassLoader(classLoader);
         this.context = context;
         //Find the configurations right away so they get reported to the splash
         //screen ASAP. [Bob Boseko]
         configurations
                 .addAll(plugInDirectory != null ? findConfigurations(plugInDirectory)
-                : new ArrayList());
+                                : new ArrayList());
         configurations.addAll(findConfigurations(context.getWorkbench()
                 .getProperties().getConfigurationClasses()));
         this.plugInDirectory = plugInDirectory;
@@ -71,8 +77,9 @@ public class PlugInManager {
         if (configuration instanceof Extension) {
             return ((Extension) configuration).getName();
         }
-        return StringUtil.toFriendlyName(configuration.getClass().getName(),
-                "Configuration") + " (" + configuration.getClass().getPackage().getName() + ")";
+        return new StringBuilder(StringUtil.toFriendlyName(configuration.getClass().getName(),
+                "Configuration")).append(" (").append(configuration.getClass().getPackage().getName())
+                .append(")").toString();
     }
 
     public static String version(Configuration configuration) {
@@ -89,12 +96,12 @@ public class PlugInManager {
             if (!Configuration.class.isAssignableFrom(c)) {
                 continue;
             }
-            LOG.debug(LOADING + " " + c.getName());
+            LOG.debug(new StringBuilder(LOADING).append(" ").append(c.getName()).toString());
             System.out.println(LOADING + " " + c.getName());
             Configuration configuration = (Configuration) c.newInstance();
             configurations.add(configuration);
-            monitor.report(LOADING + " " + name(configuration) + " "
-                    + version(configuration));
+            monitor.report(new StringBuilder(LOADING).append(" ").append(name(configuration))
+                    .append(" ").append(version(configuration)).toString());
         }
         return configurations;
     }
@@ -150,7 +157,7 @@ public class PlugInManager {
         URL[] urls = new URL[files.length];
         for (int i = 0; i < files.length; i++) {
             try {
-                urls[i] = new URL("jar:file:" + files[i].getPath() + "!/");
+                urls[i] = new URL(new StringBuilder("jar:file:").append(files[i].getPath()).append("!/").toString());
             } catch (MalformedURLException e) {
                 Assert.shouldNeverReachHere(e.toString());
             }
@@ -217,8 +224,8 @@ public class PlugInManager {
     }
 
     /**
-     * To access extension classes, use this ClassLoader rather than the default
-     * ClassLoader. Extension classes will not be present in the latter.
+     * To access extension classes, use this ClassLoader rather than the default ClassLoader.
+     * Extension classes will not be present in the latter.
      */
     public ClassLoader getClassLoader() {
         return classLoader;

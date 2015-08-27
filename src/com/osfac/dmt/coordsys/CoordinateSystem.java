@@ -15,16 +15,18 @@ public class CoordinateSystem implements Comparable, Serializable {
     private int epsgCode;
     public static final CoordinateSystem UNSPECIFIED = new CoordinateSystem(I18N.get("coordsys.CoordinateSystem.unspecified"),
             0, null) {
-        private static final long serialVersionUID = -811718450919581831L;
+                private static final long serialVersionUID = -811718450919581831L;
 
-        public Projection getProjection() {
-            throw new UnsupportedOperationException();
-        }
+                @Override
+                public Projection getProjection() {
+                    throw new UnsupportedOperationException();
+                }
 
-        public int getEPSGCode() {
-            throw new UnsupportedOperationException();
-        }
-    };
+                @Override
+                public int getEPSGCode() {
+                    throw new UnsupportedOperationException();
+                }
+            };
 
     /**
      * @see <a
@@ -40,6 +42,7 @@ public class CoordinateSystem implements Comparable, Serializable {
         this.epsgCode = epsgCode;
     }
 
+    @Override
     public String toString() {
         return name;
     }
@@ -56,6 +59,7 @@ public class CoordinateSystem implements Comparable, Serializable {
         return epsgCode;
     }
 
+    @Override
     public int compareTo(Object o) {
         Assert.isTrue(o instanceof CoordinateSystem);
         if (this == o) {

@@ -29,6 +29,7 @@ public class WorkbenchFileFilter extends FileFilter {
         description = fileType;
     }
 
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory()) {
             return true;
@@ -82,6 +83,7 @@ public class WorkbenchFileFilter extends FileFilter {
         return false;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

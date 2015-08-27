@@ -21,7 +21,9 @@ import com.osfac.dmt.workbench.ui.MenuNames;
 import static com.osfac.dmt.workbench.ui.MenuNames.LAYER;
 import com.osfac.dmt.workbench.ui.WorkbenchFrame;
 import com.osfac.dmt.workbench.ui.plugin.PersistentBlackboardPlugIn;
+import com.osfac.dmt.workbench.ui.plugin.analysis.AttributeQueryPlugIn;
 import com.osfac.dmt.workbench.ui.plugin.analysis.SpatialJoinPlugIn;
+import com.osfac.dmt.workbench.ui.plugin.analysis.SpatialQueryPlugIn;
 import com.osfac.dmt.workbench.ui.renderer.RenderingManager;
 import de.latlon.deejump.plugin.SaveLegendPlugIn;
 import de.latlon.deejump.plugin.style.LayerStyle2SLDPlugIn;
@@ -39,6 +41,8 @@ import org.openjump.core.ui.io.file.FileLayerLoader;
 import org.openjump.core.ui.io.file.ReferencedImageFactoryFileLayerLoader;
 import org.openjump.core.ui.plugin.datastore.AddDataStoreLayerWizard;
 import org.openjump.core.ui.plugin.datastore.RefreshDataStoreQueryPlugIn;
+import org.openjump.core.ui.plugin.edit.SelectAllLayerItemsPlugIn;
+import org.openjump.core.ui.plugin.edit.SelectByTypePlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.ConstrainedMoveVertexPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.DrawCircleWithGivenRadiusPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.DrawConstrainedArcPlugIn;
@@ -55,6 +59,8 @@ import org.openjump.core.ui.plugin.file.OpenRecentPlugIn;
 import org.openjump.core.ui.plugin.file.OpenWizardPlugIn;
 import org.openjump.core.ui.plugin.layer.ChangeSRIDPlugIn;
 import org.openjump.core.ui.plugin.layer.ExtractLayerInFence;
+import org.openjump.core.ui.plugin.layer.ExtractLayersByAttribute;
+import org.openjump.core.ui.plugin.layer.ExtractLayersByGeometry;
 import org.openjump.core.ui.plugin.layer.LayerPropertiesPlugIn;
 import org.openjump.core.ui.plugin.layer.ToggleVisiblityPlugIn;
 import org.openjump.core.ui.plugin.layer.pirolraster.RasterImageContextMenu;
@@ -64,6 +70,7 @@ import org.openjump.core.ui.plugin.mousemenu.category.MoveCategoryOneUp;
 import org.openjump.core.ui.plugin.mousemenu.category.MoveCategoryToBottom;
 import org.openjump.core.ui.plugin.mousemenu.category.MoveCategoryToTop;
 import org.openjump.core.ui.plugin.mousemenu.category.SetCategoryVisibilityPlugIn;
+import org.openjump.core.ui.plugin.queries.SearchAllAttributes;
 import org.openjump.core.ui.plugin.queries.SimpleQueryPlugIn;
 import org.openjump.core.ui.plugin.style.ImportSLDPlugIn;
 import org.openjump.core.ui.plugin.tools.JoinAttributesSpatiallyPlugIn;
@@ -86,13 +93,14 @@ import org.openjump.core.ui.swing.factory.field.FileFieldComponentFactory;
 import org.openjump.core.ui.swing.wizard.WizardGroup;
 
 /**
- * This class loads all OpenJUMP plugins. The method loadOpenJumpPlugIns() is
- * called from com.osfac.dmt.workbench.JUMPConfiguaration.
+ * This class loads all OpenJUMP plugins. The method loadOpenJumpPlugIns() is called from the class
+ * com.osfac.dmt.workbench.DMTConfiguaration.
  *
  * @author sstein
  */
 public class OpenJumpConfiguration {
 
+    //Method called from the DMTConfiguration
     public static void loadOpenJumpPlugIns(final WorkbenchContext workbenchContext) throws Exception {
         PlugInContext pluginContext = workbenchContext.createPlugInContext();
         /*-----------------------------------------------
@@ -111,10 +119,10 @@ public class OpenJumpConfiguration {
                 new FileFieldComponentFactory(workbenchContext));
         FieldComponentFactoryRegistry.setFactory(workbenchContext, "CharSetComboBoxField",
                 new ComboBoxFieldComponentFactory(workbenchContext, null, Charset.availableCharsets().keySet().toArray()));
+
         /**
          * *************************************************************************
-         * menu FILE
-         * ************************************************************************
+         * menu FILE ************************************************************************
          */
         //--[sstein 10.July.2008] I leave these plugins in this class, as they seem to me
         //	essential to be removable, similar for the others that are still initialized here
@@ -129,7 +137,6 @@ public class OpenJumpConfiguration {
 //
 //        AddImageLayerPlugIn addImageLayerPlugIn = new AddImageLayerPlugIn();
 //        addImageLayerPlugIn.initialize(pluginContext);
-
         OpenProjectPlugIn openProject = new OpenProjectPlugIn();
         openProject.initialize(pluginContext);
 
@@ -138,7 +145,7 @@ public class OpenJumpConfiguration {
 
         FileDragDropPlugin fileDragDropPlugin = new FileDragDropPlugin();
         fileDragDropPlugin.initialize(pluginContext);
-        
+
         PrinterPlugIn printerPlugIn = new PrinterPlugIn();
         printerPlugIn.initialize(pluginContext);
 
@@ -150,39 +157,40 @@ public class OpenJumpConfiguration {
          */
         /**
          * *************************************************************************
-         * menu EDIT
-         * ************************************************************************
+         * menu EDIT ************************************************************************
          */
         //-- [sstein 10.July.2008] now initialized with default-plugins.xml file
     /*
          SelectItemsByFenceFromSelectedLayersPlugIn selectItemsFromLayersPlugIn = new SelectItemsByFenceFromSelectedLayersPlugIn();
          selectItemsFromLayersPlugIn.initialize(new PlugInContext(workbenchContext,
          null, null, null, null));
-    
+
          SelectItemsByCircleFromSelectedLayersPlugIn selectItemsFromCirclePlugIn = new SelectItemsByCircleFromSelectedLayersPlugIn();
          selectItemsFromCirclePlugIn.initialize(new PlugInContext(workbenchContext,
-         null, null, null, null));
-    
-         SelectAllLayerItemsPlugIn selectAllLayerItemsPlugIn = new SelectAllLayerItemsPlugIn();
-         selectAllLayerItemsPlugIn.initialize(new PlugInContext(workbenchContext,
          null, null, null, null));
 
          ReplicateSelectedItemsPlugIn replicatePlugIn = new ReplicateSelectedItemsPlugIn();
          replicatePlugIn.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
          */
-//        SelectByTypePlugIn mySelectByGeomTypePlugIn = new SelectByTypePlugIn();
-//        mySelectByGeomTypePlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
-//         ExtractLayersByGeometry myExtractLayersByGeometryPlugin = new ExtractLayersByGeometry();
-//         myExtractLayersByGeometryPlugin.initialize(new PlugInContext(workbenchContext, null, null, null, null));
-//	
+        SelectAllLayerItemsPlugIn selectAllLayerItemsPlugIn = new SelectAllLayerItemsPlugIn();
+        selectAllLayerItemsPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+
+        SelectByTypePlugIn mySelectByGeomTypePlugIn = new SelectByTypePlugIn();
+        mySelectByGeomTypePlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+
+        ExtractLayersByGeometry myExtractLayersByGeometryPlugin = new ExtractLayersByGeometry();
+        myExtractLayersByGeometryPlugin.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+//
         ExtractLayerInFence myExtractLayerInFence = new ExtractLayerInFence();
         myExtractLayerInFence.initialize(new PlugInContext(workbenchContext, null, null, null, null));
-//        
+
+        ExtractLayersByAttribute myExtractLayersByAttribute = new ExtractLayersByAttribute();
+        myExtractLayersByAttribute.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+//
         /**
          * *************************************************************************
-         * menu VIEW
-         * ************************************************************************
+         * menu VIEW ************************************************************************
          */
         //-- [sstein 10.July.2008] now initialized with default-plugins.xml file
     /*
@@ -212,10 +220,8 @@ public class OpenJumpConfiguration {
         //LayerStyle2SLDPlugIn mySytle2SLDplugIn = new LayerStyle2SLDPlugIn();
         //mySytle2SLDplugIn.initialize(new PlugInContext(workbenchContext, null,
         //  null, null, null));
-
         //new ImportSLDPlugIn().initialize(pluginContext);
         //new ImportArcMapStylePlugIn().initialize(pluginContext);
-
         pluginContext.getFeatureInstaller().addMenuSeparator(LAYER);
 
         // --this caused problems with the postgis plugin [sstein]
@@ -229,8 +235,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * menu LAYER
-         * ************************************************************************
+         * menu LAYER ************************************************************************
          */
         ToggleVisiblityPlugIn myToggleVisPlugIn = new ToggleVisiblityPlugIn();
         myToggleVisPlugIn.initialize(new PlugInContext(workbenchContext, null,
@@ -243,24 +248,21 @@ public class OpenJumpConfiguration {
          myMrSIDPlugIn.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
          */
-
         ChangeSRIDPlugIn myChangeSRIDPlugIn = new ChangeSRIDPlugIn();
         myChangeSRIDPlugIn.initialize(new PlugInContext(workbenchContext, null,
                 null, null, null));
 
         /**
          * *************************************************************************
-         * menu TOOLS
-         * ************************************************************************
+         * menu TOOLS ************************************************************************
          */
         /**
          * ** ANALYSIS ***
          */
-        
-         JoinAttributesSpatiallyPlugIn mySpatialJoin = new JoinAttributesSpatiallyPlugIn();
-         mySpatialJoin.initialize(new PlugInContext(workbenchContext, null, null,
-         null, null));
-/*
+        JoinAttributesSpatiallyPlugIn mySpatialJoin = new JoinAttributesSpatiallyPlugIn();
+        mySpatialJoin.initialize(new PlugInContext(workbenchContext, null, null,
+                null, null));
+        /*
          // -- SIGLE PlugIn
          PlanarGraphPlugIn coveragePlugIn = new PlanarGraphPlugIn();
          coveragePlugIn.initialize(new PlugInContext(workbenchContext, null, null,
@@ -269,10 +271,10 @@ public class OpenJumpConfiguration {
          IntersectPolygonLayersPlugIn intersectLayers = new IntersectPolygonLayersPlugIn();
          intersectLayers.initialize(new PlugInContext(workbenchContext,
          null, null, null, null));
-    
+
          UnionByAttributePlugIn unionByAttribute = new UnionByAttributePlugIn();
          unionByAttribute.initialize(new PlugInContext(workbenchContext,
-         null, null, null, null)); 
+         null, null, null, null));
          */
         /**
          * ** GENERATE ***
@@ -289,8 +291,17 @@ public class OpenJumpConfiguration {
         /**
          * ** QUERY ***
          */
+        SpatialQueryPlugIn mySpatialQueryPlugIn = new SpatialQueryPlugIn();
+        mySpatialQueryPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+
+        AttributeQueryPlugIn myAttributeQueryPlugIn = new AttributeQueryPlugIn();
+        myAttributeQueryPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+
         SimpleQueryPlugIn mySimpleQueryPlugIn = new SimpleQueryPlugIn();
         mySimpleQueryPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
+
+        SearchAllAttributes mySearchAllAttributes = new SearchAllAttributes();
+        mySearchAllAttributes.initialize(new PlugInContext(workbenchContext, null, null, null, null));
 
         /**
          * ** QA ***
@@ -311,15 +322,15 @@ public class OpenJumpConfiguration {
          BlendLineStringsPlugIn myLSBlender = new BlendLineStringsPlugIn();
          myLSBlender.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
-*/
-         MergeTwoSelectedPolygonsPlugIn twopolymerger = new MergeTwoSelectedPolygonsPlugIn();
-         twopolymerger.initialize(new PlugInContext(workbenchContext, null, null,
-         null, null));
+         */
+        MergeTwoSelectedPolygonsPlugIn twopolymerger = new MergeTwoSelectedPolygonsPlugIn();
+        twopolymerger.initialize(new PlugInContext(workbenchContext, null, null,
+                null, null));
 
-         SplitPolygonPlugIn cutpoly = new SplitPolygonPlugIn();
-         cutpoly.initialize(new PlugInContext(workbenchContext, null, null, null,
-         null));
-         
+        SplitPolygonPlugIn cutpoly = new SplitPolygonPlugIn();
+        cutpoly.initialize(new PlugInContext(workbenchContext, null, null, null,
+                null));
+
         /**
          * ** EDIT_ATTIBUTES ****
          */
@@ -378,8 +389,7 @@ public class OpenJumpConfiguration {
 //         null));
         /**
          * *************************************************************************
-         * menu WINDOW
-         * ************************************************************************
+         * menu WINDOW ************************************************************************
          */
         MosaicInternalFramesPlugIn mosaicInternalFramesPlugIn = new MosaicInternalFramesPlugIn();
         mosaicInternalFramesPlugIn.initialize(new PlugInContext(workbenchContext, null, null,
@@ -393,8 +403,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * menu HELP
-         * ************************************************************************
+         * menu HELP ************************************************************************
          */
         /**
          * *************************************************************************
@@ -430,7 +439,6 @@ public class OpenJumpConfiguration {
         //ChangeLayerableNamePlugIn changeLayerableNamePlugIn = new ChangeLayerableNamePlugIn();
         //changeLayerableNamePlugIn.initialize(new PlugInContext(workbenchContext,
         //  null, null, null, null));
-
         RefreshDataStoreQueryPlugIn refreshDataStoreQueryPlugIn = new RefreshDataStoreQueryPlugIn();
         refreshDataStoreQueryPlugIn.initialize(new PlugInContext(workbenchContext,
                 null, null, null, null));
@@ -443,7 +451,6 @@ public class OpenJumpConfiguration {
         //featureInstaller.addPopupMenuItem(layerNamePopupMenu, refreshDataStoreQueryPlugin,
         //        new String[]{MenuNames.DATASTORE}, refreshDataStoreQueryPlugin.getName() + "...", false, RefreshDataStoreQueryPlugin.ICON,
         //            RefreshDataStoreQueryPlugin.createEnableCheck(workbenchContext));
-
         //-- [sstein 22.Feb.2009]
         //-- adds renderer for (Pirol/Sextante) raster images
         RenderingManager.putRendererForLayerable(RasterImageLayer.class, new RasterImageLayerRendererFactory(pluginContext.getWorkbenchContext()));
@@ -467,14 +474,13 @@ public class OpenJumpConfiguration {
          JoinTablePlugIn joinTablePlugIn = new JoinTablePlugIn();
          joinTablePlugIn.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
-    
+
          PasteItemsAtPlugIn pasteItemsAtPlugIn = new PasteItemsAtPlugIn();
          pasteItemsAtPlugIn.initialize(new PlugInContext(workbenchContext,
          null, null, null, null));
          */
         /**
-         * +++++++++++++++++++++++ Category Context menu
-         * ++++++++++++++++++++++++*
+         * +++++++++++++++++++++++ Category Context menu ++++++++++++++++++++++++*
          */
         // -- Pirol plugins
         SetCategoryVisibilityPlugIn.getInstance(workbenchContext.createPlugInContext()).initialize(new PlugInContext(workbenchContext,
@@ -490,8 +496,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * EDITing toolbox
-         * ************************************************************************
+         * EDITing toolbox ************************************************************************
          */
         //-- [sstein 10.July.2008] leave them, as they seem to be essential
         //   note: it is intended to replace the original JUMP edition tools with the constrained tools
@@ -532,7 +537,7 @@ public class OpenJumpConfiguration {
          CutPolygonSIGLEPlugIn cutPolyPlugin = new CutPolygonSIGLEPlugIn();
          cutPolyPlugin.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
-    
+
          AutoCompletePolygonPlugIn myAutoCompletePlugIn = new AutoCompletePolygonPlugIn();
          myAutoCompletePlugIn.initialize(new PlugInContext(workbenchContext, null, null,
          null, null));
@@ -543,11 +548,9 @@ public class OpenJumpConfiguration {
          * ScaleSelectedItemsPlugIn(); myScaleItemsPlugin.initialize(new
          * PlugInContext(workbenchContext, null, null, null, null));
          */
-
         /**
          * *************************************************************************
-         * others
-         * ************************************************************************
+         * others ************************************************************************
          */
         //-- [sstein 10.July.2008] now initialized with default-plugins.xml file
         // takes care of keyboard navigation
@@ -563,8 +566,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * Decoration
-         * ************************************************************************
+         * Decoration ************************************************************************
          */
         DMTWorkbench workbench = workbenchContext.getWorkbench();
         WorkbenchFrame workbenchFrame = workbench.getFrame();
@@ -578,8 +580,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * Set Defaults
-         * ************************************************************************
+         * Set Defaults ************************************************************************
          */
         // -- disable drawing of invalid polygons by default (can be changed during
         // work in EditOptionsPanel)
@@ -587,8 +588,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * Open Wizards
-         * ************************************************************************
+         * Open Wizards ************************************************************************
          */
         AddDataStoreLayerWizard addDataStoreLayerWizard = new AddDataStoreLayerWizard(
                 workbenchContext);
@@ -596,7 +596,6 @@ public class OpenJumpConfiguration {
 
 //        AddWmsLayerWizard addWmsLayerWizard = new AddWmsLayerWizard(workbenchContext);
 //        OpenWizardPlugIn.addWizard(workbenchContext, addWmsLayerWizard);
-
         //[sstein] 22.Feb.2009 -- added to load Pirol/Sextante images
         AddRasterImageLayerWizard addRasterImageLayerWizard = new AddRasterImageLayerWizard(
                 workbenchContext);
@@ -604,8 +603,7 @@ public class OpenJumpConfiguration {
 
         /**
          * *************************************************************************
-         * testing
-         * ************************************************************************
+         * testing ************************************************************************
          */
         /*
          * ProjectionPlugIn projectionPlugin = new ProjectionPlugIn();
@@ -614,6 +612,7 @@ public class OpenJumpConfiguration {
          */
     }
 
+    //Method called from the DMTWorkbench
     public static void postExtensionInitialization(WorkbenchContext workbenchContext) {
         Registry registry = workbenchContext.getRegistry();
         List loadChoosers = DataSourceQueryChooserManager.get(
@@ -646,23 +645,18 @@ public class OpenJumpConfiguration {
         // supersedes com.osfac.dmt.workbench.ui.plugin.imagery.InstallReferencedImageFactoriesPlugin
         // register layerloader with worldfile support and plain factories for imagelayermanager
         addImageFactory(workbenchContext, registry, new GraphicImageFactory(),
-                new String[]{
-            "wld", "bpw", "jpw", "gfw"
-        });
+                new String[]{"wld", "bpw", "jpw", "gfw"});
         addImageFactory(workbenchContext, registry, new ECWImageFactory(), null);
         addImageFactory(workbenchContext, registry, new JPEG2000ImageFactory(), null);
         addImageFactory(workbenchContext, registry, new GeoTIFFImageFactory(),
-                new String[]{
-            "tfw"
-        });
+                new String[]{"tfw"});
         addImageFactory(workbenchContext, registry, new MrSIDImageFactory(), null);
         //
         DataSourceQueryChooserManager manager = DataSourceQueryChooserManager.get(workbenchContext.getWorkbench()
                 .getBlackboard());
         for (DataSourceQueryChooser chooser : (List<DataSourceQueryChooser>) manager.getLoadDataSourceQueryChoosers()) {
             if (!(chooser instanceof FileDataSourceQueryChooser)) {
-                WizardGroup wizard = new DataSourceQueryChooserOpenWizard(
-                        workbenchContext, chooser);
+                WizardGroup wizard = new DataSourceQueryChooserOpenWizard(workbenchContext, chooser);
                 OpenWizardPlugIn.addWizard(workbenchContext, wizard);
             }
         }
@@ -674,7 +668,7 @@ public class OpenJumpConfiguration {
         if (factory.isAvailable(workbenchContext)) {
             ReferencedImageFactoryFileLayerLoader loader = new ReferencedImageFactoryFileLayerLoader(
                     workbenchContext, factory, supportFileExtensions);
-            // add registry entry as FileLayerLoader 
+            // add registry entry as FileLayerLoader
             registry.createEntry(FileLayerLoader.KEY, loader);
             // register as imagefactory (Imagelayermanager)
             registry.createEntry(ReferencedImageFactory.REGISTRY_CLASSIFICATION, factory);

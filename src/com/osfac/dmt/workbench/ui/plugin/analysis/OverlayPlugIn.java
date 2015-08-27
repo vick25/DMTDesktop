@@ -23,8 +23,8 @@ import javax.swing.JMenuItem;
 
 /**
  *
- * Creates a new layer containing intersections of all pairs of features from
- * two input layers. Splits {@link
+ * Creates a new layer containing intersections of all pairs of features from two input layers.
+ * Splits {@link
  * com.vividsolutions.jts.geom.MultiPolygon Multipolygons} and {@link
  * com.vividsolutions.jts.geom.GeometryCollection
  * GeometryCollections}, and filters out non-Polygons.
@@ -47,6 +47,7 @@ public class OverlayPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         categoryName = value;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -64,8 +65,9 @@ public class OverlayPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(2));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
-        //[sstein, 15.07.2006] placed here again otherwise language settings wont work for i18n 
+        //[sstein, 15.07.2006] placed here again otherwise language settings wont work for i18n
         POLYGON_OUTPUT = I18N.get("ui.plugin.analysis.OverlayPlugIn.limit-output-to-polygons-only");
         FIRST_LAYER = I18N.get("ui.plugin.analysis.OverlayPlugIn.first-layer");
         SECOND_LAYER = I18N.get("ui.plugin.analysis.OverlayPlugIn.second-layer");
@@ -111,6 +113,7 @@ public class OverlayPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         GUIUtil.centreOnWindow(dialog);
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         FeatureCollection a = dialog.getLayer(FIRST_LAYER).getFeatureCollectionWrapper();
@@ -125,8 +128,8 @@ public class OverlayPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
     private AttributeMapping mapping(FeatureCollection a, FeatureCollection b) {
         return new AttributeMapping(dialog.getBoolean(
                 TRANSFER_ATTRIBUTES_FROM_FIRST_LAYER) ? a.getFeatureSchema()
-                : new FeatureSchema(),
+                        : new FeatureSchema(),
                 dialog.getBoolean(TRANSFER_ATTRIBUTES_FROM_SECOND_LAYER)
-                ? b.getFeatureSchema() : new FeatureSchema());
+                        ? b.getFeatureSchema() : new FeatureSchema());
     }
 }

@@ -117,8 +117,8 @@ public class EnableCheckFactory {
     public EnableCheck createOnlyOneLayerMayHaveSelectedFeaturesCheck() {
         return new EnableCheck() {
             public String check(JComponent component) {
-                Collection layersWithSelectedFeatures =
-                        ((SelectionManagerProxy) workbenchContext
+                Collection layersWithSelectedFeatures
+                        = ((SelectionManagerProxy) workbenchContext
                         .getWorkbench()
                         .getFrame()
                         .getActiveInternalFrame())
@@ -136,8 +136,8 @@ public class EnableCheckFactory {
     public EnableCheck createOnlyOneLayerMayHaveSelectedItemsCheck() {
         return new EnableCheck() {
             public String check(JComponent component) {
-                Collection layersWithSelectedItems =
-                        ((SelectionManagerProxy) workbenchContext
+                Collection layersWithSelectedItems
+                        = ((SelectionManagerProxy) workbenchContext
                         .getWorkbench()
                         .getFrame()
                         .getActiveInternalFrame())
@@ -153,8 +153,8 @@ public class EnableCheckFactory {
     public EnableCheck createSelectedItemsLayersMustBeEditableCheck() {
         return new EnableCheck() {
             public String check(JComponent component) {
-                for (Iterator i =
-                        ((SelectionManagerProxy) workbenchContext
+                for (Iterator i
+                        = ((SelectionManagerProxy) workbenchContext
                         .getWorkbench()
                         .getFrame()
                         .getActiveInternalFrame())
@@ -394,7 +394,7 @@ public class EnableCheckFactory {
                     //-- sstein:
                     //== eat exception ==
                     System.out.println("eat exception @ EnableCheckFactory.createAtLeastNItemsMustBeSelectedCheck(i) if a non taskframe(or child) is selected");
-                    //necessary if iFrame is OutputFrame or something 
+                    //necessary if iFrame is OutputFrame or something
                     //and i dont know how to test for alle iFrames which exist or rather i do not know
                     //which are the ones accessible to the SelectionManager
                 }
@@ -450,7 +450,7 @@ public class EnableCheckFactory {
                 return (n != ((SelectionManagerProxy) workbenchContext
                         .getWorkbench().getFrame().getActiveInternalFrame())
                         .getSelectionManager().getSelectedItemsCount()) ? msg
-                        : null;
+                                : null;
             }
         };
     }
@@ -515,8 +515,8 @@ public class EnableCheckFactory {
                 LayerViewPanel layerViewPanel = workbenchContext.getLayerViewPanel();
                 return (layerViewPanel == null || //[UT] 20.10.2005 not quite the error mesg
                         null == layerViewPanel.getFence())
-                        ? get("com.osfac.dmt.workbench.plugin.A-fence-must-be-drawn")
-                        : null;
+                                ? get("com.osfac.dmt.workbench.plugin.A-fence-must-be-drawn")
+                                : null;
             }
         };
     }
@@ -526,8 +526,8 @@ public class EnableCheckFactory {
             public String check(JComponent component) {
                 return ((vectorCount() > max) || (vectorCount() < min))
                         ? getMessage(
-                        "com.osfac.dmt.workbench.plugin.Between-and-vectors-must-be-drawn",
-                        new Object[]{min, max})
+                                "com.osfac.dmt.workbench.plugin.Between-and-vectors-must-be-drawn",
+                                new Object[]{min, max})
                         : null;
             }
         };

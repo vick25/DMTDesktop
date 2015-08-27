@@ -1,6 +1,8 @@
 package com.osfac.wms.ui;
 
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Image;
 
 /**
  * A simple canvas which draws a given image in the upper left corner of itself.
@@ -32,6 +34,7 @@ public class ImageCanvas extends Canvas {
      *
      * @param g the Graphics object on which to paint.
      */
+    @Override
     public void paint(Graphics g) {
         if (img != null) {
             g.drawImage(img, 0, 0, this);

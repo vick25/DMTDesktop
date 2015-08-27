@@ -15,9 +15,9 @@ import com.osfac.dmt.workbench.ui.LayerViewPanel;
 import com.osfac.dmt.workbench.ui.LayerViewPanelProxy;
 
 /**
- * Convenience methods for accessing the various elements in the Workbench
- * structure. Some getters return null -- subclasses may choose to override them
- * or leave them unimplemented, depending on their needs.
+ * Convenience methods for accessing the various elements in the Workbench structure. Some getters
+ * return null -- subclasses may choose to override them or leave them unimplemented, depending on
+ * their needs.
  */
 public abstract class WorkbenchContext implements LayerViewPanelProxy, LayerNamePanelProxy, LayerManagerProxy {
 
@@ -37,16 +37,19 @@ public abstract class WorkbenchContext implements LayerViewPanelProxy, LayerName
         return null;
     }
 
+    @Override
     public LayerNamePanel getLayerNamePanel() {
         return null;
     }
 
+    @Override
     public LayerViewPanel getLayerViewPanel() {
         return null;
     }
 
     //Sometimes you can have a layer manager but no layer view panel
     //e.g. when the attribute window is at the forefront. [Bob Boseko]
+    @Override
     public LayerManager getLayerManager() {
         return null;
     }

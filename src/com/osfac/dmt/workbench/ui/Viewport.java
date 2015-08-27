@@ -29,8 +29,8 @@ public class Viewport implements Java2DConverter.PointConverter {
     /**
      * Origin of view as perceived by model, that is, in model space
      */
-    private Point2D viewOriginAsPerceivedByModel =
-            new Point2D.Double(INITIAL_VIEW_ORIGIN_X, INITIAL_VIEW_ORIGIN_Y);
+    private Point2D viewOriginAsPerceivedByModel
+            = new Point2D.Double(INITIAL_VIEW_ORIGIN_X, INITIAL_VIEW_ORIGIN_Y);
     private double scale = 1;
     private AffineTransform modelToViewTransform;
     private ZoomHistory zoomHistory;
@@ -40,6 +40,7 @@ public class Viewport implements Java2DConverter.PointConverter {
         zoomHistory = new ZoomHistory(panel);
         java2DConverter = new Java2DConverter(this);
         panel.addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentResized(ComponentEvent e) {
                 fireZoomChanged(getEnvelopeInModelCoordinates());
             }
@@ -71,8 +72,8 @@ public class Viewport implements Java2DConverter.PointConverter {
     }
 
     public void update() throws NoninvertibleTransformException {
-        modelToViewTransform =
-                modelToViewTransform(scale, viewOriginAsPerceivedByModel, panel.getSize().height);
+        modelToViewTransform
+                = modelToViewTransform(scale, viewOriginAsPerceivedByModel, panel.getSize().height);
         panel.repaint();
     }
 
@@ -90,6 +91,7 @@ public class Viewport implements Java2DConverter.PointConverter {
         return modelToViewTransform;
     }
 
+    @Override
     public double getScale() {
         return scale;
     }
@@ -112,19 +114,18 @@ public class Viewport implements Java2DConverter.PointConverter {
     }
 
     /**
-     * Of widthOfNewViewAsPerceivedByOldView and
-     * heightOfNewViewAsPerceivedByOldView, this method will choose the one
-     * producing the least zoom.
+     * Of widthOfNewViewAsPerceivedByOldView and heightOfNewViewAsPerceivedByOldView, this method
+     * will choose the one producing the least zoom.
      */
     public void zoom(
             Point2D centreOfNewViewAsPerceivedByOldView,
             double widthOfNewViewAsPerceivedByOldView,
             double heightOfNewViewAsPerceivedByOldView)
             throws NoninvertibleTransformException {
-        double zoomFactor =
-                Math.min(
-                panel.getSize().width / widthOfNewViewAsPerceivedByOldView,
-                panel.getSize().height / heightOfNewViewAsPerceivedByOldView);
+        double zoomFactor
+                = Math.min(
+                        panel.getSize().width / widthOfNewViewAsPerceivedByOldView,
+                        panel.getSize().height / heightOfNewViewAsPerceivedByOldView);
         double realWidthOfNewViewAsPerceivedByOldView = panel.getSize().width / zoomFactor;
         double realHeightOfNewViewAsPerceivedByOldView = panel.getSize().height / zoomFactor;
         Envelope zoomEnvelope;
@@ -167,6 +168,7 @@ public class Viewport implements Java2DConverter.PointConverter {
         return getModelToViewTransform().transform(toPoint2DDouble(modelPoint), null);
     }
 
+    @Override
     public Point2D toViewPoint(Coordinate modelCoordinate)
             throws NoninvertibleTransformException {
         //Optimization recommended by Todd Warnes [Bob Boseko 2004-02-06]
@@ -190,6 +192,7 @@ public class Viewport implements Java2DConverter.PointConverter {
         return modelToViewTransform;
     }
 
+    @Override
     public Envelope getEnvelopeInModelCoordinates() {
         double widthAsPerceivedByModel = panel.getWidth() / scale;
         double heightAsPerceivedByModel = panel.getHeight() / scale;
@@ -215,14 +218,13 @@ public class Viewport implements Java2DConverter.PointConverter {
             zoomHistory.add(getEnvelopeInModelCoordinates());
         }
 
-        setScale(
-                Math.min(
+        setScale(Math.min(
                 panel.getWidth() / modelEnvelope.getWidth(),
                 panel.getHeight() / modelEnvelope.getHeight()));
         double xCenteringOffset = ((panel.getWidth() / scale) - modelEnvelope.getWidth()) / 2d;
         double yCenteringOffset = ((panel.getHeight() / scale) - modelEnvelope.getHeight()) / 2d;
-        viewOriginAsPerceivedByModel =
-                new Point2D.Double(modelEnvelope.getMinX() - xCenteringOffset, modelEnvelope.getMinY() - yCenteringOffset);
+        viewOriginAsPerceivedByModel
+                = new Point2D.Double(modelEnvelope.getMinX() - xCenteringOffset, modelEnvelope.getMinY() - yCenteringOffset);
         update();
         zoomHistory.add(modelEnvelope);
         fireZoomChanged(modelEnvelope);

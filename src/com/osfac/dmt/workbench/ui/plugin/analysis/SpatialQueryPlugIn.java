@@ -18,9 +18,13 @@ import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.SelectionManager;
 import com.osfac.dmt.workbench.ui.plugin.FeatureInstaller;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collection;
+import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /**
  * Queries a layer by a spatial predicate.
@@ -59,10 +63,12 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
         categoryName = value;
     }
 
+    @Override
     public String getName() {
         return I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Spatial-Query");
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -80,6 +86,7 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(2));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         //[sstein] added again for correct language setting
         UPDATE_SRC = I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Select-features-in-the-source-layer");
@@ -102,6 +109,7 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         monitor.allowCancellationRequests();
@@ -117,7 +125,8 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
             return;
         }
 
-        monitor.report(I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Executing-query") + " " + functionToRun.getName() + "...");
+        monitor.report(new StringBuilder(I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Executing-query"))
+                .append(" ").append(functionToRun.getName()).append("...").toString());
 
         FeatureCollection maskFC = maskLyr.getFeatureCollectionWrapper();
         FeatureCollection sourceFC = srcLayer.getFeatureCollectionWrapper();
@@ -209,6 +218,7 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
     private class MethodItemListener
             implements ItemListener {
 
+        @Override
         public void itemStateChanged(ItemEvent e) {
             updateUIForFunction((String) e.getItem());
         }

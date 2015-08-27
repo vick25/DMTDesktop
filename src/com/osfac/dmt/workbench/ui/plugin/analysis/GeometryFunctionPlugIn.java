@@ -32,10 +32,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
- * Provides basic functions for computation with {@link Geometry} objects. <p>
+ * Provides basic functions for computation with {@link Geometry} objects.
+ * <p>
  * Uses {@link GeometryFunction} objects obtained from the Registry by the key
- * GEOMETRY_FUNCTION_REG_KEY. Other plug-ins can add further Geometry functions
- * to the Registry.
+ * GEOMETRY_FUNCTION_REG_KEY. Other plug-ins can add further Geometry functions to the Registry.
  *
  * @see GeometryFunction
  */
@@ -81,6 +81,7 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
         addToSourceAllowed = value;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -109,6 +110,7 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(1));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         //-- [sstein 16.07.2006] put here again for langugae settings
         sErrorsFound = I18N.get("ui.plugin.analysis.GeometryFunctionPlugIn.errors-found-while-executing-function");
@@ -138,6 +140,7 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         monitor.allowCancellationRequests();
@@ -205,11 +208,13 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
             final Collection undoableModifiedFeatures = modifiedFeatures;
 
             UndoableCommand cmd = new UndoableCommand(getName()) {
+                @Override
                 public void execute() {
                     srcLayer.getFeatureCollectionWrapper().removeAll(undoableModifiedFeatures);
                     srcLayer.getFeatureCollectionWrapper().addAll(undoableNewFeatures);
                 }
 
+                @Override
                 public void unexecute() {
                     srcLayer.getFeatureCollectionWrapper().removeAll(undoableNewFeatures);
                     srcLayer.getFeatureCollectionWrapper().addAll(undoableModifiedFeatures);
@@ -221,10 +226,12 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
             final Collection undoableFeatures = resultFeatures;
 
             UndoableCommand cmd = new UndoableCommand(getName()) {
+                @Override
                 public void execute() {
                     srcLayer.getFeatureCollectionWrapper().addAll(undoableFeatures);
                 }
 
+                @Override
                 public void unexecute() {
                     srcLayer.getFeatureCollectionWrapper().removeAll(undoableFeatures);
                 }
@@ -300,7 +307,6 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
         int total = fc.size();
         int count = 0;
         for (Iterator iSrc = fc.iterator(); iSrc.hasNext();) {
-
             monitor.report(count++, total, sFeatures);
             if (monitor.isCancelRequested()) {
                 return null;
@@ -422,6 +428,7 @@ public class GeometryFunctionPlugIn extends AbstractPlugIn
 
     private class MethodItemListener implements ItemListener {
 
+        @Override
         public void itemStateChanged(ItemEvent e) {
             updateUIForMethod((GeometryFunction) e.getItem());
         }

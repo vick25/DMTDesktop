@@ -31,6 +31,15 @@
  */
 package com.osfac.dmt.workbench.datasource;
 
+import com.osfac.dmt.I18N;
+import com.osfac.dmt.coordsys.CoordinateSystem;
+import com.osfac.dmt.coordsys.CoordinateSystemRegistry;
+import com.osfac.dmt.io.datasource.DataSource;
+import com.osfac.dmt.io.datasource.DataSourceQuery;
+import com.osfac.dmt.util.Blackboard;
+import com.osfac.dmt.util.CollectionUtil;
+import com.osfac.dmt.util.LangUtil;
+import com.osfac.dmt.workbench.ui.GUIUtil;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -44,7 +53,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -53,23 +61,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import com.osfac.dmt.I18N;
-import com.osfac.dmt.coordsys.CoordinateSystem;
-import com.osfac.dmt.coordsys.CoordinateSystemRegistry;
-import com.osfac.dmt.io.datasource.DataSource;
-import com.osfac.dmt.io.datasource.DataSourceQuery;
-import com.osfac.dmt.util.Blackboard;
-import com.osfac.dmt.util.CollectionUtil;
-import com.osfac.dmt.util.LangUtil;
-import com.osfac.dmt.workbench.ui.GUIUtil;
-
 /**
- * UI for picking datasets stored in files. Generates two properties: the filename
- * and the CoordinateSystem.
+ * UI for picking datasets stored in files. Generates two properties: the filename and the
+ * CoordinateSystem.
+ *
  * @see com.osfac.dmt.coordsys.CoordinateSystem
  */
 public abstract class FileDataSourceQueryChooser
-    implements DataSourceQueryChooser {
+        implements DataSourceQueryChooser {
+
     private String description;
     private Class dataSourceClass;
     private FileFilter fileFilter;
@@ -81,73 +81,75 @@ public abstract class FileDataSourceQueryChooser
      * @param extensions e.g. txt
      */
     public FileDataSourceQueryChooser(Class dataSourceClass,
-        String description, String[] extensions) {
+            String description, String[] extensions) {
         this.dataSourceClass = dataSourceClass;
         this.description = description;
         this.extensions = extensions;
         fileFilter = GUIUtil.createFileFilter(description, extensions);
     }
 
+    @Override
     public String toString() {
         return description;
     }
 
+    @Override
     public boolean isInputValid() {
     	//[sstein 6 Nov 2011] replace the code below as it does not work for MacOSX
     	/*
-        //Trick to allow inner class to modify an outside variable:
-        //stick the variable in an array. [Bob Boseko]
-        final Boolean[] actionPerformed = new Boolean[] { Boolean.FALSE };
-        ActionListener listener = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    actionPerformed[0] = Boolean.TRUE;
-                }
-            };
+         //Trick to allow inner class to modify an outside variable:
+         //stick the variable in an array. [Bob Boseko]
+         final Boolean[] actionPerformed = new Boolean[] { Boolean.FALSE };
+         ActionListener listener = new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+         actionPerformed[0] = Boolean.TRUE;
+         }
+         };
 
-        getFileChooserPanel().getChooser().addActionListener(listener);
+         getFileChooserPanel().getChooser().addActionListener(listener);
 
-        try {
-            //Workaround for Java Bug 4528663 "JFileChooser doesn't return what is
-            //typed in the file name text field." [Bob Boseko]
-            if (getFileChooserPanel().getChooser().getUI() instanceof BasicFileChooserUI) {
-                BasicFileChooserUI ui = (BasicFileChooserUI) getFileChooserPanel()
-                                                                 .getChooser()
-                                                                 .getUI();
-                ui.getApproveSelectionAction().actionPerformed(null);
-            }
-        } finally {
-            getFileChooserPanel().getChooser().removeActionListener(listener);
-        }
+         try {
+         //Workaround for Java Bug 4528663 "JFileChooser doesn't return what is
+         //typed in the file name text field." [Bob Boseko]
+         if (getFileChooserPanel().getChooser().getUI() instanceof BasicFileChooserUI) {
+         BasicFileChooserUI ui = (BasicFileChooserUI) getFileChooserPanel()
+         .getChooser()
+         .getUI();
+         ui.getApproveSelectionAction().actionPerformed(null);
+         }
+         } finally {
+         getFileChooserPanel().getChooser().removeActionListener(listener);
+         }
 
-        return actionPerformed[0] == Boolean.TRUE;
-        */
+         return actionPerformed[0] == Boolean.TRUE;
+         */
         //[sstein 6 Nov 2011] the previous does not work for MacOSX, but I found the code below here:
         //                    http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4528663
-    	boolean gotFileName = true;
+        boolean gotFileName = true;
         try {
-        	JFileChooser chooser = getFileChooserPanel().getChooser();
-        	Method getFileName = chooser.getUI().getClass().getDeclaredMethod("getFileName", new Class[]{});
-        	String fn = (String)getFileName.invoke(chooser.getUI(), new Object[]{});
-                chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), fn));
-            } 
-        catch (Exception e) { 
-            	/* log warning */ 
-            	gotFileName = false;
-            }
+            JFileChooser chooser = getFileChooserPanel().getChooser();
+            Method getFileName = chooser.getUI().getClass().getDeclaredMethod("getFileName", new Class[]{});
+            String fn = (String) getFileName.invoke(chooser.getUI(), new Object[]{});
+            chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), fn));
+        } catch (Exception e) {
+            /* log warning */
+            gotFileName = false;
+        }
         return gotFileName;
     }
 
+    @Override
     public Collection getDataSourceQueries() {
         ArrayList queries = new ArrayList();
         File[] files = GUIUtil.selectedFiles(getFileChooserPanel().getChooser());
 
         for (int i = 0; i < files.length; i++) {
             //LDB: mod to append standard extension to save file names
-          String fname = files[i].getAbsolutePath();
+            String fname = files[i].getAbsolutePath();
             if (fname.lastIndexOf(".") == -1) {
-              fname = fname + "." + extensions[0];  //first extension (i.e. shp)
+                fname = fname + "." + extensions[0];  //first extension (i.e. shp)
             }
-          File file = new File(fname);
+            File file = new File(fname);
             queries.addAll(toDataSourceQueries(file));
             //queries.addAll(toDataSourceQueries(files[i]));
         }
@@ -162,6 +164,7 @@ public abstract class FileDataSourceQueryChooser
 
     protected abstract FileChooserPanel getFileChooserPanel();
 
+    @Override
     public Component getComponent() {
         setFileFilters();
 
@@ -196,7 +199,7 @@ public abstract class FileDataSourceQueryChooser
         // takes time. [Bob Boseko]
         //
         FileFilter[] filters = getFileChooserPanel().getChooser().getChoosableFileFilters();
-        if ( ! CollectionUtil.containsReference( filters, getFileFilter() ) ) {
+        if (!CollectionUtil.containsReference(filters, getFileFilter())) {
             GUIUtil.removeChoosableFileFilters(getFileChooserPanel().getChooser());
             addFileFilters(getFileChooserPanel().getChooser());
             getFileChooserPanel().getChooser().setFileFilter(getFileFilter());
@@ -213,14 +216,14 @@ public abstract class FileDataSourceQueryChooser
         dataSource.setProperties(toProperties(file));
 
         return new DataSourceQuery(dataSource, null,
-            GUIUtil.nameWithoutExtension(file));
+                GUIUtil.nameWithoutExtension(file));
     }
 
     protected Map toProperties(File file) {
         HashMap properties = new HashMap();
         properties.put(DataSource.FILE_KEY, file.getPath());
         properties.put(DataSource.COORDINATE_SYSTEM_KEY,
-            getFileChooserPanel().getSelectedCoordinateSystem().getName());
+                getFileChooserPanel().getSelectedCoordinateSystem().getName());
 
         return properties;
     }
@@ -246,45 +249,46 @@ public abstract class FileDataSourceQueryChooser
     }
 
     protected static class FileChooserPanel extends JPanel {
+
         private JFileChooser chooser;
         private Component southComponent1;
         private Component southComponent2;
         private JComboBox coordinateSystemComboBox = new JComboBox();
-        private JLabel coordinateSystemLabel = new JLabel(I18N.get("datasource.FileDataSourceQueryChooser.coordinate-system-of-file")+" ") {
+        private JLabel coordinateSystemLabel = new JLabel(I18N.get("datasource.FileDataSourceQueryChooser.coordinate-system-of-file") + " ") {
 
-                {
-                    setDisplayedMnemonic('r');
-                    setLabelFor(coordinateSystemComboBox);
-                }
-            };
+            {
+                setDisplayedMnemonic('r');
+                setLabelFor(coordinateSystemComboBox);
+            }
+        };
 
         private JPanel southComponent1Container = new JPanel(new BorderLayout());
         private JPanel southComponent2Container = new JPanel(new BorderLayout());
 
         public FileChooserPanel(JFileChooser chooser, Blackboard blackboard) {
             setLayout(new BorderLayout());
-            ArrayList sortedSystems = new ArrayList( CoordinateSystemRegistry.instance(blackboard).getCoordinateSystems() );
-            Collections.sort( sortedSystems );
-            coordinateSystemComboBox.setModel(new DefaultComboBoxModel( new Vector(sortedSystems) ) );
+            ArrayList sortedSystems = new ArrayList(CoordinateSystemRegistry.instance(blackboard).getCoordinateSystems());
+            Collections.sort(sortedSystems);
+            coordinateSystemComboBox.setModel(new DefaultComboBoxModel(new Vector(sortedSystems)));
             this.chooser = chooser;
 
             JPanel southPanel = new JPanel(new GridBagLayout());
             southPanel.add(coordinateSystemLabel,
-                new GridBagConstraints(0, 0, 1, 1, 0, 0,
-                    GridBagConstraints.WEST, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 0), 0, 0));
+                    new GridBagConstraints(0, 0, 1, 1, 0, 0,
+                            GridBagConstraints.WEST, GridBagConstraints.NONE,
+                            new Insets(0, 0, 0, 0), 0, 0));
             southPanel.add(coordinateSystemComboBox,
-                new GridBagConstraints(1, 0, 1, 1, 0, 0,
-                    GridBagConstraints.WEST, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 0), 0, 0));
+                    new GridBagConstraints(1, 0, 1, 1, 0, 0,
+                            GridBagConstraints.WEST, GridBagConstraints.NONE,
+                            new Insets(0, 0, 0, 0), 0, 0));
             southPanel.add(southComponent1Container,
-                new GridBagConstraints(2, 0, 1, 1, 1, 0,
-                    GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 4, 0, 0), 0, 0));
+                    new GridBagConstraints(2, 0, 1, 1, 1, 0,
+                            GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                            new Insets(0, 4, 0, 0), 0, 0));
             southPanel.add(southComponent2Container,
-                new GridBagConstraints(0, 1, 3, 1, 1, 0,
-                    GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
+                    new GridBagConstraints(0, 1, 3, 1, 1, 0,
+                            GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                            new Insets(0, 0, 0, 0), 0, 0));
             add(chooser, BorderLayout.CENTER);
             add(southPanel, BorderLayout.SOUTH);
             coordinateSystemComboBox.setVisible(false);
@@ -324,8 +328,8 @@ public abstract class FileDataSourceQueryChooser
 
         public CoordinateSystem getSelectedCoordinateSystem() {
             return coordinateSystemComboBox.isVisible()
-            ? (CoordinateSystem) coordinateSystemComboBox.getSelectedItem()
-            : CoordinateSystem.UNSPECIFIED;
+                    ? (CoordinateSystem) coordinateSystemComboBox.getSelectedItem()
+                    : CoordinateSystem.UNSPECIFIED;
         }
 
         public void setSelectedCoordinateSystem(String name) {
@@ -334,8 +338,8 @@ public abstract class FileDataSourceQueryChooser
 
         private CoordinateSystem coordinateSystem(String name) {
             for (int i = 0; i < coordinateSystemComboBox.getItemCount(); i++) {
-                if (((CoordinateSystem)coordinateSystemComboBox.getItemAt(i)).getName().equals(name)) {
-                    return (CoordinateSystem)coordinateSystemComboBox.getItemAt(i);
+                if (((CoordinateSystem) coordinateSystemComboBox.getItemAt(i)).getName().equals(name)) {
+                    return (CoordinateSystem) coordinateSystemComboBox.getItemAt(i);
                 }
             }
             return null;
@@ -353,5 +357,4 @@ public abstract class FileDataSourceQueryChooser
     public Class getDataSourceClass() {
         return dataSourceClass;
     }
-    
 }

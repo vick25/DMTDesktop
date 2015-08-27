@@ -9,7 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class AuthenDialog extends JFrame implements FadeListener {
 
@@ -32,6 +36,7 @@ public class AuthenDialog extends JFrame implements FadeListener {
         this.setLocationRelativeTo(this);
         this.frame = this;
         this.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowOpened(WindowEvent e) {
                 if (splashWindow != null) {
                     splashWindow.setVisible(false);
@@ -48,6 +53,7 @@ public class AuthenDialog extends JFrame implements FadeListener {
 
     private void startAnimation() {
         Timer animation = new Timer(50, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 contentPane.repaint();
             }
@@ -55,18 +61,22 @@ public class AuthenDialog extends JFrame implements FadeListener {
         animation.start();
     }
 
+    //OSFAC DMT Login UI
     private void buildLoginForm() {
         PanAuthen form = new PanAuthen(glassPane, this);
         form.setOpaque(false);
         contentPane.add(form);
     }
 
+    @Override
     public void fadeInFinished() {
         glassPane.setVisible(false);
     }
 
+    @Override
     public void fadeOutFinished() {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 contentPane = new CirclesPanel();
                 contentPane.setLayout(new BorderLayout());

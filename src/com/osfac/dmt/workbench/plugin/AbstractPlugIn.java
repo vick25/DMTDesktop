@@ -13,9 +13,8 @@ import java.awt.event.ActionListener;
 import org.apache.log4j.Logger;
 
 /**
- * Default implementation of PlugIn, with useful functions for auto-generating a
- * name, converting a PlugIn into an ActionListener (for use with JButtons, for
- * example), and supporting undo.
+ * Default implementation of PlugIn, with useful functions for auto-generating a name, converting a
+ * PlugIn into an ActionListener (for use with JButtons, for example), and supporting undo.
  */
 public abstract class AbstractPlugIn implements PlugIn {
 
@@ -32,18 +31,20 @@ public abstract class AbstractPlugIn implements PlugIn {
         this.name = name;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         return true;
     }
 
     /**
-     * @return the class name, minus "PlugIn", with spaces inserted at the
-     * appropriate point before each uppercase+lowercase and lowercase+uppercase
-     * combination.
+     * @return the class name, minus "PlugIn", with spaces inserted at the appropriate point before
+     * each uppercase+lowercase and lowercase+uppercase combination.
      */
+    @Override
     public String getName() {
         return name == null ? createName(getClass()) : name;
     }
@@ -60,18 +61,19 @@ public abstract class AbstractPlugIn implements PlugIn {
     }
 
     /**
-     * @param taskMonitorManager can be null if you do not wish to use the Task
-     * Monitor progress-reporting framework
+     * @param taskMonitorManager can be null if you do not wish to use the Task Monitor
+     * progress-reporting framework
      */
     public static ActionListener toActionListener(final PlugIn plugIn, final WorkbenchContext workbenchContext,
             final TaskMonitorManager taskMonitorManager) {
         return new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (workbenchContext.getWorkbench() != null) {
                         workbenchContext.getWorkbench().getFrame().setStatusMessage("");
-                        workbenchContext.getWorkbench().getFrame().log(I18N.get("plugin.AbstractPlugIn.executing") + " " + plugIn.getName());
-
+                        workbenchContext.getWorkbench().getFrame().log(new StringBuilder(
+                                I18N.get("plugin.AbstractPlugIn.executing")).append(" ").append(plugIn.getName()).toString());
                     }
 
                     PlugInContext plugInContext = workbenchContext.createPlugInContext();
@@ -133,16 +135,16 @@ public abstract class AbstractPlugIn implements PlugIn {
         layerManagerProxy.getLayerManager().getUndoableEditReceiver().receive(command.toUndoableEdit());
     }
 
+    @Override
     public String toString() {
         return getName();
     }
 
     /**
-     * Indicates that this plug-in either (1) is undoable but hasn't modified
-     * the system yet or (2) does not modify the system. In either case, the
-     * undo history will be preserved. If this method is not called, then this
-     * plug-in will be assumed to be non-undoable, and the undo history will be
-     * truncated.
+     * Indicates that this plug-in either (1) is undoable but hasn't modified the system yet or (2)
+     * does not modify the system. In either case, the undo history will be preserved. If this
+     * method is not called, then this plug-in will be assumed to be non-undoable, and the undo
+     * history will be truncated.
      */
     protected void reportNothingToUndoYet(PlugInContext context) {
         //The LayerManager can be null if for example there are no TaskFrames

@@ -38,10 +38,12 @@ public class WorkbenchPropertiesFile implements WorkbenchProperties {
         this.errorHandler = errorHandler;
     }
 
+    @Override
     public List getPlugInClasses() {
         return getPlugInClasses(null); //null invokes default ClassLoader
     }
 
+    @Override
     public List getPlugInClasses(ClassLoader classLoader) {
         ArrayList plugInClasses = new ArrayList();
         for (Iterator i = root1.getChildren("plug-in").iterator(); i.hasNext();) {
@@ -65,6 +67,7 @@ public class WorkbenchPropertiesFile implements WorkbenchProperties {
         return plugInClasses;
     }
 
+    @Override
     public List getInputDriverClasses() throws ClassNotFoundException {
         ArrayList inputDriverClasses = new ArrayList();
         for (Iterator i = root1.getChildren("input-driver").iterator(); i.hasNext();) {
@@ -80,6 +83,7 @@ public class WorkbenchPropertiesFile implements WorkbenchProperties {
         return inputDriverClasses;
     }
 
+    @Override
     public List getOutputDriverClasses() throws ClassNotFoundException {
         ArrayList outputDriverClasses = new ArrayList();
         for (Iterator i = root1.getChildren("output-driver").iterator(); i.hasNext();) {
@@ -95,6 +99,7 @@ public class WorkbenchPropertiesFile implements WorkbenchProperties {
         return outputDriverClasses;
     }
 
+    @Override
     public List getConfigurationClasses() throws ClassNotFoundException {
         ArrayList getConfigurationClasses = new ArrayList();
         for (Iterator i = root1.getChildren("extension").iterator(); i.hasNext();) {

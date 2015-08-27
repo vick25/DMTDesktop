@@ -1,10 +1,10 @@
 package com.osfac.dmt.algorithm;
 
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
 
 /**
- * Contains a pair of points and the distance between them. Provides methods to
- * update with a new point pair with either maximum or minimum distance.
+ * Contains a pair of points and the distance between them. Provides methods to update with a new
+ * point pair with either maximum or minimum distance.
  */
 public class PointPairDistance {
 

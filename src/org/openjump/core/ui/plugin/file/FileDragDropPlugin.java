@@ -33,8 +33,7 @@ import javax.swing.JRootPane;
 import javax.swing.border.Border;
 import org.openjump.core.ui.plugin.AbstractUiPlugIn;
 
-public class FileDragDropPlugin extends AbstractUiPlugIn implements
-        DropTargetListener {
+public class FileDragDropPlugin extends AbstractUiPlugIn implements DropTargetListener {
 
     public static final Set<String> PROJECT_EXTENSIONS = new HashSet<>(
             Arrays.asList(new String[]{
@@ -52,6 +51,7 @@ public class FileDragDropPlugin extends AbstractUiPlugIn implements
      * @param context The plug-in context.
      * @exception Exception If there was an error initialising the plug-in.
      */
+    @Override
     public void initialize(final PlugInContext context) throws Exception {
         super.initialize(context);
         DMTWorkbench workbench = workbenchContext.getWorkbench();
@@ -60,6 +60,7 @@ public class FileDragDropPlugin extends AbstractUiPlugIn implements
         makeDropTarget(frame, true);
     }
 
+    @Override
     public void dragEnter(DropTargetDragEvent event) {
         if (isDragOk(event)) {
             JRootPane rootPane = frame.getRootPane();
@@ -71,14 +72,17 @@ public class FileDragDropPlugin extends AbstractUiPlugIn implements
         }
     }
 
+    @Override
     public void dragExit(DropTargetEvent event) {
         JRootPane rootPane = frame.getRootPane();
         rootPane.setBorder(savedBorder);
     }
 
+    @Override
     public void dragOver(DropTargetDragEvent event) {
     }
 
+    @Override
     public void drop(DropTargetDropEvent event) {
         try {
             Transferable tr = event.getTransferable();
@@ -153,6 +157,7 @@ public class FileDragDropPlugin extends AbstractUiPlugIn implements
         }
     }
 
+    @Override
     public void dropActionChanged(DropTargetDragEvent event) {
         if (isDragOk(event)) {
             event.acceptDrag(DnDConstants.ACTION_COPY);
@@ -182,6 +187,7 @@ public class FileDragDropPlugin extends AbstractUiPlugIn implements
         }
 
         component.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            @Override
             public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
                 java.awt.Component parent = component.getParent();
                 if (parent == null) {

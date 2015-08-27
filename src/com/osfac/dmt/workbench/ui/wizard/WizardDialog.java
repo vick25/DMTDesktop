@@ -53,6 +53,7 @@ public class WizardDialog extends JDialog implements WizardContext,
         jbInit();
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 cancel();
             }
@@ -111,13 +112,13 @@ public class WizardDialog extends JDialog implements WizardContext,
                 : I18N.get("ui.wizard.WizardDialog.next") + " >");
     }
 
+    @Override
     public void inputChanged() {
         updateButtons();
     }
 
     /**
-     * @param wizardPanels the first of which will be the first WizardPanel that
-     * is displayed
+     * @param wizardPanels the first of which will be the first WizardPanel that is displayed
      */
     public void init(WizardPanel[] wizardPanels) {
         List<WizardPanel> panels = Arrays.asList(wizardPanels);
@@ -181,8 +182,7 @@ public class WizardDialog extends JDialog implements WizardContext,
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
         backButton.setText("< " + I18N.get("ui.wizard.WizardDialog.back"));
-        backButton.addActionListener(new InvokeMethodActionListener(this,
-                "previous"));
+        backButton.addActionListener(new InvokeMethodActionListener(this, "previous"));
         buttonPanel.add(backButton);
 
         nextButton.setText(I18N.get("ui.wizard.WizardDialog.next") + " >");
@@ -195,8 +195,7 @@ public class WizardDialog extends JDialog implements WizardContext,
         buttonPanel.add(spacer);
 
         cancelButton.setText(I18N.get("ui.wizard.WizardDialog.cancel"));
-        cancelButton.addActionListener(new InvokeMethodActionListener(this,
-                "cancel"));
+        cancelButton.addActionListener(new InvokeMethodActionListener(this, "cancel"));
         buttonPanel.add(cancelButton);
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -253,14 +252,15 @@ public class WizardDialog extends JDialog implements WizardContext,
     public void previous() {
         WizardPanel prevPanel = (WizardPanel) completedWizardPanels.remove(completedWizardPanels.size() - 1);
         setCurrentWizardPanel(prevPanel);
-
         // Don't init panel if we're going back. [Bob Boseko]
     }
 
+    @Override
     public void setData(String name, Object value) {
         dataMap.put(name, value);
     }
 
+    @Override
     public Object getData(String name) {
         return dataMap.get(name);
     }

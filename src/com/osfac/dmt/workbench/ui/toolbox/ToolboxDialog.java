@@ -11,19 +11,22 @@ import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
 import com.osfac.dmt.workbench.ui.cursortool.CursorTool;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
- * An always-on-top modeless dialog with a WorkbenchToolBar (for CursorTools,
- * PlugIns, and other buttons). Takes care of unpressing the CursorTools (if
- * necessary) when the dialog is closed (and pressing the first CursorTool on
- * the main toolbar).
+ * An always-on-top modeless dialog with a WorkbenchToolBar (for CursorTools, PlugIns, and other
+ * buttons). Takes care of unpressing the CursorTools (if necessary) when the dialog is closed (and
+ * pressing the first CursorTool on the main toolbar).
  */
 //Must use modeless dialog rather than JInternalFrame; otherwise, if we
 // implement
@@ -61,8 +64,7 @@ public class ToolboxDialog extends JDialog {
     /**
      * @param enableCheck null to leave unspecified
      */
-    public WorkbenchToolBar.ToolConfig add(CursorTool tool,
-            EnableCheck enableCheck) {
+    public WorkbenchToolBar.ToolConfig add(CursorTool tool, EnableCheck enableCheck) {
         WorkbenchToolBar.ToolConfig config = getToolBar().addCursorTool(tool);
         JideToggleButton button = config.getButton();
         getToolBar().setEnableCheck(button,
@@ -96,13 +98,14 @@ public class ToolboxDialog extends JDialog {
         try {
             jbInit();
         } catch (Exception e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         this.context = context;
         setResizable(true);
         setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         this.addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentHidden(ComponentEvent e) {
                 if (buttons.contains(context.getWorkbench().getFrame()
                         .getToolBar().getSelectedCursorToolButton())) {
@@ -125,6 +128,7 @@ public class ToolboxDialog extends JDialog {
         initializeLocation();
     }
 
+    @Override
     public void setVisible(boolean visible) {
         if (visible && !locationInitializedBeforeMakingDialogVisible) {
             // #initializeLocation was called in #finishAddingComponents,

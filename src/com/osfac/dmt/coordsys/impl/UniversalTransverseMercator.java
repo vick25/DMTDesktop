@@ -84,10 +84,12 @@ public class UniversalTransverseMercator extends Projection {
         this.zone = zone;
     }
 
+    @Override
     public void setSpheroid(Spheroid s) {
         transverseMercator.setSpheroid(s);
     }
 
+    @Override
     public Geographic asGeographic(Planar p, Geographic q) {
 
         Assert.isTrue(zone != -1, "Call #setParameters first");
@@ -98,6 +100,7 @@ public class UniversalTransverseMercator extends Projection {
         return q;
     }
 
+    @Override
     public Planar asPlanar(Geographic q0, Planar p) {
 
         Assert.isTrue(zone != -1, "Call #setParameters first");

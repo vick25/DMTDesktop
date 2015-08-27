@@ -14,11 +14,13 @@ import org.openjump.core.ui.SelectionStyllingOptionsPanel;
 
 public class OptionsPlugIn extends AbstractPlugIn {
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         WorkbenchFrame.actionShowOptionDialog();
         return true;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         datasetOptionsPanel = new DatasetOptionsPanel(context.getWorkbenchContext());
         selectionStyllingOptionsPanel = new SelectionStyllingOptionsPanel(context.getWorkbenchContext());

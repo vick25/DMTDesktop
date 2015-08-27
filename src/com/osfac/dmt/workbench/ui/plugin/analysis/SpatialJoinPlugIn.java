@@ -16,9 +16,12 @@ import com.osfac.dmt.workbench.ui.GenericNames;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.plugin.FeatureInstaller;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collection;
+import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 
 /**
  * Queries a layer by a spatial predicate.
@@ -40,6 +43,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
     }
     private String categoryName = StandardCategoryNames.RESULT;
 
+    @Override
     public String getName() {
         //exchanged plugin with SIGLE plugin
         return I18N.get("ui.plugin.analysis.SpatialJoinPlugIn.Spatial-Join");
@@ -50,6 +54,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
         categoryName = value;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -67,6 +72,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(2));
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         dialog = new MultiInputDialog(context.getWorkbenchFrame(), getName(), true);
         setDialogValues(dialog, context);
@@ -79,6 +85,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context) throws Exception {
         monitor.allowCancellationRequests();
 
@@ -93,14 +100,14 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
             return;
         }
 
-        monitor.report(
-                I18N.get("ui.plugin.analysis.SpatialJoinPlugIn.Executing-join")
-                + " " + functionToRun.getName() + "...");
+        monitor.report(new StringBuilder(
+                I18N.get("ui.plugin.analysis.SpatialJoinPlugIn.Executing-join")).
+                append(" ").append(functionToRun.getName()).append("...").toString());
 
         FeatureCollection srcAFC = srcLayerA.getFeatureCollectionWrapper();
         FeatureCollection srcBFC = srcLayerB.getFeatureCollectionWrapper();
         //[sstein 28.Mar.2008] reversed order of input
-        //(to be able to read from top to down the spatial relations) 
+        //(to be able to read from top to down the spatial relations)
         SpatialJoinExecuter executer = new SpatialJoinExecuter(srcBFC, srcAFC);
         FeatureCollection resultFC = executer.getResultFC();
         executer.execute(monitor, functionToRun, params, resultFC);
@@ -114,8 +121,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
         context.addLayer(categoryName, outputLayerName, resultFC);
 
         if (exceptionThrown) {
-            context.getWorkbenchFrame()
-                    .warnUser("Errors found while executing query");
+            context.getWorkbenchFrame().warnUser("Errors found while executing query");
         }
     }
     private final static String LAYER_A = GenericNames.LAYER_A + " (" + GenericNames.TARGET_LAYER + ")";
@@ -124,9 +130,8 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
     private final static String PARAM = GenericNames.PARAMETER;
 
     private void setDialogValues(MultiInputDialog dialog, PlugInContext context) {
-
         //dialog.setSideBarImage(new ImageIcon(getClass().getResource("DiffSegments.png")));
-        //[sstein 31March2008] replaced sidebar description by better description use in SIGLE plugin  
+        //[sstein 31March2008] replaced sidebar description by better description use in SIGLE plugin
         /*
          dialog.setSideBarDescription(
          I18N.get("ui.plugin.analysis.SpatialJoinPlugIn.Joins-two-layers-on-a-given-spatial-relationship")
@@ -172,6 +177,7 @@ public class SpatialJoinPlugIn extends AbstractPlugIn implements ThreadedPlugIn 
 
     private class MethodItemListener implements ItemListener {
 
+        @Override
         public void itemStateChanged(ItemEvent e) {
             updateUIForFunction((String) e.getItem());
         }

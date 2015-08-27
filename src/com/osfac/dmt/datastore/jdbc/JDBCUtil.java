@@ -1,6 +1,8 @@
 package com.osfac.dmt.datastore.jdbc;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * Utilities for JDBC.

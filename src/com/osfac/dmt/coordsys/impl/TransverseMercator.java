@@ -61,6 +61,7 @@ public class TransverseMercator extends Projection {
     /**
      * @param q in degrees
      */
+    @Override
     public Geographic asGeographic(Planar p, Geographic q) {
         planarToGeographicInRadians(p, q);
         q.lat = q.lat * 180.0 / Math.PI;
@@ -71,6 +72,7 @@ public class TransverseMercator extends Projection {
     /**
      * @param q0 in degrees
      */
+    @Override
     public Planar asPlanar(Geographic q0, Planar p) {
         Geographic q = new Geographic();
         q.lat = q0.lat / 180.0 * Math.PI;

@@ -1,6 +1,13 @@
 package com.osfac.dmt.authen;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.CubicCurve2D;
@@ -24,6 +31,7 @@ public class CurvesPanel extends GradientPanel {
                 RenderingHints.VALUE_RENDER_QUALITY);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         counter++;
         Graphics2D g2 = (Graphics2D) g;

@@ -28,7 +28,11 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -71,6 +75,7 @@ public class AttributeQueryPlugIn extends AbstractPlugIn
         categoryName = value;
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
         featureInstaller.addMainMenuItem(
@@ -88,10 +93,12 @@ public class AttributeQueryPlugIn extends AbstractPlugIn
                 .add(checkFactory.createAtLeastNLayersMustExistCheck(1));
     }
 
+    @Override
     public String getName() {
         return I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Attribute-Query");
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         //[sstein] reset for correct language
         ATTR_GEOMETRY_AREA = I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Geometry.Area");
@@ -131,6 +138,7 @@ public class AttributeQueryPlugIn extends AbstractPlugIn
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context)
             throws Exception {
         monitor.allowCancellationRequests();
@@ -321,6 +329,7 @@ public class AttributeQueryPlugIn extends AbstractPlugIn
 
     private class LayerItemListener implements ItemListener {
 
+        @Override
         public void itemStateChanged(ItemEvent e) {
             updateUI((Layer) e.getItem());
         }
