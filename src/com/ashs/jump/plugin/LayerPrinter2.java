@@ -27,19 +27,22 @@ public class LayerPrinter2 {
         Assert.isTrue(!layers.isEmpty());
 
         final Throwable[] throwable = new Throwable[]{null};
-        LayerViewPanel panel =
-                new LayerViewPanel(((Layer) layers.iterator().next()).getLayerManager(),
-                new LayerViewPanelContext() {
-                    public void setStatusMessage(String message) {
-                    }
+        LayerViewPanel panel
+                = new LayerViewPanel(((Layer) layers.iterator().next()).getLayerManager(),
+                        new LayerViewPanelContext() {
+                            @Override
+                            public void setStatusMessage(String message) {
+                            }
 
-                    public void warnUser(String warning) {
-                    }
+                            @Override
+                            public void warnUser(String warning) {
+                            }
 
-                    public void handleThrowable(Throwable t) {
-                        throwable[0] = t;
-                    }
-                });
+                            @Override
+                            public void handleThrowable(Throwable t) {
+                                throwable[0] = t;
+                            }
+                        });
         int extentInPixelsX;
         int extentInPixelsY;
         double width = envelope.getWidth();
@@ -67,7 +70,6 @@ public class LayerPrinter2 {
         graphics.setRenderingHint( // LDB Added
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-
 
         paintBackground(graphics, extentInPixels);
 
