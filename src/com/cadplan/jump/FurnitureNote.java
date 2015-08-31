@@ -1,6 +1,10 @@
 package com.cadplan.jump;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -28,6 +32,7 @@ public class FurnitureNote extends Furniture {
         layerNumber = 30;
     }
 
+    @Override
     public void setFont(Font font) {
         this.font = font;
     }
@@ -67,9 +72,6 @@ public class FurnitureNote extends Furniture {
         location.width = (int) bounds.getWidth();
         location.height = (int) bounds.getHeight();
 
-
-
-
         g.setFont(font);
         //layout.draw(g2, (float)location.x, (float)location.y + (float) location.height);
         StringTokenizer st = new StringTokenizer(text, "\n");
@@ -93,7 +95,6 @@ public class FurnitureNote extends Furniture {
             }
             //numLines++;
 
-
             //String line = st.nextToken();
             //layout = new TextLayout(line, font, frc);
             if (justify < 3) {
@@ -105,7 +106,6 @@ public class FurnitureNote extends Furniture {
                 if (justify == 2) {
                     xp = x + (int) ((maxWidth - bounds.getWidth()));
                 }
-
                 //g.drawString(line,xp,y);
                 //y = y + lineSpace;
                 numLines++;
@@ -126,14 +126,9 @@ public class FurnitureNote extends Furniture {
                         //layout2.draw(g2, x, y);
                     }
                     numLines++;
-
                     //y = y + lineSpace;
                 }
             }
-
-
-
-
         }
         //paint background if required
         int dWidth = maxWidth;
@@ -165,7 +160,6 @@ public class FurnitureNote extends Furniture {
                 if (justify == 2) {
                     xp = x + (int) ((dWidth - bounds.getWidth()));
                 }
-
                 g.drawString(line, xp, y);
                 y = y + lineSpace;
             } else {
@@ -189,7 +183,6 @@ public class FurnitureNote extends Furniture {
                     y = y + lineSpace;
                 }
             }
-
         }
 
         //System.out.println("text: width="+width+"\n"+text+"<");

@@ -1,9 +1,10 @@
 package com.cadplan.jump;
 
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.JColorChooser;
 
 public class ColorButtonB extends Button implements ActionListener {
 
@@ -28,6 +29,7 @@ public class ColorButtonB extends Button implements ActionListener {
         setBackground(color);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         Color newColor = JColorChooser.showDialog(this, "Select color", color);
         if (newColor != null) {

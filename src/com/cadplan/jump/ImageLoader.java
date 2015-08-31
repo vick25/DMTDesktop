@@ -43,7 +43,6 @@ public class ImageLoader extends Component {
                 } catch (NumberFormatException ex) {
                     size = 256;
                 }
-
             }
             if (debug) {
                 System.out.println("SVG Image:" + fileName + "   size=" + size);
@@ -67,7 +66,6 @@ public class ImageLoader extends Component {
                 System.out.println("Image size: " + image.getWidth(this) + ", " + image.getHeight(this));
             }
         } else {
-
             image = Toolkit.getDefaultToolkit().getImage(url);
             try {
                 tracker.addImage(image, 1);

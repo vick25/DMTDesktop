@@ -6,8 +6,14 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
 
 public class PolygonVertexStyle extends ExternalSymbolsType {
 
@@ -31,10 +37,12 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         ((RectangularShape) shape).setFrame(0.0, 0.0, getSize(), getSize());
     }
 
+    @Override
     public void setSize(int size) {
         this.size = size;
     }
 
+    @Override
     public int getSize() {
         return size;
     }
@@ -95,6 +103,7 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         return attributeName;
     }
 
+    @Override
     public void initialize(Layer layer) {
         if (layer == null) {
             return;
@@ -108,14 +117,10 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
             if (attributeName != null && !attributeName.equals("")) {
                 attributeIndex = featureSchema.getAttributeIndex(attributeName);
             }
-
         } catch (Exception ex) {
             attributeIndex = -1;
         }
         initializeText(layer);
-
-
-
     }
 
     public void setColors(Color lineColor, Color fillColor) {
@@ -164,6 +169,7 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         return path;
     }
 
+    @Override
     public void paint(Feature feature, Graphics2D g2, Viewport viewport) {
         this.viewport = viewport;
         if (!byValue && attributeIndex >= 0) {
@@ -181,13 +187,11 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         setTextAttributeValue(feature);
         //setSelectedSymbolName(feature);
 
-
         try {
             super.paint(feature, g2, viewport);
         } catch (Exception ex) {
             System.out.println("Painting ERROR:" + ex);
             ex.printStackTrace();
-
         }
     }
 
@@ -210,10 +214,10 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         paint(g, p);
     }
 
+    @Override
     protected void render(Graphics2D g) {
         ExternalSymbolsRenderer r = new ExternalSymbolsRenderer();
         GeneralPath path = null;
-
 
         path = r.buildShape(ExternalSymbolsRenderer.POLYS, shape, byValue, orientation, size, numSides);
 
@@ -233,9 +237,6 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
         //System.out.println("Angle = "+angle);
         g.rotate(Math.toRadians(angle), r.x0, r.y0);
 
-
-
-
         if (showFill) {
             g.fill(path);
         }
@@ -251,6 +252,5 @@ public class PolygonVertexStyle extends ExternalSymbolsType {
 
         //System.out.println("Polygon label at:"+r.x0+","+r.y0);
         drawTextLabel(g, r.x0, r.y0);
-
     }
 }

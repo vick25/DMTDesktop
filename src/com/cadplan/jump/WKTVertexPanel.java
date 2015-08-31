@@ -1,8 +1,9 @@
 package com.cadplan.jump;
 
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JPanel;
 
 public class WKTVertexPanel extends JPanel {
 
@@ -16,6 +17,7 @@ public class WKTVertexPanel extends JPanel {
         ((WKTVertexStyle) symbol).setSize((int) ((double) size / scale));
     }
 
+    @Override
     public void paint(Graphics g) {
         ((WKTVertexStyle) symbol).render((Graphics2D) g);
     }

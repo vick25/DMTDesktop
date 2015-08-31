@@ -3,7 +3,9 @@ package com.cadplan.jump;
 import com.cadplan.designer.GridBagDesigner;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 public class HelpDialog extends JDialog implements ActionListener {
 
@@ -52,6 +54,7 @@ public class HelpDialog extends JDialog implements ActionListener {
         setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == cancelButton) {
             dispose();

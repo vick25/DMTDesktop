@@ -6,8 +6,15 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
 
 public class ExternalSymbolsImplType extends ExternalSymbolsType {
 
@@ -39,10 +46,12 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         ((RectangularShape) shape).setFrame(0.0, 0.0, getSize(), getSize());
     }
 
+    @Override
     public void setSize(int size) {
         this.size = size;
     }
 
+    @Override
     public int getSize() {
         return size;
     }
@@ -132,7 +141,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
 
         defaultSymbolType = symbolType;
         defaultSymbolNumber = symbolNumber;
-
     }
 
     private int getNumber(String s) {
@@ -171,19 +179,15 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         } else if (name.startsWith("@star")) {
             type = ExternalSymbolsRenderer.STARS;
             number = getNumber(name.substring(5));
-
         } else if (name.startsWith("@any")) {
             type = ExternalSymbolsRenderer.ANYS;
             number = getNumber(name.substring(4));
-
         } else if (name.toLowerCase().endsWith(".wkt")) {
             type = ExternalSymbolsRenderer.WKTS;
             number = -1;
-
         } else {
             type = ExternalSymbolsRenderer.IMAGES;
             number = -1;
-
         }
 
         symbolName = name;
@@ -192,7 +196,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         if (debug) {
             System.out.println("SymbolName = " + name + "  SymbolType = " + symbolType + "  symbolNumber=" + symbolNumber);
         }
-
     }
 
     public void setSelectedSymbolName(Feature feature) {
@@ -212,7 +215,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
             if (name == null || name.equals("") || name.equals("0")) {
                 name = null;
             }
-
         } catch (IllegalArgumentException ex3) {
             if (debug) {
                 System.out.println("SymbolName.... not found");
@@ -236,8 +238,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
                 System.out.println("name==null   using default symbol :" + symbolName + "  number=" + symbolNumber + "  type=" + symbolType);
             }
         }
-
-
     }
 
     public void initialize(Layer layer) {
@@ -249,20 +249,15 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         fillColor = GUIUtil.alphaColor(style.getFillColor(), style.getAlpha());
         ExternalSymbolsImplType vertexStyle = (ExternalSymbolsImplType) layer.getVertexStyle();
 
-
         try {
             FeatureSchema featureSchema = layer.getFeatureCollectionWrapper().getFeatureSchema();
             if (attributeName != null && !attributeName.equals("")) {
                 attributeIndex = featureSchema.getAttributeIndex(attributeName);
             }
-
         } catch (Exception ex) {
             attributeIndex = -1;
         }
         initializeText(layer);
-
-
-
     }
 
     public void setColors(Color lineColor, Color fillColor) {
@@ -270,6 +265,7 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         this.fillColor = fillColor;
     }
 
+    @Override
     public void paint(Feature feature, Graphics2D g2, Viewport viewport) {
         this.viewport = viewport;
         if (!byValue && attributeIndex >= 0) {
@@ -287,13 +283,11 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         setTextAttributeValue(feature);
         setSelectedSymbolName(feature);
 
-
         try {
             super.paint(feature, g2, viewport);
         } catch (Exception ex) {
             System.out.println("Painting ERROR:" + ex);
             ex.printStackTrace();
-
         }
     }
 
@@ -316,6 +310,7 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         paint(g, p);
     }
 
+    @Override
     protected void render(Graphics2D g) {
         ExternalSymbolsRenderer r = new ExternalSymbolsRenderer();
         GeneralPath path = null;
@@ -371,10 +366,7 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
 //        g.translate(r.x0, r.y0);
 //        g.rotate(Math.toRadians(angle), 0, 0);
 
-
-
         if (symbolType == ExternalSymbolsRenderer.POLYS) {
-
             g.rotate(0.0, r.x0, r.y0);
             if (VertexParams.sizeByScale) {
                 g.translate((size - newSize) / 2, (size - newSize) / 2);
@@ -386,7 +378,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
             r.paint(g, ExternalSymbolsRenderer.POLYS, path, showLine, lineColor, showFill, fillColor, dotted);
             g.setTransform(currentTransform);
         } else if (symbolType == ExternalSymbolsRenderer.STARS) {
-
             g.rotate(0.0, r.x0, r.y0);
             if (VertexParams.sizeByScale) {
                 g.translate((size - newSize) / 2, (size - newSize) / 2);
@@ -396,7 +387,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
             }
             r.paint(g, ExternalSymbolsRenderer.STARS, path, showLine, lineColor, showFill, fillColor, dotted);
             g.setTransform(currentTransform);
-
         } else if (symbolType == ExternalSymbolsRenderer.ANYS) {
             //g.rotate(0.0, r.x0, r.y0);
 
@@ -406,7 +396,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
             g.rotate(Math.toRadians(angle), r.x0, r.y0);
             r.paint(g, ExternalSymbolsRenderer.ANYS, path, showLine, lineColor, showFill, fillColor, dotted);
             g.setTransform(currentTransform);
-
         } else if (symbolType == ExternalSymbolsRenderer.WKTS) {
             g.translate(r.x0, r.y0);
             if (VertexParams.sizeByScale) {
@@ -416,7 +405,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
             //System.out.println("Drawing WKTS: transform:"+g.getTransform());
             r.paint(g, ExternalSymbolsRenderer.WKTS, wktShape, r.size, showLine, lineColor, showFill, fillColor, dotted);
             g.setTransform(currentTransform);
-
         } else if (symbolType == ExternalSymbolsRenderer.IMAGES) {
             if (VertexParams.sizeByScale) {
                 g.translate((size - newSize) / 2, (size - newSize) / 2);
@@ -425,7 +413,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
 
             r.paint(g, ExternalSymbolsRenderer.IMAGES, image);
             g.setTransform(currentTransform);
-
         }
 
 //        if(showFill) g.fill(path);
@@ -438,7 +425,6 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
 //        }
         //System.out.println("****New Transform: "+g.getTransform());
         //System.out.println("Polygon label at:"+r.x0+","+r.y0);
-
         if (VertexParams.sizeByScale) {
             g.translate((size - newSize) / 2, (size - newSize) / 2);
         }
@@ -446,8 +432,5 @@ public class ExternalSymbolsImplType extends ExternalSymbolsType {
         drawTextLabel(g, r.x0, r.y0);
         g.setTransform(currentTransform);
         //System.out.println("****Reset Transform: "+g.getTransform());
-
-
-
     }
 }

@@ -78,8 +78,8 @@ public class FurnitureImage extends Furniture {
     }
 
     /**
-     * sets the border dimensions, depends of if border is fixed and whether a
-     * forced change is required.
+     * sets the border dimensions, depends of if border is fixed and whether a forced change is
+     * required.
      *
      * @param w
      * @param h

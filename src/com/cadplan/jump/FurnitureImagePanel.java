@@ -50,8 +50,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
     }
 
     private void setImages() {
-
-
         for (int i = 0; i < imageItems.size(); i++) {
             FurnitureImage imageItem = imageItems.elementAt(i);
             showImagesCB[i].setSelected(imageItem.show);
@@ -61,11 +59,9 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
             layerFields[i].setText(String.valueOf(imageItem.layerNumber));
             //System.out.println("Setting border:"+aborder.show+","+aborder.fixed+","+aborder.thickness);
         }
-
     }
 
     public Vector<FurnitureImage> getImageItems() {
-
         for (int i = 0; i < imageItems.size(); i++) {
             FurnitureImage imageItem = imageItems.elementAt(i);
             imageItem.show = showImagesCB[i].isSelected();
@@ -92,7 +88,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
         //gb.setAnchor(GridBagConstraints.NORTHWEST);
         //gb.setWeight(0.0,0.0);
         gb.addComponent(showLabel);
-
 
         fileNameLabel = new JLabel(iPlug.get("JumpPrinter.Furniture.Image.ImageFile"));
         gb.setPosition(1, 0);
@@ -129,13 +124,10 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
         gb.setAnchor(GridBagConstraints.SOUTHEAST);
         gb.addComponent(addButton);
         addButton.addActionListener(this);
-
-
     }
 
     private void createScrollPane() {
         scrollPane = new JScrollPane(imagesPanel);
-
 
         //scrollPane.add(bordersPanel);
         scrollPane.setPreferredSize(new Dimension(400, 200));
@@ -163,7 +155,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
         ratioLockedCB = new JCheckBox[n];
         //System.out.println("Number of borders="+n);
         for (int i = 0; i < imageItems.size(); i++) {
-
             showImagesCB[i] = new JCheckBox("");
             gbp.setPosition(0, i);
             gbp.setInsets(5, 10, 0, 0);
@@ -208,7 +199,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
             //gbp.setWeight(1.0,0.0);
             gbp.addComponent(deleteButton[i]);
             deleteButton[i].addActionListener(this);
-
         }
         //gb.setPosition(0,3);
         //gb.setInsets(10,10,10,10);
@@ -219,10 +209,9 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
         //gb.addComponent(bordersPanel);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
-
         if (ev.getSource() == addButton) {
-
             imageItems = getImageItems();
             FurnitureImage imageItem = new FurnitureImage("", true);
             //imageItem.setImage(0, 200, 100, 50, true);
@@ -235,7 +224,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
 
             setImages();
             scrollPane.repaint();
-
         }
 
         for (int i = 0; i < imageItems.size(); i++) {
@@ -254,7 +242,6 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
 
                 setImages();
                 return;
-
             }
 
             if (ev.getSource() == browseButton[i]) {
@@ -276,13 +263,11 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
                         w = defaultImageMax;
                         h = (int) ((double) w / ratio);
                     }
-
                 } else {
                     if (h > defaultImageMax) {
                         h = defaultImageMax;
                         w = (int) ((double) h * ratio);
                     }
-
                 }
                 //System.out.println("Image2: w="+w+"  h="+h+"  ratio="+ratio);
                 imageItems.elementAt(i).location.x = 0;
@@ -295,8 +280,8 @@ public class FurnitureImagePanel extends JPanel implements ActionListener, Adjus
         }
     }
 
+    @Override
     public void adjustmentValueChanged(AdjustmentEvent ev) {
-
         if (ev.getSource() == vsb) {
             scrollPane.repaint();
             parent.repaint();

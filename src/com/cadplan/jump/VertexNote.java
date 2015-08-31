@@ -4,10 +4,8 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.model.LayerEventType;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import com.osfac.dmt.workbench.ui.SchemaPanel;
 import com.osfac.dmt.feature.*;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import com.cadplan.designer.GridBagDesigner;
 
 import javax.swing.*;
@@ -87,7 +85,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                 JOptionPane.showMessageDialog(null, iPlug.get("VertexNote.Dialog.Message1"),
                         "Warning...", JOptionPane.WARNING_MESSAGE);
                 return;
-
             }
             if (debug) {
                 System.out.println("Feature=" + selectedFeature);
@@ -123,7 +120,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                 addAttribute(layers[0], "SymbolName", AttributeType.STRING);
             }
 
-
             if (textAttributeName.equals("$FID")) {
                 textAttributeIndex = -1;
             } else if (textAttributeName.equals("$POINT")) {
@@ -135,7 +131,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                     textAttributeIndex = -1;
                 }
             }
-
 
             if (textAttributeIndex < 0) {
                 // fail
@@ -161,9 +156,7 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                 if (debug) {
                     System.out.println("Getting current symbol: name=" + symbolName + "  number=" + symbolNumber + "  type=" + symbolType);
                 }
-
             }
-
             init();
         } catch (Exception ex) {
             System.out.println("ERROR: " + ex);
@@ -176,8 +169,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
     //========================================================================
 
     private void addAttribute(final Layer layer, String newAttName, AttributeType newAttType) {
-
-
         FeatureSchema newSchema = new FeatureSchema();
         FeatureSchema oldSchema = layers[0].getFeatureCollectionWrapper().getFeatureSchema();
         int numAtt = oldSchema.getAttributeCount();
@@ -187,7 +178,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
             newSchema.addAttribute(attName, attType);
         }
         newSchema.addAttribute(newAttName, newAttType);
-
 
         java.util.List originalFeatures = layer.getFeatureCollectionWrapper().getFeatures();
         ArrayList tempFeatures = new ArrayList();
@@ -216,12 +206,9 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
         layer.setFeatureCollection(new FeatureDataset(originalFeatures,
                 newSchema));
         layer.fireLayerChanged(LayerEventType.METADATA_CHANGED);
-
     }
 
     private void delAttribute(final Layer layer, String delAttName) {
-
-
         FeatureSchema newSchema = new FeatureSchema();
         FeatureSchema oldSchema = layers[0].getFeatureCollectionWrapper().getFeatureSchema();
         int numAtt = oldSchema.getAttributeCount();
@@ -235,8 +222,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                 delItem = i;
             }
         }
-
-
 
         java.util.List originalFeatures = layer.getFeatureCollectionWrapper().getFeatures();
         ArrayList tempFeatures = new ArrayList();
@@ -265,7 +250,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
         layer.setFeatureCollection(new FeatureDataset(originalFeatures,
                 newSchema));
         layer.fireLayerChanged(LayerEventType.METADATA_CHANGED);
-
     }
 
     private Feature convert(Feature oldFeature, FeatureSchema newSchema) {
@@ -275,7 +259,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
             newFeature.setAttribute(i, oldAttributes[i]);
         }
         newFeature.setAttribute(oldAttributes.length, 0);
-
 
         return newFeature;
     }
@@ -290,8 +273,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
                 j++;
             }
         }
-
-
 
         return newFeature;
     }
@@ -311,7 +292,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
         gb.addComponent(showLabelCB);
         showLabelCB.setSelected(showLabel);
 
-
         textArea = new TextArea("", 5, 50, TextArea.SCROLLBARS_VERTICAL_ONLY);
 
         gb.setPosition(1, 0);
@@ -328,9 +308,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
         gb.setInsets(10, 10, 10, 0);
         gb.setAnchor(GridBagConstraints.NORTH);
         gb.addComponent(vertexLabel);
-
-
-
 
         group = new ButtonGroup();
 
@@ -358,18 +335,12 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
 //       // labelPanel.setBackground(Color.WHITE);
 //
 //        tabbedPane.addTab("Labels", labelPanel);
-
-
         gb.setPosition(1, 1);
         //gb.setSpan(4,1);
         //gb.setWeight(1.0,1.0);
         gb.setFill(GridBagConstraints.BOTH);
         gb.setInsets(10, 0, 10, 10);
         gb.addComponent(tabbedPane);
-
-
-
-
 
         JPanel bottomPanel = new JPanel();
         GridBagDesigner gbb = new GridBagDesigner(bottomPanel);
@@ -406,12 +377,10 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
 
         pack();
         setVisible(true);
-
     }
 
     private void setValues() {
         setCurrentSymbolName();
-
     }
 
     private void getValues() {
@@ -585,8 +554,6 @@ public class VertexNote extends JDialog implements ActionListener, ChangeListene
             }
 
             dispose();
-
-
         }
     }
 }

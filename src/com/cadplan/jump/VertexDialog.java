@@ -3,12 +3,28 @@ package com.cadplan.jump;
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.feature.AttributeType;
 import com.osfac.dmt.feature.FeatureSchema;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -72,7 +88,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
 
         tabbedPane.addTab(iPlug.get("VertexSymbols.Dialog.Labels"), labelPanel);
 
-
         gb.setPosition(0, 0);
         gb.setSpan(4, 1);
         gb.setWeight(1.0, 1.0);
@@ -121,8 +136,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         gbb.setInsets(0, 10, 5, 5);
         gbb.addComponent(orienField);
 
-
-
         dottedCB = new JCheckBox(iPlug.get("VertexSymbols.Dialog.Dotted"));
         gbb.setPosition(4, 0);
         gbb.setInsets(0, 10, 5, 5);
@@ -166,7 +179,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         gb.setSpan(4, 1);
         gb.addComponent(optionPanel);
 
-
         cancelButton = new JButton(iPlug.get("VertexSymbols.Dialog.Cancel"));
         gb.setPosition(0, 3);
         gb.setInsets(10, 10, 10, 10);
@@ -179,8 +191,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         gb.addComponent(aboutButton);
         aboutButton.addActionListener(this);
 
-
-
         acceptButton = new JButton(iPlug.get("VertexSymbols.Dialog.Accept"));
         gb.setPosition(3, 3);
         gb.setAnchor(GridBagConstraints.EAST);
@@ -192,9 +202,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         pack();
         setLocation(100, 100);
         setVisible(true);
-
-
-
     }
 
     public void setValues() {
@@ -218,7 +225,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
 //        {
 //            wktPanel.imageRB[VertexParams.selectedWKT].setSelected(true);
 //        }
-
         int n = vectorPanel.symbolPanel.getTypeIndex(VertexParams.symbolNumber, VertexParams.symbolType);
         //System.out.println("Setting Values: n="+n+"  symbolName="+VertexParams.symbolName+"  type="+VertexParams.symbolType+
         //          " number="+VertexParams.symbolNumber);
@@ -230,7 +236,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         } else if (VertexParams.selectedWKT >= 0) {
             wktPanel.imageRB[VertexParams.selectedWKT].setSelected(true);
         }
-
 
         //absValueRB.setEnabled(VertexParams.singleLayer);
         byAttributeRB.setEnabled(VertexParams.singleLayer);
@@ -285,7 +290,6 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
             JOptionPane.showMessageDialog(this, iPlug.get("VertexSymbols.Dialog.Warning3"), "Warning...", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
 
         VertexParams.showLine = showLineCB.isSelected();
         VertexParams.showFill = showFillCB.isSelected();
@@ -406,12 +410,15 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
         return -1;
     }
 
+    @Override
     public void stateChanged(ChangeEvent ev) {
     }
 
+    @Override
     public void itemStateChanged(ItemEvent ev) {
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == cancelButton) {
             cancelled = true;
@@ -432,7 +439,5 @@ public class VertexDialog extends JDialog implements ActionListener, ItemListene
             }
             dispose();
         }
-
-
     }
 }

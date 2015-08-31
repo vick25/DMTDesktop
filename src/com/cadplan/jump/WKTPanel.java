@@ -1,8 +1,12 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 public class WKTPanel extends JPanel {
 
@@ -58,7 +62,6 @@ public class WKTPanel extends JPanel {
             gb.setWeight(1.0, 1.0);
             gb.setFill(GridBagConstraints.BOTH);
             gb.addComponent(imageRB[i]);
-
         }
     }
 

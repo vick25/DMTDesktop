@@ -12,13 +12,20 @@ import com.osfac.dmt.workbench.ui.renderer.LayerRenderer;
 import com.osfac.dmt.workbench.ui.renderer.RenderingManager;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
 import com.vividsolutions.jts.geom.Envelope;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Pageable;
 import java.awt.print.Printable;
-import java.util.*;
-import javax.swing.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+import javax.swing.JPanel;
 
 public class PrinterPanel extends JPanel implements Printable, Pageable, Comparator {
 
@@ -112,7 +119,6 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
         if (debug) {
             System.out.println("***** Draw scale= " + this.scale + "  ratio=" + drawingScale + " xsize=" + xsize + "  visRect.width=" + visRect.width + "\n");
         }
-
     }
 
     /**
@@ -216,6 +222,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
      *
      * @param gp
      */
+    @Override
     public void paint(Graphics gp) {
         //boolean debug = true;
         int xb = (int) ((double) bounds.getWidth() * 1000.0 * pixelUnit / scale); //xsize;
@@ -226,7 +233,6 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
         if (debug) {
             System.out.println("Drawing 1: xb=" + xb + " yb=" + yb + " xoffs=" + xoffs + " yoffs=" + yoffs);
         }
-
 
         Graphics2D g = (Graphics2D) gp;
         g.setColor(Color.WHITE);
@@ -307,11 +313,9 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
 //    }
 //
 //    else
-
         //------------------------------------------------------------
         //  External printing renderer
         //------------------------------------------------------------
-
         //System.out.println("\nPrinting Mode ="+printingMode);
         //System.out.println("Trans begin:"+g.getTransform().getTranslateX()+","+g.getTransform().getTranslateX()+" scale:"+g.getTransform().getScaleX());
         if (printingMode == 2) // External option
@@ -368,12 +372,10 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
                 } catch (InterruptedException ex) {
                 }
             }
-
             g.setStroke(new BasicStroke());
             g.scale(1.0 / drawingScale, 1.0 / drawingScale);
             g.setClip(null);
             g.translate(-xoff, -yoff);
-
         } //------------------------------------------------------------------------------
         //  ISA Improved core renderer using a new LayerViewPanel - scaled to suit printer
         //------------------------------------------------------------------------------
@@ -382,12 +384,9 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
             if (debug) {
                 System.out.println("ISA Quality mode:");
             }
-
-
             g.translate(xoff, yoff);
 
             //g.setClip(new Rectangle(0,0,(int)(visRect.width*drawingScale),(int)(visRect.height*drawingScale)));
-
             try {
                 final Throwable[] throwable = new Throwable[]{null};
                 Envelope windowEnvelope = context.getLayerViewPanel().getViewport().getEnvelopeInModelCoordinates();
@@ -440,11 +439,9 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
                                 renderer.getSimpleFeatureCollectionRenderer().copyTo(g);
                                 //renderer.copyTo(g);
 
-
                                 boolean drawing = true;
                                 while (drawing) // wait until rendering is compplete
                                 {
-
                                     try {
                                         Thread.sleep(200);
                                         drawing = false;
@@ -488,13 +485,9 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
                                     g.scale(1.0 / drawingScale, 1.0 / drawingScale);
                                 }
 
-
-
-
                                 boolean drawing = true;
                                 while (drawing) // wait until rendering is compplete
                                 {
-
                                     try {
                                         Thread.sleep(200);
                                         drawing = false;
@@ -512,8 +505,6 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
                                 }
                                 renderer.clearImageCache();
                             }
-
-
                         }
                     }
                 }
@@ -525,14 +516,12 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
                 System.out.println("Printing ERROR: " + ex);
             }
 
-
             g.setStroke(new BasicStroke());
             //g.scale(1.0/drawingScale, 1.0/drawingScale);
             g.setClip(null);
             g.translate(-xoff, -yoff);
             panel.dispose();
             panel = null;
-
         }
 //        else    // accuracy option mode = 1
 //        {
@@ -573,8 +562,6 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
         g.setClip(null);
 
         //System.out.println("Trans end  :"+g.getTransform().getTranslateX()+","+g.getTransform().getTranslateX()+" scale:"+g.getTransform().getScaleX());
-
-
         itemsForPrinting = new Vector<Furniture>();
         if (border.show) {
             itemsForPrinting.addElement(border);
@@ -631,7 +618,6 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
             } else if (item instanceof FurnitureImage) {
                 ((FurnitureImage) item).paint(gp, -1.0, 1.0);
             }
-
         }
         /*
          if(border.show)
@@ -644,7 +630,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
          {
          FurnitureBorder aborder = borders.elementAt(i);
          if(aborder.show) aborder.paint(gp, -1.0, 1.0);
-        	
+
          }
 
 
@@ -686,6 +672,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
          */
     }
 
+    @Override
     public int compare(Object item1, Object item2) {
         if (((Furniture) item1).layerNumber < ((Furniture) item2).layerNumber) {
             return -1;
@@ -699,17 +686,19 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
     private LayerViewPanel createLayerPanel(LayerManager layerManager, final Throwable[] throwable) {
         LayerViewPanel layerViewPanel = new LayerViewPanel(layerManager,
                 new LayerViewPanelContext() {
+                    @Override
                     public void setStatusMessage(String message) {
                     }
 
+                    @Override
                     public void warnUser(String warninmg) {
                     }
 
+                    @Override
                     public void handleThrowable(Throwable t) {
                         throwable[0] = t;
                     }
                 });
-
         return layerViewPanel;
     }
 
@@ -718,6 +707,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
      *
      * @return number of pages
      */
+    @Override
     public int getNumberOfPages() {
         numPagesX = (int) ((xsize + Math.round(pageFormat.getImageableWidth()) - 1) / pageFormat.getImageableWidth());
         numPagesY = (int) ((ysize + Math.round(pageFormat.getImageableHeight()) - 1) / pageFormat.getImageableHeight());
@@ -732,6 +722,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
      * @param pageIndex
      * @return the PageFormat
      */
+    @Override
     public PageFormat getPageFormat(int pageIndex) {
         return pageFormat;
     }
@@ -771,6 +762,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
      * @return the Printable object
      * @throws IndexOutOfBoundsException
      */
+    @Override
     public Printable getPrintable(int pageIndex) throws IndexOutOfBoundsException {
         if (pageIndex >= numPages) {
             throw new IndexOutOfBoundsException();
@@ -791,6 +783,7 @@ public class PrinterPanel extends JPanel implements Printable, Pageable, Compara
      * @param pageIndex
      * @return PAGE_EXISTS
      */
+    @Override
     public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());

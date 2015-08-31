@@ -1,11 +1,17 @@
 package com.cadplan.jump;
 
 import com.osfac.dmt.util.Blackboard;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -13,7 +19,11 @@ import java.util.Vector;
 import javax.print.attribute.Size2DSyntax;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -37,10 +47,8 @@ public class XMLconverter extends DefaultHandler {
     private I18NPlug iPlug;
 
     public XMLconverter(String filename, I18NPlug iPlug) {
-
         this.filename = filename;
         this.iPlug = iPlug;
-
     }
 
     public XMLconverter(String dir, String fname, I18NPlug iPlug) {
@@ -81,7 +89,6 @@ public class XMLconverter extends DefaultHandler {
                     out.write("<pageformat width=\"" + width + "\" height=\"" + height + "\" orientation=\"" + orientation
                             + "\" imageableWidth=\"" + imageableWidth + "\" imageableHeight=\"" + imageableHeight
                             + "\" imageableX=\"" + imageableX + "\" imageableY=\"" + imageableY + "\" />\n");
-
                 }
             } catch (Exception ex) {
                 out.write("ERROR:" + ex);
@@ -98,7 +105,6 @@ public class XMLconverter extends DefaultHandler {
                 object = blackboard.get("AutoScale", null);
                 boolean autoScale = (Boolean) object;
                 out.write("<autoscale value=\"" + autoScale + "\" />\n");
-
             } catch (Exception ex) {
             }
 
@@ -107,14 +113,11 @@ public class XMLconverter extends DefaultHandler {
                 object = blackboard.get("Quality", null);
                 boolean qualityOption = (Boolean) object;
                 out.write("<quality value=\"" + qualityOption + "\" />\n");
-
             } catch (Exception ex) {
             }
             try {
                 int printMode = blackboard.getInt("PrintMode");
-
                 out.write("<printmode value=\"" + printMode + "\" />\n");
-
             } catch (Exception ex) {
             }
 
@@ -123,8 +126,6 @@ public class XMLconverter extends DefaultHandler {
                 object = blackboard.get("PageOffset", null);
                 Point2D.Double pageOffset = (Point2D.Double) object;
                 out.write("<offset point=\"" + pageOffset.x + "," + pageOffset.y + "\" />\n");
-
-
             } catch (Exception ex) {
             }
 
@@ -207,7 +208,6 @@ public class XMLconverter extends DefaultHandler {
                             + "\" rotation=\"" + north.rotation + "\" size=\"" + north.sizeFactor
                             + "\" layer=\"" + north.layerNumber
                             + "\" show=\"" + north.show + "\" />\n");
-
                 }
             } catch (Exception ex) {
             }
@@ -232,7 +232,6 @@ public class XMLconverter extends DefaultHandler {
                         out.write(" border=\"" + note.border + "\" ");
                         out.write(" width=\"" + note.width + "\" ");
                         out.write(" />\n");
-
                     }
                 }
             } catch (Exception ex) {
@@ -262,7 +261,6 @@ public class XMLconverter extends DefaultHandler {
                             out.write(",");
                         }
                     }
-
                     out.write("\" />\n");
                 }
             } catch (Exception ex) {
@@ -292,7 +290,6 @@ public class XMLconverter extends DefaultHandler {
                             out.write(",");
                         }
                     }
-
                     out.write("\" horizontal=\"" + legend.horizontal + "\" />\n");
                 }
             } catch (Exception ex) {
@@ -319,7 +316,6 @@ public class XMLconverter extends DefaultHandler {
 
             out.close();
             return true;
-
         } catch (IOException ex) {
             System.out.println("ERROR writing XML file: " + ex.toString());
             return false;
@@ -356,7 +352,6 @@ public class XMLconverter extends DefaultHandler {
             // Tell the XMLReader to parse the XML document
             xmlReader.parse(convertToFileURL(filename));
             return true;
-
         } catch (SAXException se) {
             System.err.println(se.getMessage());
             return false;
@@ -364,7 +359,6 @@ public class XMLconverter extends DefaultHandler {
             System.err.println(ioe);
             return false;
         }
-
     }
 
 //========================================================================
@@ -415,7 +409,6 @@ public class XMLconverter extends DefaultHandler {
 
             blackboard.put("PageFormat", pageFormat);
             // JOptionPane.showMessageDialog(null,"PageFormat1: "+width+","+height+","+imageableWidth+","+imageableHeight+","+orientation+","+imageableX+","+imageableY);
-
         }
 
         if (qName.equals("drawingscale")) {
@@ -575,7 +568,6 @@ public class XMLconverter extends DefaultHandler {
             border.layerNumber = layer;
             border.showFill = showFill;
             borders.addElement(border);
-
         }
         if (qName.equals("north")) {
             attributes = new AttributesImpl(atts);
@@ -640,7 +632,6 @@ public class XMLconverter extends DefaultHandler {
             notes.addElement(note); // accumulate notes
             blackboard.put("Note", note);  // add single (last note here only)
             //System.out.println("Note added: "+note.text);
-
         }
         if (qName.equals("legend")) {
             attributes = new AttributesImpl(atts);
@@ -702,7 +693,6 @@ public class XMLconverter extends DefaultHandler {
                 blackboard.put("Legend", legend);
             } catch (Exception ex) {
             }
-
         }
         if (qName.equals("layerlegend")) {
             attributes = new AttributesImpl(atts);
@@ -775,7 +765,6 @@ public class XMLconverter extends DefaultHandler {
                 blackboard.put("LayerLegend", legend);
             } catch (Exception ex) {
             }
-
         }
         if (qName.equals("image")) {
             attributes = new AttributesImpl(atts);
@@ -788,8 +777,6 @@ public class XMLconverter extends DefaultHandler {
                 layer = Integer.parseInt(attributes.getValue("layer"));
             }
 
-
-
             FurnitureImage imageItem = new FurnitureImage(fileName, show);
             ImageLoader loader = new ImageLoader();
             imageItem.image = loader.loadImage(fileName);
@@ -797,7 +784,6 @@ public class XMLconverter extends DefaultHandler {
             imageItem.layerNumber = layer;
             imageItem.ratioLocked = locked;
             imageItems.addElement(imageItem);
-
         }
     }
 
@@ -855,7 +841,6 @@ public class XMLconverter extends DefaultHandler {
         // return (int)(1000.0*v/(72.0/25.4));
         // return (int)Math.round(v/(72.0/25.4));
         return v / (72.0 / 25.4);
-
     }
 
     private PageFormat createPageFormat(int orientation, double imageableX, double imageableY,
@@ -878,7 +863,6 @@ public class XMLconverter extends DefaultHandler {
             pageFormat.setPaper(paper);
         }
 
-
         float pw = (float) (convertMM(width) / 1000.0); ///1000.0);
         float ph = (float) (convertMM(height) / 1000.0);  ///1000.0);
         int pu = Size2DSyntax.MM;
@@ -887,14 +871,12 @@ public class XMLconverter extends DefaultHandler {
         //System.out.println("paperAtt:"+paperAtt);
 
         //System.out.println("PageFormat: imageableX="+pageFormat.getImageableX()+" imageableY="+pageFormat.getImageableY()+"  width="+width+" height="+height+"  orientation= "+orientation);
-
         return pageFormat;
-
 
 //  This approach works most of the time, but in some instances fails to restore the imageableX and imagfeableY parameters
 //  correctly in some cases
 
-        /*	
+        /*
          int iXmm = convertMM(imageableX);
          int iYmm = convertMM(imageableY);
          int iWmm = convertMM(imageableWidth);
@@ -939,17 +921,15 @@ public class XMLconverter extends DefaultHandler {
          //        System.out.println("PageFormat: X="+pa.getX(Size2DSyntax.MM)+" Y="+pa.getY(Size2DSyntax.MM));
          //        System.out.println("Media: "+paperAtt.toString()+"  pa: "+pa.toString());
 
-        
+
          return pageFormat;
          */
-
     }
 //================================================================
 // endElement
 //================================================================
 
-    public void endElement(String namespaceURI, String localName,
-            String qName) {
+    public void endElement(String namespaceURI, String localName, String qName) {
         String text = accumulator.toString();
         if (qName.equals("printer")) {
         }
@@ -964,7 +944,6 @@ public class XMLconverter extends DefaultHandler {
         blackboard.put("Images", imageItems);
         //System.out.println("All notes added");
         validDoc = true;
-
         //         if(debug) displayModel(model,0);
     }
 
@@ -1072,7 +1051,6 @@ public class XMLconverter extends DefaultHandler {
             }
         }
         return (ns.toString());
-
     }
 
     private String declean(String s) {

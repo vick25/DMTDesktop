@@ -1,7 +1,9 @@
 package com.cadplan.jump;
 
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Paint;
+import java.awt.Stroke;
 import java.util.Collection;
 
 public class LegendElement {
@@ -32,9 +34,9 @@ public class LegendElement {
         this.vertexStyle = vertexStyle;
         this.showLine = showLine;
         this.showFill = showFill;
-
     }
 
+    @Override
     public String toString() {
         return name + "[" + lineColor + lineStroke + ":" + fillColor + ":" + fillPattern + "]<" + include + ">";
     }

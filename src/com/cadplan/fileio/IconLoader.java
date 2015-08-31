@@ -1,10 +1,15 @@
 package com.cadplan.fileio;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.jar.*;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
+import java.util.jar.Manifest;
 
 public class IconLoader extends Component {
 
@@ -22,7 +27,6 @@ public class IconLoader extends Component {
     }
 
     public IconLoader(String appName) {
-
         prop = System.getProperties();
         wd = prop.getProperty("user.dir");
         this.appName = appName;
@@ -36,12 +40,9 @@ public class IconLoader extends Component {
         tracker = new MediaTracker(this);
         Image image = load(name);
         return (image);
-
     }
 
     public Image load(String name) {
-
-
         if (debug) {
             System.out.println("User WD = " + wd);
         }
@@ -55,15 +56,12 @@ public class IconLoader extends Component {
             //	  System.out.println("URL= "+jarurl);
             JarURLConnection jarConnection = (JarURLConnection) jarurl.openConnection();
             Manifest manifest = jarConnection.getManifest();
-            //	  System.out.println("Loading splash from JAR");		
-
+            //	  System.out.println("Loading splash from JAR");
         } catch (MalformedURLException e) {
             if (debug) {
                 System.out.println("Jar file not found at " + wd);
             }
         } catch (IOException e) {
-
-
             if (debug) {
                 System.out.println("Error opening Jar file at: " + wd);
             }
@@ -86,7 +84,6 @@ public class IconLoader extends Component {
             } catch (MalformedURLException e1) {
                 System.out.println("ERROR - " + e1);
             }
-
         }
         if (debug) {
             System.out.println("URL= " + jarurl);
@@ -106,6 +103,5 @@ public class IconLoader extends Component {
         }
 //       Icon icon = new ImageIcon(image);
         return (image);
-
     }
 }

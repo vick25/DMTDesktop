@@ -3,12 +3,20 @@ package com.cadplan.jump;
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.feature.AttributeType;
 import com.osfac.dmt.feature.FeatureSchema;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
- * Created by IntelliJ IDEA. User: geoff Date: 14/07/2007 Time: 13:19:44 To
- * change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: geoff Date: 14/07/2007 Time: 13:19:44 To change this template use
+ * File | Settings | File Templates.
  */
 public class TextLabelPanel extends JPanel {
 
@@ -213,7 +221,6 @@ public class TextLabelPanel extends JPanel {
                         || type == AttributeType.STRING || type == AttributeType.DATE || type == AttributeType.GEOMETRY) {
                     String name = featureSchema.getAttributeName(i);
                     attributeCombo.addItem(name);
-
                 }
             }
             if (VertexParams.attName != null && !VertexParams.attTextName.equals("")) {
@@ -237,8 +244,6 @@ public class TextLabelPanel extends JPanel {
         pointsCB.setSelected((VertexParams.textScope & 1) > 0);
         linesCB.setSelected((VertexParams.textScope & 2) > 0);
         polysCB.setSelected((VertexParams.textScope & 4) > 0);
-
-
     }
 
     public boolean getValues() {
@@ -268,7 +273,6 @@ public class TextLabelPanel extends JPanel {
         }
         VertexParams.textScope = scope;
         return true;
-
     }
 
     private int getFontStyle(String style) {

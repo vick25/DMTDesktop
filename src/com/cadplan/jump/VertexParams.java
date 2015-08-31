@@ -2,7 +2,9 @@ package com.cadplan.jump;
 
 import com.osfac.dmt.workbench.WorkbenchContext;
 import com.osfac.dmt.workbench.model.Layer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 
 public class VertexParams {
 

@@ -6,7 +6,8 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -34,7 +35,6 @@ public class WKTVertexStyle extends ExternalSymbolsType {
 
     public WKTVertexStyle() {
         super(new Rectangle2D.Double());
-
     }
 
     // private void setSizeByScale(boolean sizeByScale)
@@ -90,10 +90,12 @@ public class WKTVertexStyle extends ExternalSymbolsType {
         return scale;
     }
 
+    @Override
     public int getSize() {
         return size;
     }
 
+    @Override
     public void setSize(int size) {
         this.size = size;
     }
@@ -164,14 +166,12 @@ public class WKTVertexStyle extends ExternalSymbolsType {
                 size = (int) (size / scale);
                 //System.out.println("name="+name+ "  After scaling: size="+size+ "  scale="+scale);
             }
-
         }
         if (!found) // missing image
         {
             //Icon icon = (Icon) UIManager.get("JOptionPane.questionIcon");
             wktShape = null;
         }
-
     }
 
     public String getName() {
@@ -194,7 +194,6 @@ public class WKTVertexStyle extends ExternalSymbolsType {
             attributeIndex = -1;
         }
         initializeText(layer);
-
     }
 
     public void paint(Feature feature, Graphics2D g2, Viewport viewport) {
@@ -217,7 +216,6 @@ public class WKTVertexStyle extends ExternalSymbolsType {
         } catch (Exception ex) {
             System.out.println("Painting ERROR:" + ex);
             ex.printStackTrace();
-
         }
     }
 
@@ -245,7 +243,6 @@ public class WKTVertexStyle extends ExternalSymbolsType {
     private void setFrame(Point2D p) {
         ((RectangularShape) shape).setFrame(p.getX() - width / (2 * scale), p.getY() - height / (2 * scale), width / scale, height / scale);
         //System.out.println("shape:"+shape);
-
     }
 
     protected void render(Graphics2D g) {
@@ -261,7 +258,6 @@ public class WKTVertexStyle extends ExternalSymbolsType {
 
         //Image scaledImage = image.getScaledInstance(width/scale, height/scale,Image.SCALE_DEFAULT);
         //System.out.println("scaledSize:"+scaledImage.getWidth(null)+","+scaledImage.getHeight(null)+ "  scale="+scale);
-
         AffineTransform currentTransform = g.getTransform();
         double angle = orientation;
         if (!byValue) {
@@ -292,6 +288,5 @@ public class WKTVertexStyle extends ExternalSymbolsType {
         g.setTransform(currentTransform);
 
         drawTextLabel(g, (float) r.x0, (float) r.y0);
-
     }
 }

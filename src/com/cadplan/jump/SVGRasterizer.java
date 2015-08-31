@@ -1,19 +1,18 @@
-/*****************************************************************************
- * Copyright (C) The Apache Software Foundation. All rights reserved.        *
- * ------------------------------------------------------------------------- *
- * This software is published under the terms of the Apache Software License *
- * version 1.1, a copy of which has been included with this distribution in  *
- * the LICENSE file.                                                         *
-
- *****************************************************************************/
-
+/**
+ * ***************************************************************************
+ * Copyright (C) The Apache Software Foundation. All rights reserved. *
+ * ------------------------------------------------------------------------- * This software is
+ * published under the terms of the Apache Software License * version 1.1, a copy of which has been
+ * included with this distribution in * the LICENSE file. *
+ *
+ ****************************************************************************
+ */
 package com.cadplan.jump;
+
 import java.awt.image.BufferedImage;
 
 import java.awt.Paint;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 
@@ -29,12 +28,10 @@ import org.apache.batik.transcoder.TranscodingHints;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 
 //import org.w3c.dom.svg.SVGDocument;
-
 //import javax.imageio.ImageTranscoder;
-
 /**
- * This class provides a simple and method based API for converting a SVG
- * document fragment to a <tt>BufferedImage</tt>.
+ * This class provides a simple and method based API for converting a SVG document fragment to a
+ * <tt>BufferedImage</tt>.
  *
  * @author <a href="mailto:Thierry.Kormann@sophia.inria.fr">Thierry Kormann</a>
  * @version $Id$
@@ -44,7 +41,6 @@ public class SVGRasterizer {
     /**
      * The transcoder input.
      */
-
     protected TranscoderInput input;
 
     /**
@@ -62,8 +58,7 @@ public class SVGRasterizer {
      *
      * @param uri the uri of the document to rasterize
      */
-    public SVGRasterizer(String uri)
-    {
+    public SVGRasterizer(String uri) {
         this.input = new TranscoderInput(uri);
     }
 
@@ -79,8 +74,7 @@ public class SVGRasterizer {
     /**
      * Constructs a new SVGRasterizer converter.
      *
-     * @param istream the input stream that represents the SVG document to
-     * rasterize
+     * @param istream the input stream that represents the SVG document to rasterize
      */
     public SVGRasterizer(InputStream istream) {
         this.input = new TranscoderInput(istream);
@@ -103,13 +97,12 @@ public class SVGRasterizer {
 //    public SVGRasterizer(SVGDocument document) {
 //        this.input = new TranscoderInput(document);
 //    }
-
     /**
      * Returns the image that represents the SVG document.
      */
     public BufferedImage createBufferedImage() throws TranscoderException {
         Rasterizer r = new Rasterizer();
-        r.setTranscodingHints((Map)hints);
+        r.setTranscodingHints((Map) hints);
         r.transcode(input, null);
         return img;
     }
@@ -133,9 +126,9 @@ public class SVGRasterizer {
     }
 
     /**
-     * Sets the preferred language to use. SVG documents can provide text in
-     * multiple languages, this method lets you control which language to use
-     * if possible. e.g. "en" for english or "fr" for french.
+     * Sets the preferred language to use. SVG documents can provide text in multiple languages,
+     * this method lets you control which language to use if possible. e.g. "en" for english or "fr"
+     * for french.
      *
      * @param language the preferred language to use
      */
@@ -144,9 +137,8 @@ public class SVGRasterizer {
     }
 
     /**
-     * Sets the unit conversion factor to the specified value. This method
-     * lets you choose how units such as 'em' are converted. e.g. 0.26458 is
-     * 96dpi (the default) or 0.3528 is 72dpi.
+     * Sets the unit conversion factor to the specified value. This method lets you choose how units
+     * such as 'em' are converted. e.g. 0.26458 is 96dpi (the default) or 0.3528 is 72dpi.
      *
      * @param px2mm the pixel to millimeter convertion factor.
      */
@@ -155,8 +147,7 @@ public class SVGRasterizer {
     }
 
     /**
-     * Sets the uri of the user stylesheet. The user stylesheet can be used to
-     * override styles.
+     * Sets the uri of the user stylesheet. The user stylesheet can be used to override styles.
      *
      * @param uri the uri of the user stylesheet
      */
@@ -165,22 +156,20 @@ public class SVGRasterizer {
     }
 
     /**
-     * Sets whether or not the XML parser used to parse SVG document should be
-     * validating or not, depending on the specified parameter. For futher
-     * details about how media work, see the
-     * <a href="http://www.w3.org/TR/CSS2/media.html">Media types in the CSS2
-     * specification</a>.
+     * Sets whether or not the XML parser used to parse SVG document should be validating or not,
+     * depending on the specified parameter. For futher details about how media work, see the
+     * <a href="http://www.w3.org/TR/CSS2/media.html">Media types in the CSS2 specification</a>.
      *
      * @param b true means the XML parser will validate its input
      */
     public void setXMLParserValidating(boolean b) {
         hints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING,
-                  (b ? Boolean.TRUE : Boolean.FALSE));
+                (b ? Boolean.TRUE : Boolean.FALSE));
     }
 
     /**
-     * Sets the media to rasterize. The medium should be separated by
-     * comma. e.g. "screen", "print" or "screen, print"
+     * Sets the media to rasterize. The medium should be separated by comma. e.g. "screen", "print"
+     * or "screen, print"
      *
      * @param media the media to use
      */
@@ -189,15 +178,15 @@ public class SVGRasterizer {
     }
 
     /**
-     * Sets the alternate stylesheet to use. For futher details, you can have
-     * a look at the <a href="http://www.w3.org/TR/xml-stylesheet/">Associating
-     * Style Sheets with XML documents</a>.
+     * Sets the alternate stylesheet to use. For futher details, you can have a look at the
+     * <a href="http://www.w3.org/TR/xml-stylesheet/">Associating Style Sheets with XML
+     * documents</a>.
      *
      * @param alternateStylesheet the alternate stylesheet to use if possible
      */
     public void setAlternateStylesheet(String alternateStylesheet) {
         hints.put(ImageTranscoder.KEY_ALTERNATE_STYLESHEET,
-                  alternateStylesheet);
+                alternateStylesheet);
     }
 
     /**
@@ -219,7 +208,7 @@ public class SVGRasterizer {
         }
 
         public void writeImage(BufferedImage img, TranscoderOutput output)
-            throws TranscoderException {
+                throws TranscoderException {
             SVGRasterizer.this.img = img;
         }
     }
@@ -235,4 +224,3 @@ public class SVGRasterizer {
 //        f.show();
 //    }
 }
-

@@ -5,9 +5,20 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.ColorThemingStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
 public class LayerLegend extends Furniture {
 
@@ -75,8 +86,6 @@ public class LayerLegend extends Furniture {
                 Map themeMap = themeStyle.getAttributeValueToBasicStyleMap();
                 Map labelMap = themeStyle.getAttributeValueToLabelMap();
 
-
-
                 themeStyles = themeMap.values();
                 Iterator it = themeStyles.iterator();
                 // while(it.hasNext())
@@ -92,7 +101,6 @@ public class LayerLegend extends Furniture {
                 if (debug) {
                     System.out.println("mapKeys:" + keyValues.toString());
                 }
-
             }
             if (theming) {
                 int alpha = basicStyle.getAlpha();
@@ -110,7 +118,6 @@ public class LayerLegend extends Furniture {
                 if (!basicStyle.isRenderingFill()) {
                     showFill = false;
                 }
-
 
                 String linePattern = basicStyle.getLinePattern();
                 Stroke lineStroke = basicStyle.getLineStroke();
@@ -207,7 +214,6 @@ public class LayerLegend extends Furniture {
             LegendElement element = legendItems.elementAt(i);
 
             //System.out.println(i+": "+element.toString());
-
             if (i == 0) {
                 sWidth = tw;
             } else {
@@ -222,7 +228,6 @@ public class LayerLegend extends Furniture {
             }
             //System.out.println("sWidth="+sWidth);
             if (element.include) {
-
                 numIncluded++;
                 g.setFont(smallFont);
                 g.setColor(legendTextColor);
@@ -251,14 +256,12 @@ public class LayerLegend extends Furniture {
                     Paint fillPattern = style.getFillPattern();
 
                     //System.out.println("** Fill pattern:"+fillPattern);
-
                     int alpha = style.getAlpha();
                     Color fillColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
                     g.setColor(fillColor);
 
                     // remove for the moment as fillPattern seems to be wrong
                     //if(fillPattern != null) g2.setPaint(fillPattern);
-
                     g.fillRect(xp + 5, yp + patchspace * count, patchx, patchy);
 
                     //System.out.println("Filling patch: color:"+color+"  alpha:"+alpha+"  fillColor:"+fillColor+" pattern:"+fillPattern);
@@ -277,7 +280,6 @@ public class LayerLegend extends Furniture {
                         System.out.println("    count=" + count + " color:+" + fillColor);
                     }
                     count++;
-
                 }
                 if (count * patchspace > maxY) {
                     maxY = count * patchspace;
@@ -286,9 +288,6 @@ public class LayerLegend extends Furniture {
                     maxY = count * fontHeight;
                 }
                 sHeight = maxY; // + patchspace;
-
-
-
 
                 int len = fm.stringWidth(element.name);
                 if (len > maxlen) {
@@ -316,8 +315,6 @@ public class LayerLegend extends Furniture {
                     totalWidth = tw + 10;
                 }
             }
-
-
         }
         g2.setStroke(new BasicStroke());
         location.height = totalHeight + 2 * fontHeight; // +15 + patchspace; //maxY + 2*fontHeight+15 ;

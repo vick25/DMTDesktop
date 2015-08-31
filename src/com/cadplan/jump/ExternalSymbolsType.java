@@ -7,7 +7,12 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
 import com.vividsolutions.jts.geom.Geometry;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Point2D;
@@ -201,11 +206,9 @@ public class ExternalSymbolsType extends VertexStyle {
         }
         FeatureSchema featureSchema = fcw.getFeatureSchema();
         try {
-
             if (textAttributeName != null && !textAttributeName.equals("")) {
                 textAttributeIndex = featureSchema.getAttributeIndex(textAttributeName);
             }
-
         } catch (Exception ex) {
             if (textAttributeName.equals("$FID")) {
                 textAttributeIndex = -1;
@@ -284,7 +287,6 @@ public class ExternalSymbolsType extends VertexStyle {
                     }
                 }
             }
-
         }
         Geometry geometry = feature.getGeometry();
         if (geometry instanceof com.vividsolutions.jts.geom.Point || geometry instanceof com.vividsolutions.jts.geom.MultiPoint) {
@@ -353,7 +355,6 @@ public class ExternalSymbolsType extends VertexStyle {
         if (VertexParams.sizeByScale) {
             newSize = (int) (textFontSize * scaleFactor);
             offset = offset * scaleFactor;
-
         }
 
         Font font = new Font(textFontName, textFontStyle, newSize);
@@ -449,7 +450,6 @@ public class ExternalSymbolsType extends VertexStyle {
         //System.out.println("Number of text lines: "+numLines+" : "+textAttributeValue);
         st = new StringTokenizer(textAttributeValue, "\\|");
         while (st.hasMoreTokens()) {
-
             yp = yp + height;
             double xt = xp + 5;
             g.setColor(textForegroundColor);
@@ -469,8 +469,6 @@ public class ExternalSymbolsType extends VertexStyle {
             g.drawString(line, (float) xt, (float) yp);
             lineNumber++;
         }
-
-
     }
 
     private void drawHTMLText(Graphics2D g, String text, double offset, float x0, float y0) {
@@ -485,7 +483,6 @@ public class ExternalSymbolsType extends VertexStyle {
             newSize = (int) (textFontSize * scaleFactor);
             offset = offset * scaleFactor;
         }
-
 
         String s1 = text.substring(0, 6);
         String s2 = text.substring(6);
@@ -535,10 +532,7 @@ public class ExternalSymbolsType extends VertexStyle {
                 xp = x0 - width - offset;
                 yp = y0 - height - offset;
                 break;
-
         }
-
-
         textComponent.paint(g, (float) xp, (float) yp, drawFactor);
     }
 
@@ -579,7 +573,6 @@ public class ExternalSymbolsType extends VertexStyle {
         setTextFill(VertexParams.textFill);
         setTextScope(VertexParams.textScope);
         setSizeByScale(VertexParams.sizeByScale);
-
     }
 
     public void presetTextParameters() {

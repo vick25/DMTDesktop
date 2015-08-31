@@ -1,14 +1,27 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.Vector;
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
 
 public class FurnitureBorderPanel extends JPanel implements ActionListener, AdjustmentListener {
 
@@ -44,7 +57,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
         this.iPlug = iPlug;
         init();
         setBorder();
-
     }
 
     private void setBorder() {
@@ -84,7 +96,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
     }
 
     public Vector<FurnitureBorder> getBorders() {
-
         for (int i = 0; i < borders.size(); i++) {
             FurnitureBorder aborder = borders.elementAt(i);
             aborder.show = showBordersCB[i].isSelected();
@@ -239,7 +250,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
         layerFields = new JTextField[n];
         //System.out.println("Number of borders="+n);
         for (int i = 0; i < borders.size(); i++) {
-
             showBordersCB[i] = new JCheckBox("");
             gbp.setPosition(0, i);
             gbp.setInsets(5, 10, 0, 0);
@@ -264,7 +274,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
             //gbp.setAnchor(GridBagConstraints.NORTH);
             //gbp.addComponent(fixedBordersCB[i]);
             //fixedBordersCB[i].setEnabled(false);
-
             fillBordersCB[i] = new JCheckBox("");
             gbp.setPosition(3, i);
             gbp.setInsets(10, 10, 0, 0);
@@ -292,7 +301,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
             gbp.setWeight(1.0, 0.0);
             gbp.addComponent(deleteButton[i]);
             deleteButton[i].addActionListener(this);
-
         }
         //gb.setPosition(0,3);
         //gb.setInsets(10,10,10,10);
@@ -303,10 +311,9 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
         //gb.addComponent(bordersPanel);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
-
         if (ev.getSource() == addButton) {
-
             borders = getBorders();
             FurnitureBorder border = new FurnitureBorder(1.0, true, true);
             border.setBorder(0, 200, 100, 50, true);
@@ -348,7 +355,6 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
             }
 
             if (ev.getSource() == fillBordersButton[i]) {
-
                 Color newColor = JColorChooser.showDialog(this, "Select color", fillBordersButton[i].getBackground());
                 if (newColor != null) {
                     fillBordersButton[i].setBackground(newColor);
@@ -358,10 +364,9 @@ public class FurnitureBorderPanel extends JPanel implements ActionListener, Adju
         }
     }
 
+    @Override
     public void adjustmentValueChanged(AdjustmentEvent ev) {
-
         if (ev.getSource() == vsb) {
-
             scrollPane.repaint();
             parent.repaint();
         }

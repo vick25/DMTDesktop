@@ -9,12 +9,14 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.LayerViewPanel;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class VertexNotePlugin extends AbstractPlugIn {
 
     private I18NPlug iPlug;
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         iPlug = new I18NPlug("VertexSymbols", "language.VertexSymbolsPlugin");
 
@@ -31,8 +33,6 @@ public class VertexNotePlugin extends AbstractPlugIn {
         context.getFeatureInstaller().addMainMenuItem(this, new String[]{menuName},
                 menuItem, false, null, scheck);
 
-
-
         String dirName = context.getWorkbenchContext().getWorkbench().getPlugInManager().getPlugInDirectory().getAbsolutePath();
         IconLoader loader = new IconLoader(dirName, "VertexSymbols");
 
@@ -41,19 +41,16 @@ public class VertexNotePlugin extends AbstractPlugIn {
         //System.out.println("Note Resource path: "+this.getClass().getResource("/Resources/noteicon.gif"));
         ImageIcon icon = new ImageIcon(this.getClass().getResource("/Resources/noteicon.gif"));
 
-
-
         context.getFeatureInstaller().addPopupMenuItem(LayerViewPanel.popupMenu(), this, menuItem, false, icon,
                 scheck);
 
         WorkbenchToolBar toolBar = context.getWorkbenchFrame().getToolBar();
 
-
         JButton button = toolBar.addPlugIn(icon, this, mcheck, context.getWorkbenchContext());
         //JButton button = toolBar.addPlugIn(new ImageIcon(image),this,check.createAtLeastNFeaturesMustBeSelectedCheck(1),context.getWorkbenchContext());
-
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         VertexNote vn = new VertexNote(context, iPlug);
         return true;

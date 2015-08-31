@@ -1,7 +1,8 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -11,7 +12,13 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkListener;
 
 public class OnLineHelp extends JDialog implements ActionListener, WindowListener {
@@ -80,8 +87,6 @@ public class OnLineHelp extends JDialog implements ActionListener, WindowListene
             }
         }
 
-
-
         try {
             editorPane = new JEditorPane(url);
         } catch (IOException ex) {
@@ -110,28 +115,32 @@ public class OnLineHelp extends JDialog implements ActionListener, WindowListene
         setSize(500, 300);
         //setSize(800,800);
         setVisible(true);
-
-
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == closeButton) {
             dispose();
         }
     }
 
+    @Override
     public void windowIconified(WindowEvent e) {
     }
 
+    @Override
     public void windowDeiconified(WindowEvent e) {
     }
 
+    @Override
     public void windowClosed(WindowEvent e) {
     }
 
+    @Override
     public void windowOpened(WindowEvent e) {
     }
 
+    @Override
     public void windowClosing(WindowEvent e) {
         dispose();
     }
@@ -139,9 +148,11 @@ public class OnLineHelp extends JDialog implements ActionListener, WindowListene
     public void windowOpening(WindowEvent e) {
     }
 
+    @Override
     public void windowActivated(WindowEvent e) {
     }
 
+    @Override
     public void windowDeactivated(WindowEvent e) {
     }
 }

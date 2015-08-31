@@ -2,11 +2,15 @@ package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.workbench.DMTWorkbench;
-import java.awt.*;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -55,11 +59,9 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
     }
 
     private void init() {
-
         GridBagDesigner gb = new GridBagDesigner(this);
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.addChangeListener(this);
-
 
         titlePanel = new FurnitureTitlePanel(title, iPlug);
         tabbedPane.addTab(iPlug.get("JumpPrinter.Furniture.Title"), titlePanel);
@@ -92,7 +94,6 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
         gb.setSpan(3, 1);
         gb.addComponent(tabbedPane);
 
-
         cancelButton = new JButton(iPlug.get("JumpPrinter.Furniture.Cancel"));
         gb.setPosition(0, 1);
         gb.setInsets(0, 10, 0, 10);
@@ -118,6 +119,7 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
         setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == cancelButton) {
             dispose();
@@ -141,7 +143,6 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
             imageItems = imagePanel.getImageItems();
 
             parent.updateDrawing();
-
         }
         if (ev.getSource() == closeButton) {
             title = titlePanel.getTitle();
@@ -159,6 +160,7 @@ public class FurnitureDialog extends JDialog implements ActionListener, ChangeLi
         }
     }
 
+    @Override
     public void stateChanged(ChangeEvent ev) {
         if (ev.getSource() == tabbedPane) {
             JPanel selection = (JPanel) ((JTabbedPane) ev.getSource()).getSelectedComponent();

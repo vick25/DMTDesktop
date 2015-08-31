@@ -30,7 +30,6 @@ public final class I18NPlug {
             } else {
                 locale = new Locale(language);
             }
-
         }
 
         //System.out.println("plugin name: "+pluginName+"  bundle:"+bundle);
@@ -39,7 +38,6 @@ public final class I18NPlug {
         } else {
             rb = ResourceBundle.getBundle(bundle, locale);
         }
-
     }
 
     public String get(String label) {
@@ -50,6 +48,5 @@ public final class I18NPlug {
             System.out.println("ERROR Get - Missing language resource: " + label);
             return "<" + label + ">";
         }
-
     }
 }

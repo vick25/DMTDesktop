@@ -1,11 +1,14 @@
 package com.cadplan.jump;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import java.awt.Frame;
+import java.io.IOException;
+import java.net.URL;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
 
 public class ActivatedHyperlinkListener implements HyperlinkListener {
 
@@ -27,6 +30,7 @@ public class ActivatedHyperlinkListener implements HyperlinkListener {
         } else if (type == HyperlinkEvent.EventType.ACTIVATED) {
             //System.out.println("Activated");
             Runnable runner = new Runnable() {
+                @Override
                 public void run() {
                     // Retain reference to original
                     Document doc = editorPane.getDocument();

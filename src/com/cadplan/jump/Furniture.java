@@ -1,7 +1,10 @@
 package com.cadplan.jump;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.Stroke;
+import javax.swing.JComponent;
 
 public class Furniture extends JComponent {
 

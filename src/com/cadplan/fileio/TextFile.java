@@ -1,6 +1,11 @@
 package com.cadplan.fileio;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -23,12 +28,12 @@ public class TextFile {
     }
 
     public boolean exists() {
-        File file = new File(dirName + File.separator + fileName);
+        File file = new File(new StringBuilder(dirName).append(File.separator).append(fileName).toString());
         return file.exists();
     }
 
     public boolean openRead() {
-        File file = new File(dirName + File.separator + fileName);
+        File file = new File(new StringBuilder(dirName).append(File.separator).append(fileName).toString());
 
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -36,12 +41,10 @@ public class TextFile {
         } catch (FileNotFoundException ex) {
             return false;
         }
-
     }
 
     public boolean openWrite() {
-        File file = new File(dirName + File.separator + fileName);
-
+        File file = new File(new StringBuilder(dirName).append(File.separator).append(fileName).toString());
         try {
             writer = new FileWriter(file);
             return true;

@@ -12,18 +12,32 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.plugin.ThreadedPlugIn;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
-import javax.imageio.*;
-import javax.imageio.stream.*;
-import javax.swing.*;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
@@ -56,8 +70,8 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
     String homePath;
     boolean printSinglePage = false;
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
-
         try {
             Class dummy = Class.forName("com.lowagie.text.pdf.PdfWriter"); // test if VertexSymbols pluign is installed
         } catch (Exception ex) {
@@ -79,11 +93,9 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                 false, icon, check.createAtLeastNLayersMustExistCheck(1));
 
 //        String dirName = context.getWorkbenchContext().getWorkbench().getPlugInManager().getPlugInDirectory().getAbsolutePath();
-
         //System.out.println("Printer Resource path: "+this.getClass().getResource("/Resources/jprinter.gif"));
         //IconLoader loader = new IconLoader(dirName,"JumpPrinter");
         //Image image = loader.loadImage("jprinter.gif");
-
         icon = new ImageIcon(this.getClass().getResource("/com/osfac/dmt/images/fileprint(23).png"));
         //ImageIcon icon = new ImageIcon(image);
         WorkbenchToolBar toolBar = context.getWorkbenchFrame().getToolBar();
@@ -95,10 +107,9 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
 
         blackboard = new Blackboard();
         blackboard.put("Version", version);
-
-
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         try {
             Class dummy = Class.forName("com.cadplan.jump.VertexSymbols"); // test if VertexSymbols plugin is installed
@@ -159,7 +170,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         blackboard.put("ConfigFiles", configFiles);
         //blackboard.put("ConfigItem",0);
 
-
         cancelled = false;
         bounds = context.getLayerViewPanel().getBounds();
         pp = new PrinterPreview(context);
@@ -194,6 +204,7 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
         return true;
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context) {
         if (cancelled) {
             //context.getLayerViewPanel().getRenderingManager().setPaintingEnabled(true);
@@ -248,9 +259,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
 
         if (!setup.saveAsImage) // ie print it
         {
-
-
-
             if (!pj.printDialog()) {
                 return;
             }
@@ -297,7 +305,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
             //System.out.println("size:"+pp.getPrintSize());
             //Dimension imageSize = pp.getPrintSize();
 
-
             try {
                 //System.out.println("initial file:"+ fileName);
                 String ftype = "jpg";
@@ -313,7 +320,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                 }
 
                 //System.out.println("file: "+dirName+File.separator+fileName+ " type="+type);
-
                 if (type.toLowerCase().equals("svg")) {
                     //System.out.println("Preparing SVG image");
                     DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
@@ -332,7 +338,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                     boolean useCSS = true;
                     Writer out = new OutputStreamWriter(new FileOutputStream(dirName + File.separator + fileName), "UTF-8");
                     svgGenerator.stream(out, useCSS);
-
                 }
                 if (type.toLowerCase().equals("pdf")) {
                     double xoffset = 50.0; //pageFormat.getImageableX();
@@ -356,7 +361,6 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
                             //PdfTemplate tp = cb.createTemplate((int)xsize,(int)ysize);
                             DefaultFontMapper fontMapper = new DefaultFontMapper();
                             //fontMapper.insertDirectory("c:/windows/fonts");
-
 
                             Graphics2D graphics2D = cb.createGraphics((int) xsize, (int) ysize, fontMapper);
                             graphics2D.translate(xoffset, yoffset);
@@ -437,8 +441,8 @@ public class PrinterPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
             //System.out.println("filename="+filename);
         }
 
+        @Override
         public boolean accept(File dir, String name) {
-
             if (name.endsWith(".xml") && name.indexOf(filename) >= 0) {
                 //System.out.println("dir:"+dir.getAbsolutePath()+"  name:"+name);
                 return true;

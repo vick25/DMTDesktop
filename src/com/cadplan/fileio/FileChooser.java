@@ -1,9 +1,9 @@
 package com.cadplan.fileio;
 
-import java.awt.*;
+import java.awt.Component;
 import java.io.File;
 import java.util.Properties;
-import javax.swing.*;
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 /**
@@ -27,7 +27,6 @@ public class FileChooser {
         }
         chooser = new JFileChooser();
         chooser.setDialogType(type);
-
 
         MyFileFilter filter = new MyFileFilter(info, filterText);
 
@@ -108,10 +107,12 @@ class MyFileFilter extends FileFilter {
         }
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory()) {
             return true;

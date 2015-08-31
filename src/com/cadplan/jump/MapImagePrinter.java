@@ -4,7 +4,6 @@ import com.osfac.dmt.feature.Feature;
 import com.osfac.dmt.feature.FeatureCollectionWrapper;
 import com.osfac.dmt.feature.FeatureSchema;
 import com.osfac.dmt.geom.EnvelopeUtil;
-import com.osfac.dmt.workbench.model.AbstractLayerable;
 import com.osfac.dmt.workbench.model.Category;
 import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.model.Layerable;
@@ -91,13 +90,11 @@ public class MapImagePrinter extends Component {
         xsize = extentInPixelsX;
         this.scale = scale;
 
-
         viewPort = context.getLayerViewPanel().getViewport();
         envelope = viewPort.getEnvelopeInModelCoordinates();
         visRect = context.getLayerViewPanel().getVisibleRect();
 
         envelopeGeometry = EnvelopeUtil.toGeometry(envelope);
-
 
         ysize = extentInPixelsY;
         image = new BufferedImage(extentInPixelsX, extentInPixelsY, BufferedImage.TYPE_INT_ARGB);
@@ -215,7 +212,6 @@ public class MapImagePrinter extends Component {
                     System.out.println("offsets: " + xoff + "," + yoff);
                 }
 
-
                 int x = (int) (imageEnvelope.getMinX() * scale);
                 int y = (int) (imageEnvelope.getMinY() * scale);
                 int width = (int) (imageEnvelope.getWidth() * scale);
@@ -230,8 +226,6 @@ public class MapImagePrinter extends Component {
                 if (debug) {
                     System.out.println("Image offsets: " + imageOffX + "," + imageOffY);
                 }
-
-
 
                 int scaledWidth = (int) visRect.getWidth();
                 int scaledHeight = (int) visRect.getHeight();
@@ -259,7 +253,6 @@ public class MapImagePrinter extends Component {
                 if (debug) {
                     System.out.println("ImageX=" + imageX + "  imageY=" + imageY);
                 }
-
 
                 int dx0 = pX(imageEnvelope.getMinX());
                 if (dx0 < pX(envelope.getMinX())) {
@@ -307,16 +300,11 @@ public class MapImagePrinter extends Component {
                     }
                 }
                 graphics.drawImage(bimage, dx0, dy0, dx1, dy1, sx0, sy0, sx1, sy1, null);
-
             }
         }
 
-
         //debug = false;
-
-
         java.util.List layerCollection = context.getLayerViewPanel().getLayerManager().getVisibleLayers(true);
-
 
         int count = 0;
         Object[] layerArray = layerCollection.toArray();
@@ -389,7 +377,6 @@ public class MapImagePrinter extends Component {
 //                         BasicStyle istyle = (BasicStyle) is.next();
 //                         System.out.println("Style fill color:"+istyle.getFillColor());
 //                     }
-
                 mapKeys = themeMap.keySet();
                 if (debug) {
                     System.out.println("mapKeys:" + mapKeys.toString());
@@ -448,7 +435,6 @@ public class MapImagePrinter extends Component {
                 if (debug) {
                     System.out.println("***Feature ID: " + feature.getID() + "  type:" + feature.getClass().toString());
                 }
-
                 // handle images
                 boolean featureIsImage = false;
                 Image featureImage = null;
@@ -464,7 +450,6 @@ public class MapImagePrinter extends Component {
                     String filePath = (String) feature.getAttribute(imageFileIndex);
 //                        com.vividsolutions.jump.workbench.imagery.graphic.GraphicImageFactory imf = (com.vividsolutions.jump.workbench.imagery.graphic.GraphicImageFactory)feature.getAttribute(imageFactoryIndex);
 //                        ReferencedImage rImage = imf.createImage(filePath);
-
                     if (debug) {
                         System.out.println("** File: " + filePath);
                     }
@@ -482,8 +467,6 @@ public class MapImagePrinter extends Component {
                     featureIsImage = true;
                 } catch (Exception ex) {
                 }
-
-
 
                 rd.feature = feature;
                 labelValue = null;
@@ -548,10 +531,8 @@ public class MapImagePrinter extends Component {
                                 } catch (NumberFormatException ex) {
                                     isRange = false;
                                 }
-
                             }
                             if (!isRange) {
-
                                 String themeAttributeValueString = null;
                                 try {
                                     themeAttributeValueString = (String) themeAttributeValue;
@@ -577,20 +558,17 @@ public class MapImagePrinter extends Component {
                                     //index = -1;
                                     //kk= -1;
                                 }
-
                                 if (debug) {
                                     System.out.println("themeAttribute:<" + themeAttributeValue + ">");
                                 }
                                 if (debug) {
                                     System.out.println("keyString: <" + key + "> index=" + index + " kk=" + kk);
                                 }
-
                             } else // have a range
                             {
                                 StringTokenizer st = new StringTokenizer(key, "-");
                                 double v0 = Double.MIN_VALUE;
                                 double v1 = Double.MAX_VALUE;
-
                                 try {
                                     v0 = Double.parseDouble(st.nextToken());
                                     try {
@@ -650,9 +628,7 @@ public class MapImagePrinter extends Component {
                             if (debug) {
                                 System.out.println("found: index=" + index + "  fillColor=" + rd.fillColor);
                             }
-
                         }
-
                     }
                     List styleList = layer.getStyles();
 
@@ -1019,7 +995,6 @@ public class MapImagePrinter extends Component {
                     symbols = true;
                     //System.out.println("byValue="+vertex.getByValue()+"  attname="+vertex.getAttributeName());
                 }
-
             } catch (ClassNotFoundException ex) // VertexSymbols plugin not installed
             {
             } catch (Exception ex) // any other error
@@ -1028,7 +1003,6 @@ public class MapImagePrinter extends Component {
                 ex.printStackTrace();
             }
         }
-
 
         if (!symbols && rd.vertexStyle.isEnabled()) // paint default vertex shape
         {
@@ -1042,7 +1016,6 @@ public class MapImagePrinter extends Component {
             g.setColor(rd.baseLineColor);
             g.draw(path);
         }
-
     }
 
     private void drawLine(Graphics2D g) {
@@ -1082,7 +1055,6 @@ public class MapImagePrinter extends Component {
                 rd.py = pY(y0);
                 drawDecorations(g, SEGMENT);
                 drawDecorations(g, VERTEX);
-
             }
             if (i == 1) {
                 startAngle = Math.atan2((y0 - y1), (x0 - x1));
@@ -1104,7 +1076,6 @@ public class MapImagePrinter extends Component {
             index++;
             //          lastVertexPoint = (Point2D.Double)vertexPoint.clone();
             rd.previousVertex = new Point2D.Double(coords[i].x, coords[i].y);
-
         }
         rd.previousVertex = new Point2D.Double(coords[coords.length - 2].x, coords[coords.length - 2].y);
         g.setColor(rd.lineColor);
@@ -1148,7 +1119,6 @@ public class MapImagePrinter extends Component {
                 y0 = y;
                 drawDecorations(g, VERTEX);
                 rd.firstVertex = new Point2D.Double(coords[i].x, coords[i].y);
-
             } else {
                 path.lineTo(x, y);
                 //if(coords.length > 500) System.out.println("Line i="+i+" "+x+","+y);
@@ -1156,7 +1126,6 @@ public class MapImagePrinter extends Component {
                 rd.lineAngle = segmentAngle;
                 drawDecorations(g, SEGMENT);
                 drawDecorations(g, VERTEX);
-
             }
 
             index++;
@@ -1167,7 +1136,6 @@ public class MapImagePrinter extends Component {
             xp = x;
             yp = y;
             rd.previousVertex = new Point2D.Double(coords[i].x, coords[i].y);
-
         }
         //close polygon
         //if(x != x0 || y != y0)
@@ -1191,7 +1159,6 @@ public class MapImagePrinter extends Component {
         drawDecorations(g, END);
         drawDecorations(g, MIDDLE);
         drawDecorations(g, SEGMENT);
-
 
         Area outer = new Area(path);
         //System.out.println("outer="+outer+"  numholes="+numberHoles);
@@ -1224,7 +1191,6 @@ public class MapImagePrinter extends Component {
                         if (ip < hcoords.length - 1) {
                             drawDecorations(g, VERTEX);
                         }
-
                     }
                     index++;
                     if (ip == 1) {
@@ -1251,7 +1217,6 @@ public class MapImagePrinter extends Component {
                 drawDecorations(g, START);
                 drawDecorations(g, END);
                 drawDecorations(g, MIDDLE);
-
             }
             Area hole = new Area(hpath);
             outer.subtract(hole);
@@ -1264,8 +1229,6 @@ public class MapImagePrinter extends Component {
 
         //System.out.println("Painting Layer:"+rd.layer.getName()+" Area:"+outer.toString()+"  coords size:"+coords.length);
         //System.out.println("lineColor:"+this.lineColor+"  fillColor:"+rd.fillColor+"  pattern:"+rd.fillPattern  );
-
-
         if (!rd.fillColor.equals(Color.WHITE)) {
             g.fill(outer);
         }
@@ -1380,16 +1343,12 @@ public class MapImagePrinter extends Component {
                 if (style instanceof ArrowLineStringMiddlepointStyle.NarrowSolidMiddle) {
                     drawNarrowSolid(g, xs, ys, rd.lineAngle + Math.PI, rd.lineWidth);
                 }
-
             }
             //}
-
         }
-
     }
 
     private void drawIndex(Graphics2D g, float x, float y, double angle, int index, double lineWidth) {
-
         g.setFont(vertexFont);
         g.setColor(vertexFontColor);
         String note = String.valueOf(index);
@@ -1415,7 +1374,6 @@ public class MapImagePrinter extends Component {
 
         String note = String.valueOf(format(len) + "/" + String.valueOf(formatAngle(Math.toDegrees(bearing))) + "�");
         g.drawString(note, x, y);
-
     }
 
     private String format(double v) {
@@ -1449,7 +1407,6 @@ public class MapImagePrinter extends Component {
         g.setStroke(stroke);
         g.setColor(rd.lineColor);
         g.drawOval((int) (x - dia / 2), (int) (y - dia / 2), dia, dia);
-
     }
 
     private void drawFeathers(Graphics2D g, float x, float y, double angle, double lineWidth) {
@@ -1498,7 +1455,6 @@ public class MapImagePrinter extends Component {
         g.fill(path);
         g.draw(path);
         g.rotate(-angle, x, y);
-
     }
 
     private void drawSolid(Graphics2D g, float x, float y, double angle, double lineWidth) {
@@ -1518,12 +1474,10 @@ public class MapImagePrinter extends Component {
         path.lineTo(x + len, y + d);
         path.lineTo(x + len, y);
 
-
         g.rotate(angle, x, y);
         g.fill(path);
         g.draw(path);
         g.rotate(-angle, x, y);
-
     }
 
     private void drawOpen(Graphics2D g, float x, float y, double angle, double lineWidth) {
@@ -1545,7 +1499,6 @@ public class MapImagePrinter extends Component {
         g.draw(path);
 
         g.rotate(-angle, x, y);
-
     }
 
     private String clean(String name) {

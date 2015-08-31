@@ -1,6 +1,11 @@
 package com.cadplan.jump;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
@@ -40,9 +45,6 @@ public class FurnitureScale extends Furniture {
         color = Color.BLACK;
         numberScale = 1;
         layerNumber = 40;
-
-
-
     }
 
     public void setIPlug(I18NPlug iPlug) {
@@ -97,7 +99,6 @@ public class FurnitureScale extends Furniture {
 
         //System.out.println("Scale: lendiv="+lendiv+" numdiv="+numdiv+"  width="+location.width);
         location.height = 25;
-
     }
 
     private void decodeRange() {
@@ -117,7 +118,6 @@ public class FurnitureScale extends Furniture {
 
         try {
             for (int j = 0; j < n; j++) {
-
                 double val = 0.0;
                 if (j == 0 && scaleValues[j].startsWith("-")) {
                     StringTokenizer st2 = new StringTokenizer(scaleValues[j], ":");
@@ -141,13 +141,10 @@ public class FurnitureScale extends Furniture {
                         scaleIntervals[j] = val * 1000.0 * px / scale;
                     }
                 }
-
-
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Scale.Message3"),
                     iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
         //System.out.println("scaleLeader:"+scaleLeader+"  value="+leaderInterval);
         //for(int k=0; k < scaleValues.length; k++) System.out.print(scaleValues[k]+",");
@@ -224,7 +221,6 @@ public class FurnitureScale extends Furniture {
 //        System.out.println("Scale: lendiv="+lendiv+" numdiv="+numdiv+"  width="+location.width);
 //        location.height = 25;
 
-
         g.setColor(color1);
         if (debug) {
             System.out.println("Scale color: " + color1 + "  numdiv:" + numdiv + " x=" + x + "  y=" + y);
@@ -265,7 +261,7 @@ public class FurnitureScale extends Furniture {
                     int nint = leaderInterval;
                     oddStart = (nint + 1) % 2;
                     double interval = scaleIntervals[1] / (double) nint;
-                    //if(interval < 4.0) 
+                    //if(interval < 4.0)
                     //{
                     //	nint = 5;
                     //	interval = scaleIntervals[1]/nint;
@@ -301,7 +297,6 @@ public class FurnitureScale extends Furniture {
                 double val = 0.0;
                 try {
                     val = Double.parseDouble(values) / numberScale;
-
                 } catch (NumberFormatException ex) {
                     //JOptionPane.showMessageDialog(this,iPlug.get("JumpPrinter.Furniture.Scale.Message3"),
                     //        iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
@@ -309,7 +304,6 @@ public class FurnitureScale extends Furniture {
 
                 g.drawString(formatScale(val), xd, y + h + fh); //(int)(10*sf));
                 //System.out.println("Text at:"+xd);
-
             }
             g.setColor(color1);
             int xd = (int) Math.round(scaleIntervals[scaleIntervals.length - 1]);
@@ -321,7 +315,6 @@ public class FurnitureScale extends Furniture {
             g.drawString(formatScale(val), x + xd, y + h + fh); //(int)(10*sf));
             lastWidth = fm.stringWidth(formatScale(val));
             //System.out.println("Text final at:"+(x+xd));
-
         }
         g.setColor(color);
         String scaleLabel;
@@ -332,13 +325,12 @@ public class FurnitureScale extends Furniture {
             //System.out.println("iPlug not found");
             ex.printStackTrace();
             scaleLabel = "Scale 1:";
-
         }
         String text = "";
         if (showRatio) {
             text = text + scaleLabel + String.valueOf(formatScale(scale)) + "  ";
         }
-        //if(showUnits) text = text  + units;	
+        //if(showUnits) text = text  + units;
 
         g.drawString(text, x, y + (int) (2 * fh + 5 * sf)); //(int)(25*sf));
 
@@ -346,7 +338,6 @@ public class FurnitureScale extends Furniture {
         if (showUnits) {
             g.drawString(units, xu, y + fh + h);
         }
-
 
         if (displayScale > 0.0) {
             g.setColor(boundsColor);

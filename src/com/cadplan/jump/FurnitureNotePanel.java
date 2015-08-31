@@ -1,10 +1,24 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.Rectangle;
+import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class FurnitureNotePanel extends JPanel implements ActionListener {
 
@@ -64,12 +78,10 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(textField);
 
-
         fontLabel = new JLabel(iPlug.get("JumpPrinter.Furniture.Note.Font"));
         gb.setPosition(0, 2);
         gb.setInsets(10, 10, 0, 0);
         gb.addComponent(fontLabel);
-
 
         fontNameCombo = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         gb.setPosition(1, 2);
@@ -82,7 +94,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         //gb.setPosition(0,3);
         //gb.setInsets(10,10,0,0);
         //gb.addComponent(sizeLabel);
-
         fontSizeCombo = new JComboBox(sizes);
         gb.setPosition(3, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -94,7 +105,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         // gb.setPosition(0,4);
         //gb.setInsets(10,10,10,0);
         // gb.addComponent(styleLabel);
-
         fontStyleCombo = new JComboBox(styles);
         gb.setPosition(4, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -106,7 +116,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         //gb.setPosition(2,3);
         //gb.setInsets(10,10,0,0);
         //gb.addComponent(justifyLabel);
-
         justifyCombo = new JComboBox(justifies);
         gb.setPosition(5, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -128,8 +137,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         gb.setPosition(1, 3);
         gb.setInsets(10, 0, 0, 0);
         gb.addComponent(layerField);
-
-
 
         bcolorCB = new JCheckBox(iPlug.get("JumpPrinter.Furniture.Note.Shade"));
         gb.setPosition(3, 3);
@@ -153,7 +160,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(color1Button);
         color1Button.addActionListener(this);
-
 
         showCB = new JCheckBox(iPlug.get("JumpPrinter.Furniture.Show"));
         gb.setPosition(0, 0);
@@ -212,7 +218,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
 
         setDetails();
         updateButtons();
-
     }
 
     public void actionPerformed(ActionEvent ev) {
@@ -293,7 +298,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         if (noteNumber < numNotes - 1) {
             nextB.setEnabled(true);
         }
-
     }
 
     private void setDetails() {
@@ -332,7 +336,6 @@ public class FurnitureNotePanel extends JPanel implements ActionListener {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Message2") + ": " + layerField.getText(),
                     iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
 
         try {

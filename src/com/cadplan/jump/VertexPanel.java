@@ -1,8 +1,10 @@
 package com.cadplan.jump;
 
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JPanel;
 
 public class VertexPanel extends JPanel {
 
@@ -28,10 +30,10 @@ public class VertexPanel extends JPanel {
             symbol = new AnyShapeVertexStyle();
             ((AnyShapeVertexStyle) symbol).setType(sides);
         }
-
         symbol.setSize(20);
     }
 
+    @Override
     public void paint(Graphics g) {
         if (type == VertexParams.POLYGON) {
             ((PolygonVertexStyle) symbol).render((Graphics2D) g);

@@ -5,7 +5,10 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Paint;
+import java.awt.Stroke;
 import java.awt.geom.Point2D;
 
 public class RendererData {

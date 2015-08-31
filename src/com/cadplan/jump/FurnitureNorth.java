@@ -1,6 +1,12 @@
 package com.cadplan.jump;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 public class FurnitureNorth extends Furniture {
@@ -19,11 +25,9 @@ public class FurnitureNorth extends Furniture {
     }
 
     public void drawNorth(Graphics g, int x, int y, int type) {
-
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(stroke);
         if (type <= 1) {
-
             int dia = (int) (50 * sf);
             g.setColor(Color.BLACK);
             g.drawOval(x, y, dia, dia);
@@ -53,7 +57,6 @@ public class FurnitureNorth extends Furniture {
 //             Font font = new Font("Serif",Font.BOLD, 48);
 //             g.setFont(font);
 //             g.drawString("N", lx+w/2-20, ly+t+20);
-
             g.setColor(color);      // top right face
             p0 = new Polygon();
             p0.addPoint(lx + w / 2, ly);
@@ -307,7 +310,6 @@ public class FurnitureNorth extends Furniture {
 
             location.width = 2 * s1;
             location.height = 2 * s1;
-
         }
         if (type == 5) {
 

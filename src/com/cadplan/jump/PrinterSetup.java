@@ -4,7 +4,11 @@ import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.util.Blackboard;
 import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,7 +22,14 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Vector;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class PrinterSetup extends JDialog implements ActionListener, ItemListener, WindowListener {
 
@@ -96,7 +107,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 //       gb.setInsets(0,0,0,0);
 //       gb.addComponent(qualityCB);
 //       qualityCB.setSelected(qualityOption);
-
         printQualityCombo = new JComboBox(qualityItems);
         gb.setPosition(2, 0);
         gb.setInsets(0, 0, 0, 5);
@@ -179,7 +189,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 //       gb.setPosition(6,0);
 //       gb.setInsets(3,10,10,0);
 //       gb.addComponent(printSizeCombo);
-
         gb.setPosition(0, 1);
         gb.setSpan(8, 1);
         gb.setFill(GridBagConstraints.BOTH);
@@ -356,7 +365,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         }
         preview.setBorder(border);
         preview.repaint();
-
     }
 
     /**
@@ -408,7 +416,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                     JOptionPane.ERROR_MESSAGE);
             scaleField.setText(formatScale(scale));
             return false;
-
         }
         scale = tempScale;
         scaleItem.scale = scale;
@@ -450,7 +457,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             imageableHeight = pageFormat.getImageableHeight();
         } catch (Exception ex) {
         }
-
         try {
             scale = blackboard.getDouble("Scale");
             scaleField.setText(formatScale(scale));
@@ -487,7 +493,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             printQualityCombo.setSelectedIndex(printMode);
         } catch (Exception ex) {
         }
-
         try {
             Object object = null;
             object = blackboard.get("PageOffset", null);
@@ -495,7 +500,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             preview.setOffsets(pageOffset);
         } catch (Exception ex) {
         }
-
         try {
             Object object = null;
             object = blackboard.get("Title", null);
@@ -572,7 +576,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             }
         } catch (Exception ex) {
         }
-
         try {
             Object object = null;
             object = blackboard.get("LayerLegend", null);
@@ -598,6 +601,7 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
      *
      * @param ev
      */
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == setupButton) {
             if (pageFormat == null) {
@@ -619,7 +623,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                     JOptionPane.showMessageDialog(this, "ERROR: in setting page format.\n" + ex);
                 }
             }
-
             imageableWidth = pageFormat.getImageableWidth();
             imageableHeight = pageFormat.getImageableHeight();
             updateDrawing();
@@ -636,14 +639,11 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         }
         if (ev.getSource() == saveImageButton) {
             //System.out.println("Saving image");
-
-
             cancelled = false;
             updateBlackboard();
             saveAsImage = true;
             dispose();
         }
-
 
         if (ev.getSource() == scaleField) {
             if (!validScaleValue()) {
@@ -681,7 +681,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 
             //preview.context.getWorkbenchFrame().setStatusMessage(iPlug.get("JumpPrinter.Setup.Message4")+configFileName+"_"+configCombo.getSelectedItem());
             preview.context.getWorkbenchFrame().setStatusMessage(iPlug.get("JumpPrinter.Setup.Message4") + " " + configCombo.getSelectedItem());
-
         }
 
         if (ev.getSource() == loadButton) {
@@ -697,7 +696,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                 restoreBlackboard();
                 updateDrawing();
                 preview.context.getWorkbenchFrame().setStatusMessage(iPlug.get("JumpPrinter.Setup.Message3") + " " + configCombo.getSelectedItem());
-
             } else {
                 JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Setup.Message5"), iPlug.get("JumpPrinter.Warning"),
                         JOptionPane.WARNING_MESSAGE);
@@ -709,7 +707,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             preview.xpan = (int) (preview.xpan * 1.2);
             preview.ypan = (int) (preview.ypan * 1.2);
             updateDrawing();
-
         }
         if (ev.getSource() == zoom100Button) {
             preview.globalScale = 1.0;
@@ -722,7 +719,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
             preview.xpan = (int) (preview.xpan / 1.2);
             preview.ypan = (int) (preview.ypan / 1.2);
             updateDrawing();
-
         }
         if (ev.getSource() == configCombo) {
             //System.out.println("Action event: config combo");
@@ -745,7 +741,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                     configNames.remove(selectedConfigIndex);
                     selectedConfigIndex = 0;
                     configCombo.setSelectedIndex(0);
-
                 } else {
                     configCombo.setSelectedIndex(selectedConfigIndex);
                 }
@@ -757,7 +752,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                 configCombo.addItem(item);
                 configCombo.setSelectedItem(item);
                 //System.out.println("Index: "+selectedConfigIndex);
-
                 //System.out.println("Added: "+ item);
             } else // display item
             {
@@ -769,7 +763,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
 //            {
 //                System.out.println(configNames.elementAt(i));
 //            }
-
             blackboard.put("ConfigFiles", configNames);
             blackboard.put("ConfigItem", configCombo.getSelectedIndex());
         }
@@ -786,7 +779,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
                 return;
             }
             autoScale = autoCB.isSelected();
-
             updateDrawing();
         }
         if (ev.getSource() == singlePageCB) {
@@ -840,7 +832,6 @@ public class PrinterSetup extends JDialog implements ActionListener, ItemListene
         cancelled = true;
         updateBlackboard();
         dispose();
-
     }
 
     @Override

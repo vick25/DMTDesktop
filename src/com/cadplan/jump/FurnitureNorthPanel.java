@@ -1,12 +1,22 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionListener {
 
@@ -82,7 +92,6 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(layerField);
 
-
         style1RB = new JRadioButton(iPlug.get("JumpPrinter.Furniture.North.Style1"));
         gb.setPosition(0, 1);
         gb.setInsets(10, 10, 10, 0);
@@ -131,8 +140,6 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
         buttonGroup.add(style5RB);
         buttonGroup.add(style6RB);
 
-
-
         imagePanel = new NorthPanel(north);
         imagePanel.setPreferredSize(new Dimension(300, 80));
         gb.setPosition(0, 2);
@@ -142,10 +149,7 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
         gb.setWeight(1.0, 1.0);
         gb.addComponent(imagePanel);
 
-
-
         setNorth();
-
     }
 
     private void setNorth() {
@@ -187,7 +191,6 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Message2") + ": " + layerField.getText(),
                     iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
 
         try {
@@ -195,7 +198,6 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
             north.rotation = rot;
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.North.Message1"), iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
         try {
             size = Double.parseDouble(sizeField.getText());
@@ -203,11 +205,9 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
                 north.sizeFactor = size;
             } else {
                 JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Message1"), iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Message1"), iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
 
         if (style1RB.isSelected()) {
@@ -226,6 +226,7 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
         return north;
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == colorButton) {
             Color newColor = JColorChooser.showDialog(this, "Select color", colorButton.getBackground());
@@ -233,11 +234,11 @@ public class FurnitureNorthPanel extends JPanel implements ItemListener, ActionL
                 colorButton.setBackground(newColor);
                 north.color = newColor;
                 imagePanel.repaint();
-
             }
         }
     }
 
+    @Override
     public void itemStateChanged(ItemEvent ev) {
     }
 }

@@ -1,9 +1,9 @@
 package com.cadplan.jump;
 
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JPanel;
 
 /**
  * User: geoff Date: 17/06/2007 Time: 10:53:09 Copyright 2005 Geoffrey G Roy.
@@ -20,6 +20,7 @@ public class ImageVertexPanel extends JPanel {
         ((ImageVertexStyle) symbol).setSize((int) ((double) size / scale));
     }
 
+    @Override
     public void paint(Graphics g) {
         ((ImageVertexStyle) symbol).render((Graphics2D) g);
     }

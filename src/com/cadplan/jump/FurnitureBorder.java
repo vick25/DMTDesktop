@@ -1,6 +1,10 @@
 package com.cadplan.jump;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 public class FurnitureBorder extends Furniture {
 
@@ -76,8 +80,8 @@ public class FurnitureBorder extends Furniture {
     }
 
     /**
-     * sets the border dimensions, depends of if border is fixed and whether a
-     * forced change is required.
+     * sets the border dimensions, depends of if border is fixed and whether a forced change is
+     * required.
      *
      * @param w
      * @param h
@@ -95,13 +99,11 @@ public class FurnitureBorder extends Furniture {
             location.y = y;
             location.width = w;
             location.height = h;
-
         }
     }
 
     public void paint(Graphics g, double scale, double globalScale) {
         Graphics2D g2 = (Graphics2D) g;
-
 
         g.setColor(color);
         Stroke stroke = new BasicStroke((float) thickness);

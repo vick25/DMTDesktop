@@ -2,9 +2,17 @@ package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
 import com.osfac.dmt.workbench.DMTWorkbench;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 public class ImageSelectorDialog extends JDialog implements ActionListener {
 
@@ -102,7 +110,6 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
         gb.setFill(GridBagConstraints.HORIZONTAL);
         gb.addComponent(qualitySlider);
 
-
         svgLabel = new JLabel("SVG scale factor");
         gb.setPosition(0, 5);
         gb.setInsets(10, 10, 0, 0);
@@ -117,7 +124,6 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
         gb.addComponent(svgField);
         svgField.setText("1.0");
         svgField.setEnabled(false);
-
 
         cancelButton = new JButton(iPlug.get("JumpPrinter.Setup.Cancel"));
         gb.setPosition(0, 6);
@@ -160,7 +166,6 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
 
     private void enableFields(int type) {
         switch (type) {
-
             case 0:
                 xField.setEnabled(true);	//JPG
                 yField.setEnabled(true);
@@ -189,14 +194,11 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
                 qualitySlider.setEnabled(false);
                 svgField.setEnabled(false);
                 break;
-
         }
-
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
-
-
         if (ev.getSource() == cancelButton) {
             cancelled = true;
             dispose();
@@ -205,13 +207,9 @@ public class ImageSelectorDialog extends JDialog implements ActionListener {
             getData();
             dispose();
         }
-
         if (ev.getSource() == typeCombo) {
             enableFields(typeCombo.getSelectedIndex());
-
-
         }
-
         if (ev.getSource() == xField) {
             String sval = xField.getText();
             int xval = xSize;

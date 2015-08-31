@@ -52,7 +52,6 @@ public class VertexSymbols {
                 VertexParams.sides = ((PolygonVertexStyle) vertexStyle).getNumSides();
                 VertexParams.type = VertexParams.POLYGON;
                 VertexParams.sizeByScale = ((PolygonVertexStyle) vertexStyle).getSizeByScale();
-
             } else if (vertexStyle instanceof StarVertexStyle) {
                 VertexParams.size = vertexStyle.getSize();
                 VertexParams.attName = ((StarVertexStyle) vertexStyle).getAttributeName();
@@ -64,7 +63,6 @@ public class VertexSymbols {
                 VertexParams.sides = ((StarVertexStyle) vertexStyle).getNumSides();
                 VertexParams.type = VertexParams.STAR;
                 VertexParams.sizeByScale = ((StarVertexStyle) vertexStyle).getSizeByScale();
-
             } else if (vertexStyle instanceof AnyShapeVertexStyle) {
                 VertexParams.size = vertexStyle.getSize();
                 VertexParams.attName = ((AnyShapeVertexStyle) vertexStyle).getAttributeName();
@@ -76,7 +74,6 @@ public class VertexSymbols {
                 VertexParams.sides = ((AnyShapeVertexStyle) vertexStyle).getType();
                 VertexParams.type = VertexParams.ANYSHAPE;
                 VertexParams.sizeByScale = ((AnyShapeVertexStyle) vertexStyle).getSizeByScale();
-
             } else if (vertexStyle instanceof ImageVertexStyle) {
                 VertexParams.size = vertexStyle.getSize();
                 VertexParams.attName = ((ImageVertexStyle) vertexStyle).getAttributeName();
@@ -93,7 +90,6 @@ public class VertexSymbols {
                     }
                 } catch (NullPointerException ex) {
                 }
-
             } else if (vertexStyle instanceof WKTVertexStyle) {
                 VertexParams.size = vertexStyle.getSize();
                 VertexParams.attName = ((WKTVertexStyle) vertexStyle).getAttributeName();
@@ -111,13 +107,10 @@ public class VertexSymbols {
                         if (VertexParams.wktNames[i].equals(imageName)) {
                             VertexParams.selectedWKT = i;
                         }
-
                     }
                     System.out.println("Selecting WKT:" + VertexParams.selectedWKT);
                 } catch (NullPointerException ex) {
                 }
-
-
             }
             //identify current images/WKTs for dialog\
             try {
@@ -133,7 +126,6 @@ public class VertexSymbols {
                     if (VertexParams.wktNames[i].equals(VertexParams.symbolName)) {
                         VertexParams.selectedWKT = i;
                     }
-
                 }
                 //System.out.println("Selecting images: image:"+VertexParams.selectedImage+"  WKT:"+VertexParams.selectedWKT);
             } catch (NullPointerException ex) {
@@ -147,14 +139,12 @@ public class VertexSymbols {
         VertexDialog vertexDialog = new VertexDialog(iPlug);
 
         //System.out.println("Loading: VertexParams.sizeByScale:"+VertexParams.sizeByScale);
-
         if (vertexDialog.cancelled) {
             return;
         }
         for (int i = 0; i < layers.length; i++) {
             changeStyle(layers[i]);
         }
-
     }
 
     private void changeStyle(Layer layer) {
@@ -205,8 +195,6 @@ public class VertexSymbols {
             ((ExternalSymbolsType) newStyle).setupTextParameters();
 
             newStyle.setSize(VertexParams.size);
-
-
         } else if (VertexParams.type == VertexParams.ANYSHAPE) {
             newStyle = new AnyShapeVertexStyle();
             ((AnyShapeVertexStyle) newStyle).setType(VertexParams.sides);
@@ -269,6 +257,5 @@ public class VertexSymbols {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 }

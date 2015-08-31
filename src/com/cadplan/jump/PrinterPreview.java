@@ -4,7 +4,15 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.RenderingManager;
 import com.vividsolutions.jts.geom.Envelope;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,7 +22,7 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
-import javax.swing.*;
+import javax.swing.JPanel;
 
 public class PrinterPreview extends JPanel implements MouseListener, MouseMotionListener, Comparator {
 
@@ -128,8 +136,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         addMouseListener(this);
         addMouseMotionListener(this);
 
-
-
         repaint(100);
         //renderingManager.setPaintingEnabled(false);
 
@@ -181,8 +187,8 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
     }
 
     /**
-     * gets the size of the printer panel to draw map at the required scale on
-     * paper in world coordinates
+     * gets the size of the printer panel to draw map at the required scale on paper in world
+     * coordinates
      *
      * @return the panel size
      */
@@ -199,7 +205,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         if (debug) {
             System.out.println("image: width=" + width + "  height=" + height);
         }
-
 
         if (title != null && title.show) {
             if (title.location.x + title.location.width > width) {
@@ -295,7 +300,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         border.setBorder(0, 0, width, height, false);
 
         if (border != null && border.show) {
-
             if (border.location.x + border.location.width > width) {
                 width = border.location.x + border.location.width;
             }
@@ -303,7 +307,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                 height = border.location.y + border.location.height;
             }
         }
-
 
         if (debug) {
             System.out.println("Panel width=" + getWidth() + "  height=" + getHeight() + " viewScale=" + viewScale);
@@ -331,7 +334,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         paperHeightMeasure = paperHeight * scale / 1000.0;
 
         //System.out.println("width="+width+"  height="+height+"  scale="+scale+","+this.scale);
-
         if (debug) {
             sb.append("\nSetPaper: paperWidth=").append(paperWidth).append(" paperHeight=")
                     .append(paperHeight).append(" drawingScale=").append(drawingScale).append(" paperWidthMeasure=")
@@ -408,7 +410,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
 
     public void setBorders(Vector<FurnitureBorder> borders) {
         this.borders = borders;
-
     }
 
     /**
@@ -520,6 +521,7 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
      *
      * @param gp
      */
+    @Override
     public void paint(Graphics gp) {
         Graphics2D g = (Graphics2D) gp;
         g.setColor(Color.WHITE);
@@ -546,7 +548,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         }
         //System.out.println("Bounds: x="+xsize+" y="+ysize+"  paper x="+(int) (paperWidthMeasure/scale)+" y="+(int) (paperHeightMeasure/scale));
 
-
         g.translate(xoff, yoff);
         int dw = (int) (visRect.width);
         int dh = (int) (visRect.height);
@@ -563,7 +564,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         g.setStroke(new BasicStroke());
         g.setClip(null);
         g.translate(-xoff, -yoff);
-
 
         g.setClip(0, 0, (int) ((getWidth() - xpan) / globalScale), (int) ((getHeight() - ypan) / globalScale));
         // draw map boundary
@@ -634,10 +634,7 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             } else if (item instanceof FurnitureImage) {
                 ((FurnitureImage) item).paint(gp, furnitureScale, globalScale);
             }
-
-
         }
-
 
         // draw the scale
         if (drawScale) {
@@ -660,7 +657,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
          //System.out.println("Painting border: "+i+","+aborder.thickness+","+aborder.color+","+aborder.show);
          if(aborder.show) aborder.paint(gp, furnitureScale, globalScale);
          }
-
 
          if(debug) sb.append("furnitureScale ="+furnitureScale+"  drawingScale="+drawingScale+"  viewScale="+viewScale+"\n");
          if(title.show)
@@ -724,9 +720,9 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         }
         g.scale(1.0 / globalScale, 1.0 / globalScale);
         g.translate(-xpan, -ypan);
-
     }
 
+    @Override
     public int compare(Object item1, Object item2) {
         if (((Furniture) item1).layerNumber < ((Furniture) item2).layerNumber) {
             return -1;
@@ -785,12 +781,14 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
      *
      * @param ev
      */
+    @Override
     public void mouseClicked(MouseEvent ev) {
     }
 
     public void mouseDown(MouseEvent ev) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent ev) {
         int xp = xlast - xd;
         int yp = ylast - yd;
@@ -884,7 +882,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             int height = (int) Math.round(ylast / furnitureScale - aborder.location.y);
 
             //System.out.println("BR: width="+width+" height="+height+"  xlast="+xlast+"  ylast="+ylast+" xd="+xd+" yd="+yd);
-
             if (width < 0) {
                 width = 0;
             }
@@ -904,7 +901,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
 
 //            PrinterSetup.autoCB.setSelected(false);
         }
-
         if (draggingBorderTL && xlast >= 0 && ylast >= 0) {
             FurnitureBorder aborder = border;
             if (selectedBorder >= 0) {
@@ -925,8 +921,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             }
             aborder.setBorder(x, y, width, height, true);
 
-
-
             //border.location = new Rectangle(0,0,(int)(xlast/furnitureScale), (int)(ylast/furnitureScale));
             xlast = -1;
             ylast = -1;
@@ -945,7 +939,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             repaint();
 //            PrinterSetup.autoCB.setSelected(false);
         }
-
         if (draggingLayerLegend && xlast >= 0 && ylast >= 0) {
             draggingLayerLegend = false;
             layerLegend.location = new Rectangle((int) ((xp) / furnitureScale), (int) ((yp) / furnitureScale), layerLegend.location.width, layerLegend.location.height);
@@ -955,7 +948,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             repaint();
 //            PrinterSetup.autoCB.setSelected(false);
         }
-
         if (draggingImage && xlast >= 0 && ylast >= 0) {
             draggingImage = false;
             FurnitureImage imageItem = imageItems.elementAt(selectedImage);
@@ -1023,8 +1015,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             }
             imageItem.setImage(x, y, width, height);
 
-
-
             //border.location = new Rectangle(0,0,(int)(xlast/furnitureScale), (int)(ylast/furnitureScale));
             xlast = -1;
             ylast = -1;
@@ -1034,7 +1024,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
 
 //            PrinterSetup.autoCB.setSelected(false);
         }
-
 
         if (dragging && xlast >= 0 && ylast >= 0) {
             dragging = false;
@@ -1055,6 +1044,7 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
+    @Override
     public void mousePressed(MouseEvent ev) {
         //boolean debug = true;
         boolean shift = false;
@@ -1070,7 +1060,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             yd = y;
             return;
         }
-
 
         if (debug) {
             sb.append(">>> Pressed at: ").append(x).append(",").append(y).append("\n");
@@ -1116,13 +1105,10 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             }
         }
 
-
-
         if (border.insideBR(x, y, furnitureScale, globalScale) && border.fixed) {
             if (debug) {
                 sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
             }
-
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             xd = x - (int) (border.location.x * furnitureScale);
             yd = y - (int) (border.location.y * furnitureScale);
@@ -1134,7 +1120,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             if (debug) {
                 sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
             }
-
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             xd = x - (int) (border.location.x * furnitureScale);
             yd = y - (int) (border.location.y * furnitureScale);
@@ -1146,7 +1131,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             if (debug) {
                 sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
             }
-
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             xd = x - (int) (border.location.x * furnitureScale);
             yd = y - (int) (border.location.y * furnitureScale);
@@ -1160,7 +1144,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                 if (debug) {
                     sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
                 }
-
                 setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 xd = x - (int) (aborder.location.x * furnitureScale);
                 yd = y - (int) (aborder.location.y * furnitureScale);
@@ -1172,7 +1155,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                 if (debug) {
                     sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
                 }
-
                 setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 xd = x - (int) (aborder.location.x * furnitureScale);
                 yd = y - (int) (aborder.location.y * furnitureScale);
@@ -1184,7 +1166,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                 if (debug) {
                     sb.append(">>> Pressed at border: ").append(x).append(",").append(y).append("\n");
                 }
-
                 setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 xd = x - (int) (aborder.location.x * furnitureScale);
                 yd = y - (int) (aborder.location.y * furnitureScale);
@@ -1193,7 +1174,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                 return;
             }
         }
-
 
         if (legend.inside(x, y, furnitureScale)) {
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -1256,25 +1236,27 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             xd = x - mapRect.x;
             yd = y - mapRect.y;
             dragging = true;
-
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent ev) {
     }
 
+    @Override
     public void mouseExited(MouseEvent ev) {
     }
 
+    @Override
     public void mouseMoved(MouseEvent ev) {
     }
 
+    @Override
     public void mouseDragged(MouseEvent ev) {
         Graphics g = getGraphics();
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(xpan, ypan);
         g2.scale(globalScale, globalScale);
-
 
         int x = (int) ((ev.getX() - xpan) / globalScale);
         int y = (int) ((ev.getY() - ypan) / globalScale);
@@ -1371,7 +1353,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
                         (int) (layerLegend.location.height * furnitureScale));
             }
 
-
             if (!initDrag) {
                 g.drawRect(xoff + xlast - xd, yoff + ylast - yd, mapRect.width, mapRect.height);
             }
@@ -1382,8 +1363,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             initDrag = false;
         }
         if (draggingTitle) {
-
-
             g.setColor(Color.WHITE);
             g.setXORMode(Color.BLUE);
             if (!initDrag) {
@@ -1490,7 +1469,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             initDrag = false;
         }
 
-
         if (draggingBorderBR) {
 //            int x = ev.getX();
 //            int y = ev.getY();
@@ -1538,8 +1516,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             initDrag = false;
         }
         if (draggingLegend) {
-
-
             g.setColor(Color.WHITE);
             g.setXORMode(Color.BLUE);
             if (!initDrag) {
@@ -1557,8 +1533,6 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             initDrag = false;
         }
         if (draggingLayerLegend) {
-
-
             g.setColor(Color.WHITE);
             g.setXORMode(Color.BLUE);
             if (!initDrag) {
@@ -1660,9 +1634,7 @@ public class PrinterPreview extends JPanel implements MouseListener, MouseMotion
             ylast = y;
             initDrag = false;
         }
-
         g2.scale(1.0 / globalScale, 1.0 / globalScale);
         g2.translate(-xpan, -ypan);
-
     }
 }

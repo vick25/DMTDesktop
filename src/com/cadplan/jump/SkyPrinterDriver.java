@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.*;
+import javax.swing.RepaintManager;
 
 public class SkyPrinterDriver {
 
@@ -70,13 +70,12 @@ public class SkyPrinterDriver {
     }
 
     /**
-     * An alternate method of rendering that tries to avoid anything that would
-     * cause PeekGraphics to set the raster mode of printing. It is your
-     * repsonsibility to turn off transparency before calling.
+     * An alternate method of rendering that tries to avoid anything that would cause PeekGraphics
+     * to set the raster mode of printing. It is your repsonsibility to turn off transparency before
+     * calling.
      *
      * @param g
-     * @param layersReversed - pass the list of layers to render in reverse
-     * order
+     * @param layersReversed - pass the list of layers to render in reverse order
      * @throws Exception
      */
     private void render(Graphics2D g, Collection layersReversed)
@@ -109,8 +108,6 @@ public class SkyPrinterDriver {
                     } catch (InterruptedException ex) {
                     }
                 }
-
-
                 renderer.clearImageCache();  //free memory
             }
 //			else
@@ -189,7 +186,7 @@ public class SkyPrinterDriver {
         }
         /*
          * Multiplying the size of the imageable area and then drawing
-         * with the inverse scale factor increases the apparent 
+         * with the inverse scale factor increases the apparent
          * resolution while maintaining the scale of everything
          */
         //if (resolutionFactor != 1d) graphics.scale(1d/resolutionFactor,1d/resolutionFactor);
@@ -229,8 +226,7 @@ public class SkyPrinterDriver {
     }
 
     /**
-     * Modifies the styles of the passed layerable ArrayList to optimize them
-     * for vector printing
+     * Modifies the styles of the passed layerable ArrayList to optimize them for vector printing
      *
      * @param printLayerables ArrayList
      * @param removeThemeFills - remove fills from color themed layers
@@ -293,8 +289,7 @@ public class SkyPrinterDriver {
     }
 
     /**
-     * Disables double buffering on passed component by disabling it in the
-     * current RepaintManager
+     * Disables double buffering on passed component by disabling it in the current RepaintManager
      *
      * @param c Component to use
      */
@@ -304,8 +299,7 @@ public class SkyPrinterDriver {
     }
 
     /**
-     * Reenables double buffering on passed component using the current
-     * RepaintManager
+     * Reenables double buffering on passed component using the current RepaintManager
      *
      * @param c Component to use
      */

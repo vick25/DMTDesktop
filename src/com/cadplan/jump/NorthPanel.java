@@ -1,7 +1,8 @@
 package com.cadplan.jump;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 
 public class NorthPanel extends JPanel {
 
@@ -11,6 +12,7 @@ public class NorthPanel extends JPanel {
         this.north = north;
     }
 
+    @Override
     public void paint(Graphics g) {
         north.sf = 1.0;
         int xsize = getSize().width;

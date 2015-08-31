@@ -5,7 +5,15 @@ import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.ColorThemingStyle;
 import com.osfac.dmt.workbench.ui.renderer.style.VertexStyle;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.Collection;
@@ -82,7 +90,6 @@ public class FurnitureLegend extends Furniture {
                     System.out.println("Map:" + themeMap.toString());
                 }
                 themeStyles = themeMap.values();
-
             }
             int alpha = basicStyle.getAlpha();
             Color lineColor = basicStyle.getLineColor();
@@ -99,8 +106,6 @@ public class FurnitureLegend extends Furniture {
             if (!basicStyle.isRenderingFill()) {
                 showFill = false;
             }
-
-
 
             Stroke lineStroke = basicStyle.getLineStroke();
             Paint fillPattern = basicStyle.getFillPattern();
@@ -175,7 +180,6 @@ public class FurnitureLegend extends Furniture {
 
         int extraBottomSpace = 0;
 
-
         for (int i = 0; i < legendItems.size(); i++) {
             LegendElement element = legendItems.elementAt(i);
             VertexStyle vertexStyle = element.vertexStyle;
@@ -211,8 +215,6 @@ public class FurnitureLegend extends Furniture {
                     }
 
                     //System.out.println("height="+height+" size="+vertexStyle.getSize()+" extraBottmomSpace="+extraBottomSpace);
-
-
                     if (element.fillPattern != null) {
                         //TexturePaint paint = (TexturePaint)element.fillPattern;
                         //BufferedImage textureImage = paint.getImage();
@@ -221,7 +223,6 @@ public class FurnitureLegend extends Furniture {
                         //TexturePaint newPaint = new TexturePaint(textureImage,scaledRect);
                         //g2.setPaint(newPaint);
                         g2.setPaint(element.fillPattern);
-
                     }
                     xp0 = (int) ((location.x + 5));
                     yp0 = (int) (location.y + y - height);
@@ -318,7 +319,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         } else if (vertexStyle instanceof com.cadplan.jump.PolygonVertexStyle) {
                             PolygonVertexStyle vertex = new PolygonVertexStyle();
                             vertex.setColors(element.lineColor, element.fillColor);
@@ -333,7 +333,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         } else if (vertexStyle instanceof com.cadplan.jump.StarVertexStyle) {
                             StarVertexStyle vertex = new StarVertexStyle();
                             vertex.setColors(element.lineColor, element.fillColor);
@@ -348,7 +347,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         } else if (vertexStyle instanceof com.cadplan.jump.AnyShapeVertexStyle) {
                             AnyShapeVertexStyle vertex = new AnyShapeVertexStyle();
                             vertex.setColors(element.lineColor, element.fillColor);
@@ -363,7 +361,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         } else if (vertexStyle instanceof com.cadplan.jump.ImageVertexStyle) {
                             ImageVertexStyle vertex = new ImageVertexStyle();
                             vertex.setOrientation(((ImageVertexStyle) vertexStyle).getOrientation());
@@ -375,7 +372,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         } else if (vertexStyle instanceof com.cadplan.jump.WKTVertexStyle) {
                             WKTVertexStyle vertex = new WKTVertexStyle();
                             vertex.setColors(element.lineColor, element.fillColor);
@@ -391,7 +387,6 @@ public class FurnitureLegend extends Furniture {
 
                             vertex.paint((Graphics2D) g, new Point2D.Double(xp, yp));
                             symbols = true;
-
                         }
                     } catch (ClassNotFoundException ex) // VertexSymbols plugin not installed
                     {
@@ -431,7 +426,6 @@ public class FurnitureLegend extends Furniture {
                 if (len > maxlen) {
                     maxlen = len;
                 }
-
             }
         }
         g2.setStroke(new BasicStroke());

@@ -1,13 +1,23 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class FurnitureScalePanel extends JPanel implements ItemListener, ActionListener {
 
@@ -55,7 +65,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         gb.setAnchor(GridBagConstraints.EAST);
         gb.addComponent(fontLabel);
 
-
         fontNameCombo = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         gb.setPosition(1, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -68,7 +77,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         //gb.setPosition(0,3);
         // gb.setInsets(10,10,0,0);
         //gb.addComponent(sizeLabel);
-
         fontSizeCombo = new JComboBox(sizes);
         gb.setPosition(4, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -76,12 +84,10 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         gb.setFill(GridBagConstraints.HORIZONTAL);
         gb.addComponent(fontSizeCombo);
 
-
         //styleLabel = new JLabel(iPlug.get("JumpPrinter.Furniture.Title.Style"));
         //gb.setPosition(0,4);
         //gb.setInsets(10,10,10,0);
         //gb.addComponent(styleLabel);
-
         fontStyleCombo = new JComboBox(styles);
         gb.setPosition(5, 2);
         gb.setInsets(10, 0, 0, 0);
@@ -139,14 +145,11 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         //gb.setInsets(10,10,0,10);
         //gb.setAnchor(GridBagConstraints.WEST);
         //gb.addComponent(intervalLabel);
-
         //intervalField = new JTextField(10);
         //gb.setPosition(1,3);
         //gb.setInsets(10,0,0,0);
         //gb.setAnchor(GridBagConstraints.WEST);
         //gb.addComponent(intervalField);
-
-
         numberLabel = new JLabel(iPlug.get("JumpPrinter.Furniture.Scale.Number"));
         gb.setPosition(0, 4);
         gb.setInsets(10, 10, 0, 10);
@@ -207,17 +210,14 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(layerField);
 
-
         setScale();
         setFont();
     }
 
     private void setFont() {
-
         fontNameCombo.setSelectedItem(scaleItem.font.getName());
         fontSizeCombo.setSelectedItem(String.valueOf(scaleItem.font.getSize()));
         fontStyleCombo.setSelectedItem(styleString(scaleItem.font.getStyle()));
-
     }
 
     private String formatScale(double v) {
@@ -244,7 +244,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         if (autoCB.isSelected()) {
             rangeField.setEnabled(false);
             //intervalField.setEnabled(false);
-
         }
         showRatioCB.setSelected(scaleItem.showRatio);
         showUnitCB.setSelected(scaleItem.showUnits);
@@ -260,7 +259,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         Font font = new Font((String) fontNameCombo.getSelectedItem(), styleNumber((String) fontStyleCombo.getSelectedItem()),
                 Integer.parseInt((String) fontSizeCombo.getSelectedItem()));
         scaleItem.font = font;
-
         try {
             //   range = Double.parseDouble(rangeField.getText());
             //interval = Double.parseDouble(intervalField.getText());
@@ -276,7 +274,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, iPlug.get("JumpPrinter.Furniture.Message2") + ": " + layerField.getText(),
                     iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
-
         }
         //if(OK && range <= 0.0)
         //{
@@ -306,7 +303,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
             OK = false;
         }
 
-
         if (OK) {
             scaleItem.autoScale = autoCB.isSelected();
             scaleItem.show = showCB.isSelected();
@@ -325,7 +321,6 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         }
 
         if (!validScaleRange(scaleItem.rangeSpec) && !scaleItem.autoScale) {
-
             //JOptionPane.showMessageDialog(this,iPlug.get("JumpPrinter.Furniture.Message3"),
             //        iPlug.get("JumpPrinter.Error"), JOptionPane.ERROR_MESSAGE);
             //OK = false;
@@ -334,10 +329,10 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         } else {
             scaleItem.validItem = true;
         }
-
         return scaleItem;
     }
 
+    @Override
     public void itemStateChanged(ItemEvent ev) {
         if (ev.getSource() == autoCB) {
             rangeField.setEnabled(!autoCB.isSelected());
@@ -345,6 +340,7 @@ public class FurnitureScalePanel extends JPanel implements ItemListener, ActionL
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == color1Button) {
             Color newColor = JColorChooser.showDialog(this, "Select color", color1Button.getBackground());

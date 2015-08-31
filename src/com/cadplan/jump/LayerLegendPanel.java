@@ -1,10 +1,25 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 public class LayerLegendPanel extends JPanel implements ActionListener {
 
@@ -48,7 +63,6 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
          gb.setInsets(10,5,0,0);
          gb.addComponent(showCB);
          showCB.setSelected(legend.show);
-
 
          checkAllButton = new JButton(iPlug.get("JumpPrinter.Furniture.Legend.CheckAll"));
          gb.setPosition(1,0);
@@ -105,7 +119,6 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         gb.setInsets(10, 5, 0, 0);
         gb.addComponent(titleLabel);
 
-
         titleField = new JTextField(20);
         gb.setPosition(2, 0);
         gb.setInsets(10, 5, 0, 0);
@@ -133,7 +146,6 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         gb.setInsets(5, 10, 0, 0);
         gb.addComponent(fontLabel);
 
-
         fontNameCombo = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         gb.setPosition(1, 1);
         gb.setInsets(5, 0, 0, 0);
@@ -141,16 +153,12 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         gb.setSpan(3, 1);
         gb.addComponent(fontNameCombo);
 
-
-
         fontSizeCombo = new JComboBox(sizeItems);
         gb.setPosition(4, 1);
         gb.setInsets(5, 0, 0, 0);
         gb.setAnchor(GridBagConstraints.WEST);
         gb.setFill(GridBagConstraints.HORIZONTAL);
         gb.addComponent(fontSizeCombo);
-
-
 
         fontStyleCombo = new JComboBox(styles);
         gb.setPosition(5, 1);
@@ -202,7 +210,6 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         gb.setInsets(10, 10, 10, 0);
         gb.addComponent(layerLabel);
 
-
         layerField = new JTextField(5);
         gb.setPosition(3, 2);
         gb.setInsets(10, 5, 10, 0);
@@ -251,20 +258,12 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         gb.setSpan(8, 1);
         gbl.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(scrollPane);
-
-
-
-
-
-
     }
 
     private void setFont() {
-
         fontNameCombo.setSelectedItem(legend.legendFont.getName());
         fontSizeCombo.setSelectedItem(String.valueOf(legend.legendFont.getSize()));
         fontStyleCombo.setSelectedItem(styleString(legend.legendFont.getStyle()));
-
     }
 
     public LayerLegend getLegend() {
@@ -325,6 +324,7 @@ public class LayerLegendPanel extends JPanel implements ActionListener {
         return n;
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == checkAllButton) {
             for (int i = 0; i < numItems; i++) {

@@ -6,19 +6,20 @@ import com.osfac.dmt.workbench.plugin.MultiEnableCheck;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class VertexSymbolsPlugIn extends AbstractPlugIn {
 
     private I18NPlug iPlug;
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         iPlug = new I18NPlug("VertexSymbols", "language.VertexSymbolsPlugin");
         EnableCheckFactory check = new EnableCheckFactory(context.getWorkbenchContext());
         MultiEnableCheck mcheck = new MultiEnableCheck();
         mcheck.add(check.createAtLeastNLayersMustExistCheck(1));
         mcheck.add(check.createAtLeastNLayersMustBeEditableCheck(1));
-
 
         String menuName = MenuNames.PLUGINS; //iPlug.get("VertexSymbols.MenuName");
         String menuItem = iPlug.get("VertexSymbols.MenuItem");
@@ -34,17 +35,13 @@ public class VertexSymbolsPlugIn extends AbstractPlugIn {
 
         WorkbenchToolBar toolBar = context.getWorkbenchFrame().getToolBar();
 
-
-
-
-
         JButton button = toolBar.addPlugIn(icon, this, mcheck, context.getWorkbenchContext());
         LoadImages imageLoader = new LoadImages(context);
         //System.out.println("Initialize plugin");
         VertexParams.context = context.getWorkbenchContext();
-
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         VertexSymbols vs = new VertexSymbols(context, iPlug);
         return true;

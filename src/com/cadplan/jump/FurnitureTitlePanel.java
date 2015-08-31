@@ -1,8 +1,15 @@
 package com.cadplan.jump;
 
 import com.cadplan.designer.GridBagDesigner;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class FurnitureTitlePanel extends JPanel {
 
@@ -53,7 +60,6 @@ public class FurnitureTitlePanel extends JPanel {
         gb.setInsets(10, 10, 0, 0);
         gb.addComponent(fontLabel);
 
-
         fontNameCombo = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         gb.setPosition(2, 1);
         gb.setInsets(10, 5, 0, 0);
@@ -65,19 +71,16 @@ public class FurnitureTitlePanel extends JPanel {
         //gb.setPosition(0,3);
         // gb.setInsets(10,10,0,0);
         //gb.addComponent(sizeLabel);
-
         fontSizeCombo = new JComboBox(sizes);
         gb.setPosition(3, 1);
         gb.setInsets(10, 0, 0, 0);
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(fontSizeCombo);
 
-
         //styleLabel = new JLabel(iPlug.get("JumpPrinter.Furniture.Title.Style"));
         //gb.setPosition(0,4);
         //gb.setInsets(10,10,10,0);
         //gb.addComponent(styleLabel);
-
         fontStyleCombo = new JComboBox(styles);
         gb.setPosition(4, 1);
         gb.setInsets(10, 0, 0, 0);
@@ -101,9 +104,7 @@ public class FurnitureTitlePanel extends JPanel {
         gb.setAnchor(GridBagConstraints.WEST);
         gb.addComponent(layerField);
 
-
         setFont();
-
     }
 
     private void setFont() {

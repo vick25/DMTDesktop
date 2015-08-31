@@ -6,8 +6,14 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
 
 public class AnyShapeVertexStyle extends ExternalSymbolsType {
 
@@ -31,10 +37,12 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
         ((RectangularShape) shape).setFrame(0.0, 0.0, getSize(), getSize());
     }
 
+    @Override
     public void setSize(int size) {
         this.size = size;
     }
 
+    @Override
     public int getSize() {
         return size;
     }
@@ -95,6 +103,7 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
         return attributeName;
     }
 
+    @Override
     public void initialize(Layer layer) {
         if (layer == null) {
             return;
@@ -137,7 +146,6 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
                 path.lineTo(x0, y0 - s);
                 path.moveTo(x0, y0);
                 path.lineTo(x0 + s / 2, y0 - s / 2);
-
                 break;
 
             case 1:
@@ -175,13 +183,11 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
                 path.lineTo(x0 + s / 2, y0 + s / 2);
                 path.lineTo(x0 - s / 2, y0 + s / 2);
                 path.lineTo(x0 - s / 2, y0 - s / 2);
-
                 break;
 
             case 4:
                 path.moveTo(x0, y0);
                 path.lineTo(x0, y0 - s2 / 2);
-
 
                 path.moveTo(x0 + s2 / 4, y0 - 3 * s2 / 4);
                 for (int i = 0; i <= 16; i++) {
@@ -210,6 +216,7 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
         return path;
     }
 
+    @Override
     public void paint(Feature feature, Graphics2D g2, Viewport viewport) {
         this.viewport = viewport;
         if (!byValue && attributeIndex >= 0) {
@@ -249,6 +256,7 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
         paint(g, p);
     }
 
+    @Override
     protected void render(Graphics2D g) {
         //GeneralPath path = buildShape();
         ExternalSymbolsRenderer r = new ExternalSymbolsRenderer();
@@ -276,6 +284,5 @@ public class AnyShapeVertexStyle extends ExternalSymbolsType {
 //            g.fillRect((int)(x0-1), (int)(y0-1), 2, 2);
 //        }
         drawTextLabel(g, r.x0, r.y0);
-
     }
 }

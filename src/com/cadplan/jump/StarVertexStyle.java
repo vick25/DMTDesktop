@@ -6,9 +6,14 @@ import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.Viewport;
 import com.osfac.dmt.workbench.ui.renderer.style.BasicStyle;
-
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
 
 /**
  * User: geoff Date: 16/06/2007 Time: 16:32:15 Copyright 2005 Geoffrey G Roy.
@@ -99,6 +104,7 @@ public class StarVertexStyle extends ExternalSymbolsType {
         return attributeName;
     }
 
+    @Override
     public void initialize(Layer layer) {
         if (layer == null) {
             return;
@@ -116,7 +122,6 @@ public class StarVertexStyle extends ExternalSymbolsType {
             attributeIndex = -1;
         }
         initializeText(layer);
-
     }
 
     public void setColors(Color lineColor, Color fillColor) {
@@ -163,6 +168,7 @@ public class StarVertexStyle extends ExternalSymbolsType {
         return path;
     }
 
+    @Override
     public void paint(Feature feature, Graphics2D g2, Viewport viewport) {
         this.viewport = viewport;
 
@@ -184,7 +190,6 @@ public class StarVertexStyle extends ExternalSymbolsType {
         } catch (Exception ex) {
             System.out.println("Painting ERROR:" + ex);
             ex.printStackTrace();
-
         }
     }
 
@@ -204,6 +209,7 @@ public class StarVertexStyle extends ExternalSymbolsType {
         paint(g, p);
     }
 
+    @Override
     protected void render(Graphics2D g) {
         //GeneralPath path = buildShape();
         ExternalSymbolsRenderer r = new ExternalSymbolsRenderer();
@@ -233,6 +239,5 @@ public class StarVertexStyle extends ExternalSymbolsType {
         g.setTransform(currentTransform);
 
         drawTextLabel(g, r.x0, r.y0);
-
     }
 }
