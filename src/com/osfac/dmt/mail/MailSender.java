@@ -10,7 +10,13 @@ import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -47,6 +53,7 @@ public class MailSender {
         } else {
             // Connexion avec authentification
             _session = Session.getDefaultInstance(props, new Authenticator() {
+                @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(userName, password);
                 }
@@ -204,7 +211,6 @@ public class MailSender {
 //        msg.setSubject("sujet");
 //        msg.setContent("corps du message", false);
 //        mail1.sendMessage(msg);
-
 
             // connexion e un autre serveur de mail
             // (l'activation du compte pop est necessaire pour gmail)

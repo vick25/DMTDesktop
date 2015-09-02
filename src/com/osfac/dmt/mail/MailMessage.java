@@ -55,8 +55,7 @@ public final class MailMessage {
     public MailMessage() {
     }
 
-    public MailMessage(final Message msg)
-            throws IOException, MessagingException {
+    public MailMessage(final Message msg) throws IOException, MessagingException {
         _from = getInternetAddress(msg.getFrom())[0];
         _to = getInternetAddress(msg.getRecipients(Message.RecipientType.TO));
         _cc = getInternetAddress(msg.getRecipients(Message.RecipientType.CC));
@@ -66,8 +65,7 @@ public final class MailMessage {
         _receivedDate = msg.getReceivedDate();
     }
 
-    private static String decodeText(final String text)
-            throws UnsupportedEncodingException {
+    private static String decodeText(final String text) throws UnsupportedEncodingException {
         return null == text ? text : new String(text.getBytes("iso-8859-1"));
     }
 

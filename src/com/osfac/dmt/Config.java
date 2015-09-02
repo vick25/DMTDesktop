@@ -62,13 +62,13 @@ public class Config {
                     username = "root";
                     password = "";
                 } else {
-                    host = "192.168.1.109";
+                    host = "192.168.1.250";
                     username = "admin";
                     password = "OsfacLab01";
                     host = pref.get(SettingKeyFactory.Connection.HOST, host);
                 }
                 con = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(host).
-                        append("/").append(database).toString(), username, password);
+                        append("/").append(DATABASE).toString(), username, password);
                 optionsDialog = SettingOptionsDialog.showOptionsDialog();
                 df.setMaximumFractionDigits(2);
                 df.setMinimumFractionDigits(2);
@@ -99,11 +99,11 @@ public class Config {
     public static void dbConnect() {
         setDefaultLocale(pref.getInt(SettingKeyFactory.Language.INDEX, 0));
         try {
-            host = "192.168.1.109";
+            host = "192.168.1.250";
             username = "admin";
             password = "OsfacLab01";
             host = pref.get(SettingKeyFactory.Connection.HOST, host);
-            con = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(host).append("/").append(database).toString(), username, password);
+            con = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(host).append("/").append(DATABASE).toString(), username, password);
             if (!withoutError) {
                 optionsDialog = SettingOptionsDialog.showOptionsDialog();
                 df.setMaximumFractionDigits(2);
@@ -156,7 +156,7 @@ public class Config {
 
     public static double getImageSize(String idImage) {
         try {
-            PreparedStatement ps = con.prepareStatement("select size from dmt_image where id_image = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT size FROM dmt_image WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet ress = ps.executeQuery();
             while (ress.next()) {
@@ -209,11 +209,17 @@ public class Config {
                     append(" ").append("http://").append(IPAddress).toString());
             OtherFeatures.txtIP.setText(IPAddress);
         }
-        if (!ChangeIP.useAtBegining) {
+        if (!ChangeIP.useAtBeginning) {
             PanAuthen.BServerIP.setText(new StringBuilder(I18N.get("com.osfac.dmt.Config.Server-Text")).
                     append(" ").append(IPAddress).toString());
         }
         host = IPAddress;
+
+        //Change the Workbench Frame Title upon changing the Server IP address
+        DMTWorkbench.frame.setTitle(new StringBuilder(I18N.get("ui.WorkbenchFrame.title")).append(" ")
+                .append(I18N.get("JUMPWorkbench.version.number")).append(" ")
+                .append(WorkbenchFrame.TypeOfVersion).append("   [").append(I18N.get("Text.Server-IP-Address-text"))
+                .append(" ").append(Config.host).append("]").toString());
     }
 
     public static String encrypt(String s) {
@@ -493,8 +499,8 @@ public class Config {
     public static SettingOptionsDialog optionsDialog;
     public static SimpleDateFormat dateFormatDB = new SimpleDateFormat("yyyy-MM-dd", new DateFormatSymbols());
     public static SimpleDateFormat dateFormat;
-    private static String database = "dbosfacdmt";
-    public static String host = "127.0.0.1";
+    private static final String DATABASE = "dbosfacdmt";
+    public static volatile String host = "127.0.0.1";
     private static String username = "root";
     private static String password = "";
     //

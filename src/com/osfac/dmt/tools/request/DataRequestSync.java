@@ -134,24 +134,24 @@ public class DataRequestSync extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(PBar, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(labTask, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap()));
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(PBar, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(labTask, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addComponent(PBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labTask, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)));
+                        .addContainerGap(21, Short.MAX_VALUE)
+                        .addComponent(PBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labTask, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -186,6 +186,7 @@ public class DataRequestSync extends javax.swing.JDialog {
 
     private void syncDataBases() {
         thread = new Thread() {
+            @Override
             public void run() {
                 PBar.setIndeterminate(true);
                 labTask.setText(I18N.get("DataRequestSync.text-connecting-to-remote-database"));
@@ -212,7 +213,7 @@ public class DataRequestSync extends javax.swing.JDialog {
                                 insertDelivery(idRequesterNew, findDeliveryData(res.getInt(1), con), con, res.getInt(1));
                                 PBar.setValue(++i);
                                 WorkbenchFrame.DataRequestFound.setToolTipText(I18N.get("DataRequestSync.Synchronizing-database")
-                                        + "" + PBar.getString());
+                                        + PBar.getString());
                                 confirmSync(res.getInt(1), con);
                             }
                         }
@@ -223,8 +224,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                             DataRequestManager.BRefresh.doClick();
                         }
                     } catch (SQLException e) {
-                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                                + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                e.getMessage(), null, null, e, Level.SEVERE, null));
                     }
                 }
             }
@@ -248,8 +249,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 }
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return data;
     }
@@ -257,8 +258,8 @@ public class DataRequestSync extends javax.swing.JDialog {
     private int insertDelivery(int idRequester, ArrayList<String> data, Connection con, int idDeliveryOld) {
         int idDelivery = -1;
         try {
-            PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)"
-                    + "", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             ps.setInt(2, idRequester);
             for (int i = 0; i < data.size(); i++) {
@@ -287,8 +288,8 @@ public class DataRequestSync extends javax.swing.JDialog {
             }
             labTask.setText(NewRequester + " " + I18N.get("DataRequestSync.added-successfully"));
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return idDelivery;
     }
@@ -303,8 +304,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 list.add(res.getInt(1));
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return list;
     }
@@ -319,8 +320,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 list.add(res.getInt(1));
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return list;
     }
@@ -342,8 +343,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 }
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return RequesterData;
     }
@@ -351,8 +352,8 @@ public class DataRequestSync extends javax.swing.JDialog {
     private int insertRequester(ArrayList<String> data) {
         try {
             PreparedStatement ps = Config.con.prepareStatement("insert into dmt_requester values "
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                    + "", Statement.RETURN_GENERATED_KEYS);
+                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             for (int i = 0; i < data.size(); i++) {
                 ps.setString((i + 2), data.get(i));
@@ -367,8 +368,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 }
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return -1;
     }
@@ -382,8 +383,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 return res.getInt(1);
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return 0;
     }
@@ -399,8 +400,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                 WorkbenchFrame.timer.start();
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

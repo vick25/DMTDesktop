@@ -20,9 +20,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Icon;
 
 /**
- * Default implementation of PlugIn, with useful functions for auto-generating a
- * name, converting a PlugIn into an ActionListener (for use with JButtons, for
- * example), and supporting undo.
+ * Default implementation of PlugIn, with useful functions for auto-generating a name, converting a
+ * PlugIn into an ActionListener (for use with JButtons, for example), and supporting undo.
  */
 public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
 
@@ -72,11 +71,12 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
     }
 
     /**
-     * Method to be overridden by implementations to initialize the plug-in.
-     * Plug-ins must invoke super.initialize().
+     * Method to be overridden by implementations to initialize the plug-in. Plug-ins must invoke
+     * super.initialize().
      *
      * @param context The plug-in context.
      */
+    @Override
     public void initialize(final PlugInContext context) throws Exception {
         this.workbenchContext = context.getWorkbenchContext();
     }
@@ -86,16 +86,16 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
      *
      * @param context The plug-in context.
      */
+    @Override
     public boolean execute(final PlugInContext context) throws Exception {
         return true;
     }
 
     /**
-     * Indicates that this plug-in either (1) is undoable but hasn't modified
-     * the system yet or (2) does not modify the system. In either case, the
-     * undo history will be preserved. If this method is not called, then this
-     * plug-in will be assumed to be non-undoable, and the undo history will be
-     * truncated.
+     * Indicates that this plug-in either (1) is undoable but hasn't modified the system yet or (2)
+     * does not modify the system. In either case, the undo history will be preserved. If this
+     * method is not called, then this plug-in will be assumed to be non-undoable, and the undo
+     * history will be truncated.
      */
     protected void reportNothingToUndoYet(PlugInContext context) {
         LayerManager layerManager = context.getLayerManager();
@@ -114,6 +114,7 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
      *
      * @param e The action event.
      */
+    @Override
     public void actionPerformed(final ActionEvent e) {
         try {
             DMTWorkbench workbench = workbenchContext.getWorkbench();
@@ -169,11 +170,12 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
     }
 
     /**
-     * Get the name of the plug-in. If a name was not specified create a name
-     * using {@link #createName(Class)}.
+     * Get the name of the plug-in. If a name was not specified create a name using
+     * {@link #createName(Class)}.
      *
      * @return The plug-in name.
      */
+    @Override
     public String getName() {
         if (name == null) {
             name = createName(getClass());
@@ -191,8 +193,8 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
     }
 
     /**
-     * Create a name using the I18N String using the class name or by adding
-     * spaces between the words in the class name without the PlugIn suffix.
+     * Create a name using the I18N String using the class name or by adding spaces between the
+     * words in the class name without the PlugIn suffix.
      *
      * @param plugInClass The plug-in's class.
      * @return The plug-in's name.
@@ -217,6 +219,7 @@ public abstract class AbstractUiPlugIn implements PlugIn, ActionListener {
      *
      * @return The string.
      */
+    @Override
     public String toString() {
         return getName();
     }

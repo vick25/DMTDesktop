@@ -59,12 +59,12 @@ public class panRequest extends javax.swing.JPanel {
         try {
             cleanTable();
             PreparedStatement ps = null;
-            String sql = "select * from dmt_delivery where id_user = ?";
+            String sql = "SELECT * FROM dmt_delivery WHERE id_user = ?";
             if (Config.isLiteVersion()) {
                 ps = Config.con.prepareStatement(sql);
                 ps.setInt(1, WorkbenchFrame.idUser);
             } else {
-                sql += " and confirm_email_sent = ?";
+                sql += " AND confirm_email_sent = ?";
                 ps = Config.con.prepareStatement(sql);
                 ps.setInt(1, WorkbenchFrame.idUser);
                 ps.setString(2, "No");
@@ -124,8 +124,8 @@ public class panRequest extends javax.swing.JPanel {
 
     private boolean isRequestPerformed(int row) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select confirm_email_sent from dmt_delivery "
-                    + "where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT confirm_email_sent FROM dmt_delivery "
+                    + "WHERE id_delivery = ?");
             String value = table.getValueAt(row, 0).toString();
             ps.setString(1, value);
             ResultSet res = ps.executeQuery();

@@ -86,6 +86,7 @@ public class WorkbenchToolBar extends EnableableToolBar {
      * Add's a CursorTool with an own JToggleButton. This is useful, if you want to add CursorTool
      * with an own JToggleButton implementation, such a DropDownToggleButton.
      *
+     * @return
      */
     public ToolConfig addCursorTool(final CursorTool cursorTool, JideToggleButton button) {
         button.setToolTipText(cursorTool.getName());
@@ -124,13 +125,13 @@ public class WorkbenchToolBar extends EnableableToolBar {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                //It's null when the Workbench starts up. [Bob Boseko]
+                        //It's null when the Workbench starts up. [Bob Boseko]
                         //Or the active frame may not have a LayerViewPanel. [Bob Boseko]
                         if (layerViewPanelProxy.getLayerViewPanel() != null) {
                             layerViewPanelProxy.getLayerViewPanel().setCurrentCursorTool(quasimodeTool);
                         }
 
-                //<<TODO:DESIGN>> We really shouldn't create a new LeftClickFilter on each
+                        //<<TODO:DESIGN>> We really shouldn't create a new LeftClickFilter on each
                         //click of the tool button. Not a big deal though. [Bob Boseko]
                     }
                 }, cursorToolEnableCheck);

@@ -303,18 +303,22 @@ public final class DMTWorkbench {
      * @param splashComponent a component to open until the workbench frame is displayed
      * @param taskMonitor notified of progress of plug-in loading
      */
-    public static void main(String[] args, String title, Setup setup, JComponent splashComponent, TaskMonitor taskMonitor) {
+    public static void main(String[] args, String title, Setup setup, JComponent splashComponent,
+            TaskMonitor taskMonitor) {
         try {
+            //The frame that holds the SplashPanel with OSFAC image
             SplashWindow splashWindow = new SplashWindow(splashComponent);
             splashWindow.setVisible(true);
             taskMonitor.report(I18N.get("JUMPWorkbench.status.create"));
 
             DMTWorkbench workbench = new DMTWorkbench(title, args, taskMonitor);
+
             taskMonitor.report(I18N.get("JUMPWorkbench.status.configure-core"));
             setup.setup(workbench.context);
             //must wait until after setup initializes the persistent blackboard to recall settings
 
             WorkbenchFrame _frame = workbench.getFrame();
+
             taskMonitor.report(I18N.get("JUMPWorkbench.status.restore-state"));
 //            _frame.restore();
             taskMonitor.report(I18N.get("JUMPWorkbench.status.load-extensions"));
@@ -446,6 +450,8 @@ public final class DMTWorkbench {
     /**
      * Expensive data structures can be cached on the blackboard so that several plug-ins can share
      * them.
+     *
+     * @return
      */
     public Blackboard getBlackboard() {
         return blackboard;

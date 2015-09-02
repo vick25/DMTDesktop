@@ -239,7 +239,7 @@ public class LoadDefaultLayers extends javax.swing.JDialog {
     }
 
     private File[] getPathOfFilesChecked() {
-        File[] tab = new File[getNumberRowChecked()];
+        File[] tab = new File[getCheckedRowsTotal()];
         int j = 0;
         for (int i = 0; i < table.getRowCount(); i++) {
             if (Boolean.valueOf(table.getValueAt(i, 0).toString()) == true) {
@@ -339,7 +339,7 @@ public class LoadDefaultLayers extends javax.swing.JDialog {
         }
     }
 
-    private int getNumberRowChecked() {
+    private int getCheckedRowsTotal() {
         int nRow = 0;
         for (int i = 0; i < table.getRowCount(); i++) {
             if (Boolean.valueOf(table.getValueAt(i, 0).toString()) == true) {
@@ -353,7 +353,7 @@ public class LoadDefaultLayers extends javax.swing.JDialog {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -369,6 +369,7 @@ public class LoadDefaultLayers extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 LoadDefaultLayers dialog = new LoadDefaultLayers(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {

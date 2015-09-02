@@ -996,27 +996,28 @@ public class DMTConfiguration implements Setup {
 //                frame.getToolBar().addPlugIn(outputWindowPlugIn.getIcon(),
 //                outputWindowPlugIn, new MultiEnableCheck(), workbenchContext));
         frame.getToolBar().addSeparator();
-        findImagesData = new JideSplitButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.STACK));
-        findImagesData.setToolTipText(I18N.get("DMTConfiguration.Text.Tooltip.Search-Satellite-Images"));
-        findImagesData.setText(I18N.get("DMTConfiguration.Text.Search-Satellite-Images"));
-        findImagesData.setFocusable(false);
-        findImagesData.addActionListener(new ActionListener() {
+        splBtnFindImagesData = new JideSplitButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.STACK));
+        splBtnFindImagesData.setToolTipText(I18N.get("DMTConfiguration.Text.Tooltip.Search-Satellite-Images"));
+        splBtnFindImagesData.setText(I18N.get("DMTConfiguration.Text.Search-Satellite-Images"));
+        splBtnFindImagesData.setFocusable(false);
+        splBtnFindImagesData.setButtonStyle(JideSplitButton.TOOLBOX_STYLE);
+        splBtnFindImagesData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 WorkbenchFrame.actionFindData();
             }
         });
-        loadDefaultShapes = new JideButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.LAYER2));
-        loadDefaultShapes.setToolTipText(I18N.get("Text.Load-Default-Layers"));
-        loadDefaultShapes.addActionListener(new ActionListener() {
+        btnLoadDefaultShapes = new JideButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.LAYER2));
+        btnLoadDefaultShapes.setToolTipText(I18N.get("Text.Load-Default-Layers"));
+        btnLoadDefaultShapes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 WorkbenchFrame.actionLoadLayers();
             }
         });
-        frame.getToolBar().add(loadDefaultShapes);
+        frame.getToolBar().add(btnLoadDefaultShapes);
         frame.getToolBar().addSeparator();
-        DefaultOverlayable findImage = Config.createOverLayableIcon(findImagesData, OverlayableIconsFactory.QUESTION, DefaultOverlayable.SOUTH_WEST,
+        DefaultOverlayable findImage = Config.createOverLayableIcon(splBtnFindImagesData, OverlayableIconsFactory.QUESTION, DefaultOverlayable.SOUTH_WEST,
                 I18N.get("Text.Click-for-Help"), I18N.get("Text.selection-must-be-in-geographic"));
         findImage.setMaximumSize(new Dimension(140, 20));
         frame.getToolBar().add(findImage);
@@ -1075,7 +1076,7 @@ public class DMTConfiguration implements Setup {
         }
     }
 
-    public static JideSplitButton findImagesData;
-    public static JideButton loadDefaultShapes;
+    public static JideSplitButton splBtnFindImagesData;
+    public static JideButton btnLoadDefaultShapes;
     public static AdvancedMeasureOptionsPanel advancedMeasureOP;
 }

@@ -28,12 +28,17 @@ import java.awt.GradientPaint;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -45,6 +50,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -87,6 +93,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         });
         timer.start();
         BUpdateSize.setVisible(Config.isFullVersion() && Config.isAdministrator());
+        //Method to release cursor FROM a textpane
+        jumpTextPaneCursor();
         this.setLocationRelativeTo(parent);
     }
 
@@ -1390,8 +1398,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
     private void BSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSearchActionPerformed
         if (doCount(txtFirstName.getText(), txtFamilyName.getText()) == 0) {
-            JOptionPane.showMessageDialog(this, ""
-                    + I18N.get("DataRequestForm.No-matching-requester"), I18N.get("DataRequestForm.Warning-message"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, I18N.get("DataRequestForm.No-matching-requester"),
+                    I18N.get("DataRequestForm.Warning-message"), JOptionPane.WARNING_MESSAGE);
         } else {
             findNamesDataBase(txtFirstName.getText(), txtFamilyName.getText());
         }
@@ -1401,10 +1409,39 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         txtSize.setText(getRequestSize());
     }//GEN-LAST:event_BUpdateSizeActionPerformed
 
+    private void jumpTextPaneCursor() {
+        final HashMap<Integer, JTextPane> textPanesMap = new HashMap<>();
+        textPanesMap.put(1, txtAdress);
+        textPanesMap.put(2, txtComment);
+        textPanesMap.put(3, txtInterstedArea);
+        textPanesMap.put(4, txtNote);
+        Set<Integer> keys = textPanesMap.keySet(); // The set of keys in the map.
+        Iterator<Integer> keyIter = keys.iterator();
+
+        while (keyIter.hasNext()) {
+            final int key = keyIter.next(); // Get the next key.
+            // Get the value for that key.
+            textPanesMap.get(key).addKeyListener(new KeyAdapter() {
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                        if (e.getModifiers() > 0) {
+                            textPanesMap.get(key).transferFocusBackward();
+                        } else {
+                            textPanesMap.get(key).transferFocus();
+                        }
+                        e.consume();
+                    }
+                }
+            });
+        }
+    }
+
     private void getRequestInfo(int idDelivery) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_requester inner join dmt_delivery on "
-                    + "dmt_delivery.id_requester = dmt_requester.id_requester where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_requester INNER JOIN dmt_delivery ON\n"
+                    + "dmt_requester.id_requester = dmt_delivery.id_requester WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
 
@@ -1433,8 +1470,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             }
             getUsageInfo(idDelivery);
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
             this.dispose();
         }
     }
@@ -1449,7 +1486,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
     private void getUsageInfo(int idDelivery) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_choose where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_choose WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1458,23 +1495,23 @@ public class DataRequestFormedit extends javax.swing.JDialog {
                 ChBOtherUsage.setSelected(res.getInt("id_usage") == 3);
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
     private ArrayList<Integer> getIDImages(int idDelivery) {
         ArrayList<Integer> list = new ArrayList<>();
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select distinct id_image from dmt_deliver where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT id_image FROM dmt_deliver WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
                 list.add(res.getInt(1));
             }
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         return list;
     }
@@ -1489,12 +1526,13 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         JideButton closeButton = createButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/close.png")));
         closeButton.addActionListener(closeAction);
         rightPanel.add(closeButton);
-        String text = "<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>";
+        StringBuilder text = new StringBuilder("<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>");
         if (!firstName.isEmpty() && !familyName.isEmpty()) {
-            text += "\"<font color=blue>" + firstName + " " + familyName + "</font>\" " + I18N.get("DataRequestForm.found-in-database") + "<br>";
+            text.append("\"<font color=blue>").append(firstName).append(" ").append(familyName).append("</font>\" ")
+                    .append(I18N.get("DataRequestForm.found-in-database")).append("<br>");
         }
-        text += "</HTML>";
-        final JLabel LabelMessage = new JLabel(text);
+        text.append("</HTML>");
+        final JLabel LabelMessage = new JLabel(text.toString());
         PaintPanel panel = new PaintPanel(new BorderLayout(6, 6));
         panel.setBorder(BorderFactory.createEmptyBorder(6, 7, 7, 7));
         panel.add(LabelMessage, BorderLayout.CENTER);
@@ -1534,9 +1572,9 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             PreparedStatement ps;
             int i = 0;
             if (!firstName.isEmpty() && !familyName.isEmpty()) {
-                ps = Config.con.prepareStatement("select distinct * from dmt_requester where firstname = ? and "
-                        + "familyname = ? and id_requester in (select max(id_requester) "
-                        + "from dmt_requester where (firstname = ? or familyname = ?))");
+                ps = Config.con.prepareStatement("SELECT DISTINCT * FROM dmt_requester WHERE firstname = ? AND "
+                        + "familyname = ? AND id_requester IN (SELECT MAX(id_requester) "
+                        + "FROM dmt_requester WHERE (firstname = ? OR familyname = ?))");
                 ps.setString(1, firstName);
                 ps.setString(2, familyName);
                 ps.setString(3, firstName);
@@ -1553,8 +1591,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
                 }
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return value;
     }
@@ -1579,9 +1617,9 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             PreparedStatement ps;
             int sum = 0;
             if (!firstname.isEmpty() && !familyName.isEmpty()) {
-                ps = Config.con.prepareStatement("select count(id_requester) from dmt_requester "
-                        + "where firstname = ? and familyname = ? and id_requester in (select max(id_requester) "
-                        + "from dmt_requester where (firstname = ? or familyname = ?))");
+                ps = Config.con.prepareStatement("SELECT count(id_requester) FROM dmt_requester "
+                        + "WHERE firstname = ? AND familyname = ? AND id_requester IN (SELECT MAX(id_requester) "
+                        + "FROM dmt_requester WHERE (firstname = ? OR familyname = ?))");
                 ps.setString(1, firstname);
                 ps.setString(2, familyName);
                 ps.setString(3, firstname);
@@ -1593,8 +1631,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             }
             return sum;
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return 0;
     }
@@ -1608,6 +1646,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         hideAnimationT.setDirection(Config.pref.getInt(SettingKeyFactory.General.exitDirection, CustomAnimation.BOTTOM));
         alertRequester.setHideAnimation(hideAnimationT);
         alertRequester.getContentPane().add(createSampleAlertTable(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 alertRequester.hidePopup();
             }
@@ -1641,10 +1680,10 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
     private void updateRequester() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("update dmt_requester set firstname=?,"
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_requester SET firstname=?,"
                     + "familyname=?,othername=?,sex=?,adress=?,phone=?,email=?,profession=?,"
                     + "institution=?,nationality=?,interest_area=?,usefulness=?,comment=? "
-                    + "where id_requester = ?");
+                    + "WHERE id_requester = ?");
             ps.setString(1, Config.capitalFirstLetter(txtFirstName.getText()));
             ps.setString(2, Config.capitalFirstLetter(txtFamilyName.getText()));
             ps.setString(3, Config.capitalFirstLetter(txtOtherName.getText()));
@@ -1667,22 +1706,22 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             if (result == 1) {
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
     private void updateDelivery() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("update dmt_delivery set request_date = ?, "
-                    + "image_size = ? where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery SET request_date = ?, "
+                    + "image_size = ? WHERE id_delivery = ?");
             ps.setString(1, Config.dateFormatDB.format(CBDate.getDate()));
             ps.setString(2, txtSize.getText());
             ps.setInt(3, idDelivery);
             int result = ps.executeUpdate();
             if (result == 1) {
                 ArrayList<Integer> list = getIDUsage();
-                ps = Config.con.prepareStatement("delete from dmt_choose where id_delivery = ?");
+                ps = Config.con.prepareStatement("delete FROM dmt_choose WHERE id_delivery = ?");
                 ps.setInt(1, idDelivery);
                 int result1 = ps.executeUpdate();
                 if (result1 == 1) {
@@ -1731,8 +1770,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
     private String getCategory(int idImage) {
         String category = "";
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select category_name from dmt_category join dmt_image on "
-                    + "dmt_image.id_category = dmt_category.id_category where id_image = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT category_name FROM dmt_category JOIN dmt_image ON\n"
+                    + "dmt_category.id_category = dmt_image.id_category WHERE id_image = ?");
             ps.setInt(1, idImage);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1770,7 +1809,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         table.getColumnModel().getColumn(tableModel.getColumnCount() - 1).setMaxWidth(70);
         try {
             Statement stat = Config.con.createStatement();
-            ResultSet res = stat.executeQuery("select * from dmt_image where id_image in (" + manyCriteria(vID) + ")");
+            ResultSet res = stat.executeQuery("SELECT * FROM dmt_image WHERE id_image IN (" + manyCriteria(vID) + ")");
             int i = 0;
             while (res.next()) {
                 if (table.getRowCount() >= i) {
@@ -1798,31 +1837,34 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
     public class MyTableModel extends AbstractTableModel {
 
-        private String[] columnNames = {I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+        private final ArrayList[] DATA;
 
         public MyTableModel() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
+        @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
+        @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
+        @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -1837,33 +1879,33 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 if (i == 0) {
-                    Data[i].add(false);
+                    DATA[i].add(false);
                 } else {
-                    Data[i].add("");
+                    DATA[i].add("");
                 }
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 
@@ -1873,7 +1915,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         ResultSet res;
         ArrayList<String> list = new ArrayList();
         try {
-            ps = Config.con.prepareStatement("select distinct firstname from dmt_requester order by firstname");
+            ps = Config.con.prepareStatement("SELECT DISTINCT firstname FROM dmt_requester ORDER BY firstname");
             res = ps.executeQuery();
             while (res.next()) {
                 list.add(res.getString(1));
@@ -1881,7 +1923,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             intellihints = new ListDataIntelliHints(txtFirstName, list);
             intellihints.setCaseSensitive(false);
             ArrayList<String> list2 = new ArrayList();
-            ps = Config.con.prepareStatement("select distinct familyname from dmt_requester order by familyname");
+            ps = Config.con.prepareStatement("SELECT DISTINCT familyname FROM dmt_requester ORDER BY familyname");
             res = ps.executeQuery();
             while (res.next()) {
                 list2.add(res.getString(1));
@@ -1889,7 +1931,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             intellihints = new ListDataIntelliHints(txtFamilyName, list2);
             intellihints.setCaseSensitive(false);
             ArrayList<String> list3 = new ArrayList();
-            ps = Config.con.prepareStatement("select distinct othername from dmt_requester where othername <> ? order by othername");
+            ps = Config.con.prepareStatement("SELECT DISTINCT othername FROM dmt_requester WHERE othername <> ? ORDER BY othername");
             ps.setString(1, "");
             res = ps.executeQuery();
             while (res.next()) {
@@ -1898,7 +1940,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             intellihints = new ListDataIntelliHints(txtOtherName, list3);
             intellihints.setCaseSensitive(false);
             ArrayList<String> list4 = new ArrayList();
-            ps = Config.con.prepareStatement("select distinct email from dmt_requester where email <> ? order by email");
+            ps = Config.con.prepareStatement("SELECT DISTINCT email FROM dmt_requester WHERE email <> ? ORDER BY email");
             ps.setString(1, "");
             res = ps.executeQuery();
             while (res.next()) {
@@ -1907,7 +1949,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             intellihints = new ListDataIntelliHints(txtEMail, list4);
             intellihints.setCaseSensitive(false);
             ArrayList<String> list5 = new ArrayList();
-            ps = Config.con.prepareStatement("select distinct phone from dmt_requester where phone <> ? order by phone");
+            ps = Config.con.prepareStatement("SELECT DISTINCT phone FROM dmt_requester WHERE phone <> ? ORDER BY phone");
             ps.setString(1, "");
             res = ps.executeQuery();
             while (res.next()) {
@@ -1915,14 +1957,14 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             }
             intellihints = new ListDataIntelliHints(txtPhone, list5);
             intellihints.setCaseSensitive(false);
-            ps = Config.con.prepareStatement("select distinct profession from dmt_requester where profession <> ? order by profession");
+            ps = Config.con.prepareStatement("SELECT DISTINCT profession FROM dmt_requester WHERE profession <> ? ORDER BY profession");
             ps.setString(1, "");
             res = ps.executeQuery();
             while (res.next()) {
                 CBProfession.addItem(res.getString(1));
             }
             CBProfession.setSelectedIndex(-1);
-            ps = Config.con.prepareStatement("select distinct institution from dmt_requester where institution <> ? order by institution");
+            ps = Config.con.prepareStatement("SELECT DISTINCT institution FROM dmt_requester WHERE institution <> ? ORDER BY institution");
             ps.setString(1, "");
             res = ps.executeQuery();
             while (res.next()) {
@@ -1935,11 +1977,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
     }
 
     private boolean checkOutUsage() {
-        if (ChBAcademique.isSelected() || ChBProfessionel.isSelected() || ChBOtherUsage.isSelected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return ChBAcademique.isSelected() || ChBProfessionel.isSelected() || ChBOtherUsage.isSelected();
     }
 
     private JButton createButton(Icon icon, Icon rolloverIcon) {
@@ -1973,6 +2011,7 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             if (!forRenderer) {
                 JButton editButton = (JButton) (((JPanel) editorRendererComponent).getComponent(0));
                 editButton.addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         setDataFromAlertToFields(row);
                     }
@@ -1995,8 +2034,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
 
     private void setDataFromAlertToFields(int row) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_requester "
-                    + "where id_requester = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_requester "
+                    + "WHERE id_requester = ?");
             ps.setInt(1, Integer.parseInt(alertTable.getValueAt(row, 0).toString()));
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -2017,8 +2056,8 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             }
             alertRequester.hidePopup();
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

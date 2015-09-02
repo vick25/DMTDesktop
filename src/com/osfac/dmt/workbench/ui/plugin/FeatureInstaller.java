@@ -366,18 +366,22 @@ public class FeatureInstaller {
 
     private Menu createMenu(final JideMenu menu) {
         return new Menu() {
+            @Override
             public void insert(JMenuItem menuItem, int i) {
                 menu.insert(menuItem, i);
             }
 
+            @Override
             public String getText() {
                 return menu.getText();
             }
 
+            @Override
             public int getItemCount() {
                 return menu.getItemCount();
             }
 
+            @Override
             public void add(JMenuItem menuItem) {
                 menu.add(menuItem);
             }
@@ -432,8 +436,7 @@ public class FeatureInstaller {
         return menuItem;
     }
 
-    private static void installDefaultMnemonic(JMenuItem menuItem,
-            MenuElement parent) {
+    private static void installDefaultMnemonic(JMenuItem menuItem, MenuElement parent) {
         outer:
         for (int i = 0; i < menuItem.getText().length(); i++) {
             // Swing stores mnemonics in upper case [Bob Boseko]
@@ -544,13 +547,16 @@ public class FeatureInstaller {
         }
         if (enableCheck != null) {
             popupMenu.addPopupMenuListener(new PopupMenuListener() {
+                @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     toMenuItemShownListener(enableCheck).menuItemShown(menuItem);
                 }
 
+                @Override
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 }
 
+                @Override
                 public void popupMenuCanceled(PopupMenuEvent e) {
                 }
             });
@@ -589,18 +595,22 @@ public class FeatureInstaller {
 
     private Menu createMenu(final JPopupMenu popupMenu) {
         return new Menu() {
+            @Override
             public void insert(JMenuItem menuItem, int i) {
                 popupMenu.insert(menuItem, i);
             }
 
+            @Override
             public String getText() {
                 return "";
             }
 
+            @Override
             public int getItemCount() {
                 return popupMenu.getComponentCount();
             }
 
+            @Override
             public void add(JMenuItem menuItem) {
                 popupMenu.add(menuItem);
             }
@@ -681,8 +691,10 @@ public class FeatureInstaller {
         final ActionListener listener = abstractPlugInActionListener(menuItem.getActionListeners());
         menuItem.removeActionListener(listener);
         menuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         listener.actionPerformed(e);
                     }
@@ -811,13 +823,16 @@ public class FeatureInstaller {
                 this.menuListener = null;
             } else {
                 this.menuListener = new PopupMenuListener() {
+                    @Override
                     public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                         toMenuItemShownListener(enableCheck).menuItemShown(menuItem);
                     }
 
+                    @Override
                     public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                     }
 
+                    @Override
                     public void popupMenuCanceled(PopupMenuEvent e) {
                     }
                 };
@@ -857,13 +872,16 @@ public class FeatureInstaller {
             this.menuItem = menuItem;
         }
 
+        @Override
         public void menuSelected(MenuEvent e) {
             menuItemShownListener.menuItemShown(menuItem);
         }
 
+        @Override
         public void menuCanceled(MenuEvent e) {
         }
 
+        @Override
         public void menuDeselected(MenuEvent e) {
         }
     }

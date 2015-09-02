@@ -2,9 +2,18 @@ package com.osfac.dmt.workbench.ui.plugin;
 
 import com.osfac.dmt.util.CollectionUtil;
 import com.osfac.dmt.util.StringUtil;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.util.Assert;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class WKTDisplayHelper {
 
@@ -27,8 +36,7 @@ public class WKTDisplayHelper {
         int level = 0;
         String lastNonBlankToken = "";
         StringBuffer formattedWKT = new StringBuffer();
-        StringTokenizer tokenizer = new StringTokenizer(wkt, " \t\n\r\f,()",
-                true);
+        StringTokenizer tokenizer = new StringTokenizer(wkt, " \t\n\r\f,()", true);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -70,13 +78,12 @@ public class WKTDisplayHelper {
 
             lastNonBlankToken = token;
         }
-
         return formattedWKT.toString().trim();
     }
 
     private String newLine() {
         //Not System.getProperty("line.separator"); otherwise, when you copy
-        //into, say, Notepad, you get garbage characters at the end of each line 
+        //into, say, Notepad, you get garbage characters at the end of each line
         //(\r\r\n). [Bob Boseko]
         return "\n";
     }
@@ -102,8 +109,7 @@ public class WKTDisplayHelper {
         stack.push(new Integer(0));
 
         ArrayList annotations = new ArrayList();
-        StringTokenizer tokenizer = new StringTokenizer(wkt, " \t\n\r\f,()",
-                true);
+        StringTokenizer tokenizer = new StringTokenizer(wkt, " \t\n\r\f,()", true);
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -163,8 +169,7 @@ public class WKTDisplayHelper {
     }
 
     public static void main(String[] args) {
-        String wkt = new WKTDisplayHelper().format("POINT(5 5)POINT(10 10)",
-                false);
+        String wkt = new WKTDisplayHelper().format("POINT(5 5)POINT(10 10)", false);
         System.out.println(wkt);
         System.out.println(new WKTDisplayHelper().annotate(wkt));
     }
@@ -181,11 +186,8 @@ public class WKTDisplayHelper {
         stack.push(new Integer(0));
 
         if (geometry instanceof GeometryCollection) {
-            for (int i = 0;
-                    i < ((GeometryCollection) geometry).getNumGeometries();
-                    i++) {
-                if (annotation(((GeometryCollection) geometry).getGeometryN(i),
-                        c, stack)) {
+            for (int i = 0; i < ((GeometryCollection) geometry).getNumGeometries(); i++) {
+                if (annotation(((GeometryCollection) geometry).getGeometryN(i), c, stack)) {
                     return true;
                 }
             }
@@ -194,10 +196,8 @@ public class WKTDisplayHelper {
                 return true;
             }
 
-            for (int i = 0; i < ((Polygon) geometry).getNumInteriorRing();
-                    i++) {
-                if (annotation(((Polygon) geometry).getInteriorRingN(i), c,
-                        stack)) {
+            for (int i = 0; i < ((Polygon) geometry).getNumInteriorRing(); i++) {
+                if (annotation(((Polygon) geometry).getInteriorRingN(i), c, stack)) {
                     return true;
                 }
             }

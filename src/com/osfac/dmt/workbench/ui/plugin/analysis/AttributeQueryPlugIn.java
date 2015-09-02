@@ -41,8 +41,7 @@ import javax.swing.JRadioButton;
 /**
  * Queries a layer by a spatial predicate.
  */
-public class AttributeQueryPlugIn extends AbstractPlugIn
-        implements ThreadedPlugIn {
+public class AttributeQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn {
 
     private static String ATTR_GEOMETRY_AREA = I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Geometry.Area");
     private static String ATTR_GEOMETRY_LENGTH = I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Geometry.Length");

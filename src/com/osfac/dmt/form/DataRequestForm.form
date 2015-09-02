@@ -664,9 +664,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="2" attributes="0">
                               <Component id="labelNImage" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtNumber" alignment="2" min="-2" pref="19" max="-2" attributes="0"/>
                               <Component id="labelVImage" alignment="2" min="-2" max="-2" attributes="0"/>
                               <Component id="txtSize" alignment="2" min="-2" pref="19" max="-2" attributes="0"/>
-                              <Component id="txtNumber" alignment="2" min="-2" pref="19" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="2" attributes="0">

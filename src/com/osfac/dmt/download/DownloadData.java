@@ -64,6 +64,7 @@ public class DownloadData extends javax.swing.JFrame {
         runingSocketClient(idImagesList);
         downloadData = this;
         timerSpeedTime = new Timer(1000, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (ProgressOnGoing.getValue() > 3) {
                     speedAndDuration();
@@ -324,6 +325,7 @@ public class DownloadData extends javax.swing.JFrame {
         setTitle(bundle.getString("DownloadData.title")); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -656,8 +658,8 @@ public class DownloadData extends javax.swing.JFrame {
 
     private void confirmDataTreated(int idDelivery) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("update dmt_delivery set "
-                    + "confirm_request_treated = ? where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery set "
+                    + "confirm_request_treated = ? WHERE id_delivery = ?");
             ps.setString(1, "Yes");
             ps.setInt(2, idDelivery);
             int result = ps.executeUpdate();
@@ -703,9 +705,9 @@ public class DownloadData extends javax.swing.JFrame {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setShowGrid(false);
         try {
-            ResultSet res = Config.con.createStatement().executeQuery("select image_path, size from dmt_image inner join "
-                    + "dmt_support on dmt_support.id_support = dmt_image.id_support where dmt_image.id_image "
-                    + "in (" + manyCriteria(idImagesList) + ")");
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT image_path, size FROM dmt_image INNER JOIN "
+                    + "dmt_support ON dmt_support.id_support = dmt_image.id_support WHERE dmt_image.id_image "
+                    + "IN (" + manyCriteria(idImagesList) + ")");
             int i = 0;
             while (res.next()) {
                 if (table.getRowCount() >= i) {
@@ -727,14 +729,14 @@ public class DownloadData extends javax.swing.JFrame {
 
     private class MyTableModel extends AbstractTableModel implements StyleModel {
 
-        private String[] columnNames = {I18N.get("DownloadData.table-header-File"), I18N.get("DownloadData.table-header-Size"
-            ), I18N.get("DownloadData.table-header-Status")};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {I18N.get("DownloadData.table-header-File"), I18N.get("DownloadData.table-header-Size"),
+            I18N.get("DownloadData.table-header-Status")};
+        private final ArrayList[] DATA;
 
         public MyTableModel() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
@@ -770,22 +772,22 @@ public class DownloadData extends javax.swing.JFrame {
 
         @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -800,29 +802,29 @@ public class DownloadData extends javax.swing.JFrame {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].add("");
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 
@@ -846,7 +848,7 @@ public class DownloadData extends javax.swing.JFrame {
         boolean val = false;
         try {
             InputStream inImportant = getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/001.png");
-            File dest = new File(dir + File.separator + "001.png");
+            File dest = new File(new StringBuilder(dir).append(File.separator).append("001.png").toString());
             try (FileOutputStream fout = new FileOutputStream(dest)) {
                 int nbRead;
                 while ((nbRead = inImportant.read(TAMPON)) != -1) {
@@ -864,8 +866,8 @@ public class DownloadData extends javax.swing.JFrame {
     private void initializingOthers(boolean targetFolder, ArrayList<String> listOfIDs) {
         ProgressTotal.setIndeterminate(true);
         try {
-            ResultSet res = Config.con.createStatement().executeQuery("select sum(size) from dmt_image "
-                    + "where id_image in (" + manyCriteria(listOfIDs) + ")");
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT sum(size) FROM dmt_image "
+                    + "WHERE id_image IN (" + manyCriteria(listOfIDs) + ")");
             while (res.next()) {
                 dataSizeTotal += res.getDouble(1) * (1024 * 1024);
             }
@@ -903,22 +905,22 @@ public class DownloadData extends javax.swing.JFrame {
         pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
         ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
                 + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
-                + "" + pourcentAll + "              "
+                + pourcentAll + "              "
                 + "                           " + TotalTime);
         ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
                 + conversion(fileSize) + "                                               "
-                + "" + pourcentFile + "                                              "
-                + "" + FileTime);
+                + pourcentFile + "                                              "
+                + FileTime);
     }
 
     private void endOfDownload(String title) {
         labImageName.setText("");
         this.setTitle(title);
         ProgressTotal.setString("                                         "
-                + "" + pourcentAll + "              "
+                + pourcentAll + "              "
                 + "                           ");
         ProgressOnGoing.setString("                                               "
-                + "" + pourcentFile + "                                              ");
+                + pourcentFile + "                                              ");
     }
 
     private void speedAndDuration() {
@@ -948,7 +950,7 @@ public class DownloadData extends javax.swing.JFrame {
                 time = tpsSec + " sec";
             }
             this.setTitle(" " + pourcentAll + " - " + time + " " + "(" + s + ") - "
-                    + "" + (a + 1) + " " + I18N.get("DownloadData.text-of") + " " + idImagesList.size());
+                    + (a + 1) + " " + I18N.get("DownloadData.text-of") + " " + idImagesList.size());
         }
     }
 
@@ -1015,8 +1017,8 @@ public class DownloadData extends javax.swing.JFrame {
 
     private String getImageName(String idImage) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select image_name from dmt_image "
-                    + "where id_image = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT image_name FROM dmt_image "
+                    + "WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1030,8 +1032,8 @@ public class DownloadData extends javax.swing.JFrame {
 
     private String getImageFormat(String idImage) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select format from dmt_image "
-                    + "where id_image = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT format FROM dmt_image "
+                    + "WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1045,9 +1047,9 @@ public class DownloadData extends javax.swing.JFrame {
 
     private String getHardDriveName(String idImage) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select support_name from dmt_support "
-                    + "inner join dmt_image on dmt_image.id_support = dmt_support.id_support "
-                    + "where id_image = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT support_name FROM dmt_support "
+                    + "INNER JOIN dmt_image ON dmt_support.id_support = dmt_image.id_support "
+                    + "WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1134,12 +1136,12 @@ public class DownloadData extends javax.swing.JFrame {
                 pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
                 ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
                         + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
-                        + "" + pourcentAll + "              "
+                        + pourcentAll + "              "
                         + "                           " + TotalTime);
                 ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
                         + conversion(fileSize) + "                                               "
-                        + "" + pourcentFile + "                                              "
-                        + "" + FileTime);
+                        + pourcentFile + "                                              "
+                        + FileTime);
                 if (endCopyFile >= fileSize) {
                     changeRowStatus(SCOMPLETED);
                     break;
@@ -1165,8 +1167,8 @@ public class DownloadData extends javax.swing.JFrame {
     private String destByCategory(String dest, String idImage) {
         String destCategory = dest;
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select category_name from dmt_category inner join dmt_image on "
-                    + "dmt_category.id_category=dmt_image.id_category where id_image = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT category_name FROM dmt_category INNER JOIN dmt_image ON "
+                    + "dmt_category.id_category = dmt_image.id_category WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -1181,14 +1183,15 @@ public class DownloadData extends javax.swing.JFrame {
     }
 
     private String conversion(long valeur) {
+        StringBuilder value = new StringBuilder();
         if ((valeur >= 1024) && (valeur < (1024 * 1024))) {
-            return ((long) valeur / 1024) + " Ko";
+            return value.append((long) valeur / 1024).append(" Ko").toString();
         } else if ((valeur >= (1024 * 1024)) && (valeur < (1024 * 1024 * 1024))) {
-            return ((long) valeur / (1024 * 1024)) + " Mo";
+            return value.append((long) valeur / (1024 * 1024)).append(" Mo").toString();
         } else if ((valeur >= (1024 * 1024 * 1024))) {
-            return ((long) valeur / (1024 * 1024 * 1024)) + " Go";
+            return value.append((long) valeur / (1024 * 1024 * 1024)).append(" Go").toString();
         } else {
-            return ((long) valeur) + " Octets";
+            return value.append((long) valeur).append(" Octets").toString();
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

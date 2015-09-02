@@ -1,14 +1,16 @@
 package com.osfac.dmt.parameter;
 
-import java.util.*;
-
-import com.vividsolutions.jts.util.Assert;
 import com.osfac.dmt.util.LangUtil;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * A strongly-typed list of parameters for passing to a component
  */
 public class ParameterList {
+
     private ParameterListSchema schema;
 
     private Map params = new HashMap();
@@ -19,7 +21,7 @@ public class ParameterList {
 
     public ParameterList(ParameterList other) {
         initialize(other.getSchema());
-        for (Iterator i = Arrays.asList(other.getSchema().getNames()).iterator(); i.hasNext(); ) {
+        for (Iterator i = Arrays.asList(other.getSchema().getNames()).iterator(); i.hasNext();) {
             String name = (String) i.next();
             setParameter(name, other.getParameter(name));
         }
@@ -39,6 +41,7 @@ public class ParameterList {
         return this;
     }
 
+    @Override
     public boolean equals(Object obj) {
         return equals((ParameterList) obj);
     }
@@ -65,12 +68,11 @@ public class ParameterList {
         return (String) params.get(name);
     }
 
-    public int getParameterInt(String name)
-    {
-      Object value = params.get(name);
-      if (value instanceof String)
-        return Integer.parseInt((String) value);
-      return ((Integer) params.get(name)).intValue();
+    public int getParameterInt(String name) {
+        Object value = params.get(name);
+        if (value instanceof String) {
+            return Integer.parseInt((String) value);
+        }
+        return ((Integer) params.get(name)).intValue();
     }
-
 }

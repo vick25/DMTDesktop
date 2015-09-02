@@ -159,7 +159,8 @@ import org.openjump.core.model.TaskListener;
 import org.openjump.core.ui.plugin.file.OpenFilePlugIn;
 import org.openjump.swing.factory.component.ComponentFactory;
 
-public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements LayerViewPanelContext, ViewportListener, ErrorHandlerV2 {
+public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements LayerViewPanelContext,
+        ViewportListener, ErrorHandlerV2 {
 
     @SuppressWarnings("LeakingThisInConstructor")
     public WorkbenchFrame(String title, final WorkbenchContext workbenchContext) throws Exception {
@@ -215,6 +216,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         WorkbenchFrame.workbenchContext = workbenchContext;
         // set icon for the app frame
         DMTWorkbench.setIcon(this);
+
         toolBar = new WorkbenchToolBar(workbenchContext);
         toolBar.setTaskMonitorManager(new TaskMonitorManager());
 
@@ -273,11 +275,12 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         this.getDockingManager().getWorkspace().add(_documentPane, BorderLayout.CENTER);
 
         this.getDockableBarManager().addDockableBar(cbf.createToolsCommandBar()); //Tools command bar
-//        menuBar.getMenu(3).getItem(10).setVisible(false);
+//        menuBar.getMenu(3).getItem(10).setVisible(false); //Layer Menu
         menuBar.getMenu(2).add(cbf.createViewMenu(), 0); //View Menu Bar
-        menuBar.getMenu(4).getItem(0).setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SETTING)); //Customize
+        menuBar.getMenu(4).getItem(0).setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SETTING)); //Customize menu
         exitMenuItem.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.EXIT));
         cbf.createToolsMenu(menuBar.getMenu(5)); //Tools menu
+
         for (int i = 0; i < menuBar.getMenuCount(); i++) {
             if (i == IndexMenu) {
                 continue;
@@ -298,17 +301,20 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 });
             }
         }
-        createLayersMenu(menuBar.getMenu(IndexMenu - 2));
-        createCustomizeMenu(menuBar.getMenu(IndexMenu - 1));
-        cbf.createWindowsMenu(menuBar.getMenu(++IndexMenu));
-        createHelpMenu(menuBar.getMenu(++IndexMenu));
+
+        createLayersMenu(menuBar.getMenu(IndexMenu - 2)); //Layers menu (3)
+        createCustomizeMenu(menuBar.getMenu(IndexMenu - 1)); //Customize menu (4)
+        cbf.createWindowsMenu(menuBar.getMenu(++IndexMenu)); //(6)
+        createHelpMenu(menuBar.getMenu(++IndexMenu)); //Help menu (7)
 
         _statusBar = createStatusBar();
-        findImagesCategoriesAll();
+
+        findImagesCategoriesAll();//Find and Add images category from DB
+        //Activate Search Images button upon layer selection
         new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DMTConfiguration.findImagesData.setEnabled(activeTaskFrame != null
+                DMTConfiguration.splBtnFindImagesData.setEnabled(activeTaskFrame != null
                         && activeTaskFrame.getLayerViewPanel().getSelectionManager().getSelectedItemsCount() > 0);
             }
         }).start();
@@ -319,9 +325,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     Thread thread = new Thread() {
                         @Override
                         public void run() {
-                            Connection con = remoteDBConnecting();
-                            if (con != null) {
-                                boolean requestFound = isNewDataRequestFound(con);
+                            Connection remoteCon = remoteDBConnecting();
+                            if (remoteCon != null) {
+                                boolean requestFound = isNewDataRequestFound(remoteCon);
                                 if (requestFound) {
                                     if (dataRequestSync != null) {
                                         dataRequestSync.setVisible(true);
@@ -345,7 +351,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         this.getDockingManager().setUndoLimit(10);
         this.getDockingManager().beginLoadLayoutData();
         // add all dockable frames
-        this.getDockingManager().addFrame(cbf.createFrameMenuTree());
+        this.getDockingManager().addFrame(cbf.createFrameMenuTree());//Tutorial and Requests
         this.getDockingManager().setShowGripper(true);
         this.getDockingManager().setOutlineMode(DockingManager.TRANSPARENT_OUTLINE_MODE);
         this.getDockingManager().setPopupMenuCustomizer(new com.jidesoft.docking.PopupMenuCustomizer() {
@@ -383,10 +389,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         new Thread() {
             @Override
             public void run() {
-                Connection con = remoteDBConnecting();
-                if (con != null) {
+                Connection remoteCon = remoteDBConnecting();
+                if (remoteCon != null) {
                     try {
-                        PreparedStatement ps = con.prepareStatement("select * from updater");
+                        PreparedStatement ps = remoteCon.prepareStatement("SELECT * FROM updater");
                         ResultSet res = ps.executeQuery();
                         while (res.next()) {
                             if (!res.getString(2).equals(I18N.get("JUMPWorkbench.version.number"))) {
@@ -397,20 +403,22 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             }
                         }
                     } catch (SQLException ex) {
-                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                                + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                ex.getMessage(), null, null, ex, Level.SEVERE, null));
                     }
                 }
             }
         }.start();
-        fillDatabase();
+
+        fillDatabase(); //create database
         this.toFront();
+
         if (Config.isFullVersion()) {
             connectToFTPServer();
         }
         if (Config.pref.getBoolean(SettingKeyFactory.OtherFeatures.ChKLayer, true)) {
-            OpenFilePlugIn filePlugin = new OpenFilePlugIn(workbenchContext, new File(""
-                    + "default layers/Pays_COMIFAC.shp"));
+            OpenFilePlugIn filePlugin = new OpenFilePlugIn(workbenchContext, new File(
+                    "default layers/Pays_COMIFAC.shp"));
             filePlugin.actionPerformed(new ActionEvent(this, 0, ""));
         }
         return this;
@@ -467,9 +475,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         }
     }
 
+    //Create the database upon error
     private void fillDatabase() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_image");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_image");
             ResultSet res = ps.executeQuery();
         } catch (SQLException e) {
             new DBUpdating(this, true, new File("dbosfacdmt.sql")).setVisible(true);
@@ -542,74 +551,74 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private void findImagesCategoriesAll() {
         try {
             ChBCategoryList.clear();
-            DMTConfiguration.findImagesData.removeAll();
-            ResultSet res = Config.con.createStatement().executeQuery("SELECT distinct category_name "
-                    + "FROM dmt_category order by category_name");
+            DMTConfiguration.splBtnFindImagesData.removeAll();
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT category_name "
+                    + "FROM dmt_category ORDER BY category_name");
             while (res.next()) {
                 ChBCategoryList.add(new JCheckBoxMenuItem(res.getString(1)));
             }
             for (int i = 0; i < ChBCategoryList.size(); i++) {
                 ChBCategoryList.get(i).setSelected(true);
-                DMTConfiguration.findImagesData.add(ChBCategoryList.get(i));
+                DMTConfiguration.splBtnFindImagesData.add(ChBCategoryList.get(i));
             }
 
-            DMTConfiguration.findImagesData.add(new JPopupMenu.Separator());
-            DMTConfiguration.findImagesData.add(MIClear);
-            MIClear.setText(I18N.get("Text.Unselect-All-categories"));
-            MIClear.addActionListener(new ActionListener() {
+            DMTConfiguration.splBtnFindImagesData.add(new JPopupMenu.Separator());
+            DMTConfiguration.splBtnFindImagesData.add(MICheckAll);
+            MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
+            MICheckAll.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < ChBCategoryList.size(); i++) {
                         ChBCategoryList.get(i).setSelected(checkAll);
                     }
                     if (checkAll) {
-                        MIClear.setText(I18N.get("Text.Unselect-All-categories"));
+                        MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
                     } else {
-                        MIClear.setText(I18N.get("Text.select-All-categories"));
+                        MICheckAll.setText(I18N.get("Text.select-All-categories"));
                     }
                     checkAll = !checkAll;
                 }
             });
         } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
     }
 
     private void findImagesCategories() {
         try {
             ChBCategoryList.clear();
-            DMTConfiguration.findImagesData.removeAll();
+            DMTConfiguration.splBtnFindImagesData.removeAll();
             Object FeatureTab[] = activeTaskFrame.getLayerViewPanel().getSelectionManager().getFeatureSelection().getSelectedItems().toArray();
             String where = "";
             for (int i = 0; i < FeatureTab.length; i++) {
-                where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) or";
+                where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) OR";
             }
             where = where.substring(0, where.length() - 3);
             ResultSet res = Config.con.createStatement().executeQuery("SELECT distinct category_name "
-                    + "FROM dmt_category inner join dmt_image on dmt_category.id_category = "
-                    + "dmt_image.id_category WHERE" + where + " order by category_name");
+                    + "FROM dmt_category INNER JOIN dmt_image ON dmt_category.id_category = "
+                    + "dmt_image.id_category WHERE" + where + " ORDER BY category_name");
             while (res.next()) {
                 ChBCategoryList.add(new JCheckBoxMenuItem(res.getString(1)));
             }
             for (int i = 0; i < ChBCategoryList.size(); i++) {
                 ChBCategoryList.get(i).setSelected(true);
-                DMTConfiguration.findImagesData.add(ChBCategoryList.get(i));
+                DMTConfiguration.splBtnFindImagesData.add(ChBCategoryList.get(i));
             }
 
-            DMTConfiguration.findImagesData.add(new JPopupMenu.Separator());
-            DMTConfiguration.findImagesData.add(MIClear);
-            MIClear.setText(I18N.get("Text.Unselect-All-categories"));
-            MIClear.addActionListener(new ActionListener() {
+            DMTConfiguration.splBtnFindImagesData.add(new JPopupMenu.Separator());
+            DMTConfiguration.splBtnFindImagesData.add(MICheckAll);
+            MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
+            MICheckAll.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     for (int i = 0; i < ChBCategoryList.size(); i++) {
                         ChBCategoryList.get(i).setSelected(checkAll);
                     }
                     if (checkAll) {
-                        MIClear.setText(I18N.get("Text.Unselect-All-categories"));
+                        MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
                     } else {
-                        MIClear.setText(I18N.get("Text.select-All-categories"));
+                        MICheckAll.setText(I18N.get("Text.select-All-categories"));
                     }
                     checkAll = !checkAll;
                 }
@@ -623,8 +632,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public static void createPreviewLayer() {
         if (previewLayer == null) {
             PlugInContext plugincontext = workbenchContext.createPlugInContext();
-            previewLayer = plugincontext.addLayer(StandardCategoryNames.WORKING, I18N.get(""
-                    + "ui.plugin.AddNewLayerPlugIn.createPreviewLayer.title"),
+            previewLayer = plugincontext.addLayer(StandardCategoryNames.WORKING, I18N.get(
+                    "ui.plugin.AddNewLayerPlugIn.createPreviewLayer.title"),
                     AddNewLayerPlugIn.createBlankFeatureCollection());
             previewLayer.setFeatureCollectionModified(false).setEditable(true);
         }
@@ -644,7 +653,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         String value = "";
         String tab[] = categories.split(",");
         for (int i = 0; i < tab.length; i++) {
-            value += "\'" + tab[i].toString() + "\',";
+            value += "\'" + tab[i] + "\',";
         }
         if (value.endsWith(",")) {
             value = value.substring(0, value.length() - 1);
@@ -659,11 +668,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             String hostN = "dbosfacdmt.db.8487892.hostedresource.com";
             String username = "dbosfacdmt";
             String password = "OsfacLab01";
-            conN = DriverManager.getConnection("jdbc:mysql://" + hostN + "/"
-                    + "" + database, username, password);
+            conN = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(hostN)
+                    .append("/").append(database).toString(), username, password);
         } catch (SQLException ex) {
-//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-//                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+//                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return conN;
     }
@@ -733,6 +742,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         });
         JPanel pan = new JPanel();
         statusPanelInit(pan);
+
         configureStatusLabel(timeLabel, 175); //set the component size
         configureStatusLabel(scaleLabel, 90);
         configureStatusLabel(coordinateLabel, 175);
@@ -772,7 +782,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         updater.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.REQUESTDATA));
         updater.setToolTipText(I18N.get("Text.updater.tooltip"));
         updater.setFocusable(false);
-        updater.setVisible(false);
+        updater.setVisible(false); //set to false
         updater.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -788,7 +798,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         label.setAlignment(JLabel.CENTER);
         statusBar.add(label, JideBoxLayout.FLEXIBLE);
         timeStatusBar = new TimeStatusBarItem();
-        timeStatusBar.setTextFormat(new SimpleDateFormat(I18N.get("language.format.date") + "  HH:mm:ss"));
+        timeStatusBar.setTextFormat(new SimpleDateFormat(new StringBuilder(
+                I18N.get("language.format.date")).append("  HH:mm:ss").toString()));
         statusBar.add(timeStatusBar, JideBoxLayout.FLEXIBLE);
         final MemoryStatusBarItem gc = new MemoryStatusBarItem();
         statusBar.add(gc, JideBoxLayout.FLEXIBLE);
@@ -796,10 +807,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         return statusBar;
     }
 
-    private boolean isNewDataRequestFound(Connection con) {
+    private boolean isNewDataRequestFound(Connection remoteCon) {
         try {
-            PreparedStatement ps = con.prepareStatement("select id_delivery from "
-                    + "dmt_delivery where confirm_request_treated = ?");
+            PreparedStatement ps = remoteCon.prepareStatement("SELECT id_delivery FROM\n"
+                    + "dmt_delivery WHERE confirm_request_treated = ?");
             ps.setString(1, "No");
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -816,7 +827,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private JPanel createToolTipContent() {
         JPanel fieldPanel = new JPanel(new BorderLayout(6, 6));
         fieldPanel.setOpaque(false);
-        JideButton bt = new JideButton(I18N.get("Text.updater.button-update-text") + " " + new_version);
+        JideButton bt = new JideButton(new StringBuilder(I18N.get("Text.updater.button-update-text"))
+                .append(" ").append(new_version).toString());
         bt.setButtonStyle(3);
         bt.setIcon(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/browser(17).png")));
         bt.setAlwaysShowHyperlink(true);
@@ -868,33 +880,43 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     try {
                         progress.setProgressStatus(I18N.get("WorkbenchFrame.Retrieving-satellite-images-in-database"));
                         progress.setIndeterminate(true);
+                        //Get the extent of the layer selected
                         Object FeatureTab[] = activeTaskFrame.getLayerViewPanel().
                                 getSelectionManager().getFeatureSelection().getSelectedItems().toArray();
-                        String where = " (category_name in (" + categories + ")) and";
+
+                        String where = " (category_name IN (" + categories + ")) AND\n";
                         for (int i = 0; i < FeatureTab.length; i++) {
-                            where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) or";
+                            where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) OR";
                         }
                         where = where.substring(0, where.length() - 3);
 //                        System.out.println(where);
-                        ResultSet res = Config.con.createStatement().executeQuery("SELECT distinct id_image "
-                                + "FROM dmt_image inner join dmt_category on dmt_category.id_category = "
-                                + "dmt_image.id_category WHERE" + where);
-                        ArrayList<Integer> IDsList = new ArrayList<>();
+                        ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image\n"
+                                + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
+                                + "dmt_category.id_category WHERE\n" + where);
+                        ArrayList<Integer> IDsImageList = new ArrayList<>();
                         while (res.next()) {
-                            IDsList.add(res.getInt(1));
+                            IDsImageList.add(res.getInt(1));
                         }
 //                        dbprocessing.setVisible(false);
                         progress.setProgress(100);
-                        if (IDsList.isEmpty()) {
+                        if (IDsImageList.isEmpty()) {
                             JOptionPane.showMessageDialog(DMTWorkbench.frame,
                                     I18N.get("WorkbenchFrame.No-image-found-in-database"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                         } else {
-                            new GeoResult(DMTWorkbench.frame, true, IDsList).setVisible(true);
+                            //Geographic Search Result Interface
+                            if (geoResult != null) {
+                                geoResult.dispose();
+                            }
+                            geoResult = new GeoResult(DMTWorkbench.frame, true, IDsImageList);
+                            geoResult.setVisible(true);
                             if (previewLayer != null) {
                                 previewLayer.getLayerManager().dispose(DMTWorkbench.frame, previewLayer);
                                 previewLayer = null;
                             }
                         }
+                        FeatureTab = null;
+                        where = null;
+                        IDsImageList = null;
                     } catch (SQLException | HeadlessException e) {
                         JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                                 e.getMessage(), null, null, e, Level.SEVERE, null));
@@ -908,7 +930,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public static void actionHelp() {
         try {
             Process p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "
-                    + "" + new File("OSFAC-DMT.chm"));
+                    + new File("OSFAC-DMT.chm"));
             p.waitFor();
         } catch (IOException | InterruptedException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
@@ -992,7 +1014,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     public static void actionUserManagement() {
         if (!_documentPane.isDocumentOpened(I18N.get("Text.User-Manager"))) {
-            DocumentComponent document = new DocumentComponent(new UserManager(), I18N.get("Text.User-Manager"), I18N.get("Text.User-Manager"), DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.USER));
+            DocumentComponent document = new DocumentComponent(new UserManager(),
+                    I18N.get("Text.User-Manager"), I18N.get("Text.User-Manager"),
+                    DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.USER));
             _documentPane.openDocument(document);
         }
         _documentPane.setActiveDocument(I18N.get("Text.User-Manager"));
@@ -1668,6 +1692,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         closeApplication();
     }
 
+    private void closeApplication() {
+        applicationExitHandler.exitApplication(this);
+    }
+
     void windowMenu_menuSelected(MenuEvent e) {
         // If this is the first call get the number of added menu items.
         // After this point no new menus can be added
@@ -1703,10 +1731,6 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 }
             }
         });
-    }
-
-    private void closeApplication() {
-        applicationExitHandler.exitApplication(this);
     }
 
     private Collection getLayersWithModifiedFeatureCollections() {
@@ -2205,7 +2229,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private int minimumFeatureExtentForAnyRenderingInPixels = 2;
     private StringBuffer log = new StringBuffer();
     private int taskSequence = 1;
-    private byte IndexMenu = 5;
+    private byte IndexMenu = 5; // 5 represents the Tools menu
     public static WorkbenchContext workbenchContext;
     private HashMap keyCodeAndModifiersToPlugInAndEnableCheckMap = new HashMap();
     InternalFrameCloseHandler internalFrameCloseHandler = new DefaultInternalFrameCloser();
@@ -2221,7 +2245,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private int primaryInfoFrameIndex = -1;
     private int addedMenuItems = -1;
     public static Timer timer;
-    private JideButton updater = new JideButton();
+    private JideButton updater = new JideButton(); //button set to false
     private String url_update, new_version;
     private ComponentFactory<TaskFrame> taskFrameFactory;
     CommandMenuBar menuBar = new CommandMenuBar("Menu Bar");
@@ -2232,7 +2256,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     public static Layer previewLayer = null;
     public static ArrayList<JCheckBoxMenuItem> ChBCategoryList = new ArrayList<>();
     private boolean checkAll = false;
-    private JMenuItem MIClear = new JMenuItem();
+    private final JMenuItem MICheckAll = new JMenuItem();
+    private static GeoResult geoResult;
     public static JideButton DataRequestFound;
     public static JideButton BSConnect; //connect to FTP Server
     public static String TypeOfVersion = Config.FULL_VERSION;

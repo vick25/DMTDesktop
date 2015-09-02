@@ -70,7 +70,7 @@ public class FileChooser {
             }
         }
         if (!OK) {
-            name = name + "." + filterText[0];
+            name = new StringBuilder(name).append(".").append(filterText[0]).toString();
         }
         return name;
     }
@@ -122,7 +122,6 @@ class MyFileFilter extends FileFilter {
         } else {
             String path = file.getAbsolutePath().toLowerCase();
             for (int i = 0; i < extensions.length; i++) {
-
                 String extension = extensions[i];
                 if (path.endsWith(extension) && (path.charAt(path.length() - extension.length() - 1) == '.')) {
                     return true;

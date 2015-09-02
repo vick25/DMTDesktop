@@ -17,6 +17,7 @@ public class SettingKeyFactory {
 
     public static class Privacy {
 
+        public static final String loginInAutomatically = "OSFAC-DMT.SettingKeyFactory.Privacy.loginInAutomatically";
         public static final String rememberLoginInfo = "OSFAC-DMT.SettingKeyFactory.Privacy.rememberLoginInfo";
         public static final String rememberEmail = "OSFAC-DMT.SettingKeyFactory.Privacy.rememberEmail";
         public static final String rememberEmailOnly = "OSFAC-DMT.SettingKeyFactory.Privacy.rememberEmailOnly";

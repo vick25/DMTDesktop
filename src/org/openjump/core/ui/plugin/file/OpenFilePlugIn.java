@@ -14,7 +14,8 @@ import org.openjump.core.ui.plugin.file.open.OpenFileWizard;
 public class OpenFilePlugIn extends AbstractWizardPlugin {
 
     private static final String KEY = OpenFilePlugIn.class.getName();
-    private static final String FILE_DOES_NOT_EXIST = I18N.get(KEY + ".file-does-not-exist");
+    private static final String FILE_DOES_NOT_EXIST = I18N.get(new StringBuilder(KEY).
+            append(".file-does-not-exist").toString());
 
     /**
      * Construct the main Open File plug-in.
@@ -36,7 +37,7 @@ public class OpenFilePlugIn extends AbstractWizardPlugin {
             file
         };
         this.enableCheck = new BooleanPropertyEnableCheck(file, "exists", true,
-                FILE_DOES_NOT_EXIST + ": " + file.getAbsolutePath());
+                new StringBuilder(FILE_DOES_NOT_EXIST).append(": ").append(file.getAbsolutePath()).toString());
         OpenFileWizard openFileWizard = new OpenFileWizard(workbenchContext, files);
         setWizard(openFileWizard);
     }
@@ -48,20 +49,19 @@ public class OpenFilePlugIn extends AbstractWizardPlugin {
     }
 
     /**
-     * Initialise the main instance of this plug-in, should not be called for
-     * the Recent menu open file plug-ins.
+     * Initialize the main instance of this plug-in, should not be called for the Recent menu open
+     * file plug-ins.
      *
      * @param context The plug-in context.
-     * @exception Exception If there was an error initialising the plug-in.
+     * @exception Exception If there was an error initializing the plug-in.
      */
+    @Override
     public void initialize(final PlugInContext context) throws Exception {
         super.initialize(context);
         FeatureInstaller featureInstaller = new FeatureInstaller(workbenchContext);
 
         // Add File Menu
-        featureInstaller.addMainMenuItem(new String[]{
-                    MenuNames.FILE
-                }, this, 2);
+        featureInstaller.addMainMenuItem(new String[]{MenuNames.FILE}, this, 2);
         // Register the Open File Wizard
         OpenFileWizard openFileWizard = new OpenFileWizard(workbenchContext);
         setWizard(openFileWizard);

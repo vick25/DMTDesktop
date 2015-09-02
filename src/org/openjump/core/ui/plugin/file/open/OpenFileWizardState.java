@@ -215,7 +215,6 @@ public class OpenFileWizardState {
         for (URI file : files) {
             setOption(file, label, value);
         }
-
     }
 
     public void setOption(URI file, String label, Object value) {

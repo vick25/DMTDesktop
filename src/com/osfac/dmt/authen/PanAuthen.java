@@ -376,6 +376,7 @@ public class PanAuthen extends javax.swing.JPanel {
                         }
                         Config.pref.putBoolean(SettingKeyFactory.Privacy.rememberEmailOnly, PrivacyPanel.RBEmail.isSelected());
                         Config.pref.putBoolean(SettingKeyFactory.Privacy.rememberLoginInfo, PrivacyPanel.ChBParameter.isSelected());
+                        Config.pref.putBoolean(SettingKeyFactory.Privacy.loginInAutomatically, PrivacyPanel.chkLogAuto.isSelected());
                         WorkbenchFrame.idUser = res.getInt("id_user");
                         glassPane.setVisible(true);
                     }
@@ -425,7 +426,9 @@ private void BServerIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         txtPassword.setText(Config.pref.get(SettingKeyFactory.Privacy.rememberPassword, ""));
         if (PrivacyPanel.ChBParameter.isSelected() && !PrivacyPanel.RBEmail.isSelected()) {
             if (!txtEmail.getText().isEmpty() && !String.copyValueOf(txtPassword.getPassword()).isEmpty()) {
-                BLogInActionPerformed(null);
+                if (PrivacyPanel.chkLogAuto.isSelected()) {
+                    BLogInActionPerformed(null);
+                }
             }
         }
     }

@@ -1,11 +1,11 @@
 package com.osfac.dmt.parameter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The schema for a {@link ParameterList}. Parameter names should be
- * case-retentive (i.e. comparisons are case-insensitive, but the case is
- * maintained).
+ * The schema for a {@link ParameterList}. Parameter names should be case-retentive (i.e.
+ * comparisons are case-insensitive, but the case is maintained).
  */
 public class ParameterListSchema {
 
@@ -39,6 +39,7 @@ public class ParameterListSchema {
         return nameMap.containsKey(name);
     }
 
+    @Override
     public boolean equals(Object obj) {
         return equals((ParameterListSchema) obj);
     }

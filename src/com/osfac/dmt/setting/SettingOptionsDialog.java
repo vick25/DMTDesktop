@@ -455,10 +455,11 @@ public class SettingOptionsDialog extends MultiplePageDialog {
 //    }
     private void applyPrivacy() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_user where id_user = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_user WHERE id_user = ?");
             ps.setInt(1, WorkbenchFrame.idUser);
             ResultSet res = ps.executeQuery();
             res.next();
+            Config.pref.putBoolean(SettingKeyFactory.Privacy.loginInAutomatically, PrivacyPanel.chkLogAuto.isSelected());
             Config.pref.putBoolean(SettingKeyFactory.Privacy.rememberLoginInfo, PrivacyPanel.ChBParameter.isSelected());
             Config.pref.putBoolean(SettingKeyFactory.Privacy.rememberEmailOnly, PrivacyPanel.RBEmail.isSelected());
             if (PrivacyPanel.ChBParameter.isSelected()) {
@@ -474,8 +475,8 @@ public class SettingOptionsDialog extends MultiplePageDialog {
                 Config.pref.put(SettingKeyFactory.Privacy.rememberPassword, "");
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -496,8 +497,7 @@ public class SettingOptionsDialog extends MultiplePageDialog {
             Config.pref.put(SettingKeyFactory.Language.ABREV, LanguagePanel.customCombo.petStrings[index]);
             Config.pref.putInt(SettingKeyFactory.Language.INDEX, index);
             Config.setDefaultLocale(index);
-            JOptionPane.showMessageDialog(this, I18N.get("Text.Restart-OSFAC-DMT"
-                    + ""), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, I18N.get("Text.Restart-OSFAC-DMT"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             if (DMTWorkbench.frame instanceof DefaultDockableBarDockableHolder) {
                 DMTWorkbench.frame.getLayoutPersistence().resetToDefault();
             }

@@ -52,6 +52,7 @@ public class OpenFileWizard extends AbstractWizardGroup {
         this.files = files;
     }
 
+    @Override
     public void initialize(final WorkbenchContext workbenchContext, WizardDialog dialog) {
         this.workbenchContext = workbenchContext;
         initPanels(workbenchContext);
@@ -92,6 +93,7 @@ public class OpenFileWizard extends AbstractWizardGroup {
         }
     }
 
+    @Override
     public String getFirstId() {
         String firstId;
         if (files != null) {
@@ -113,6 +115,7 @@ public class OpenFileWizard extends AbstractWizardGroup {
      *
      * @param monitor The task monitor.
      */
+    @Override
     public void run(WizardDialog dialog, TaskMonitor monitor) throws Exception {
         chooseProjectPanel.activateSelectedProject();
         Set<File> openedFiles = new LinkedHashSet<>();
