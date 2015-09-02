@@ -263,7 +263,7 @@ public class JoinAttributesSpatiallyPlugIn extends ThreadedBasePlugIn {
          * MINORITY = 1; public final static int MEAN = 2; public final static int MEDIAN = 3;
          * public final static int MIN = 4; public final static int MAX = 5; public final static int
          * STD = 6; public final static int SUM = 7; public final static int COUNT = 8;
-         *
+	    *
          */
         this.attrOpList.clear(); //because function may be called several times
         this.attrOpList.add(AttributeOp.MAJORITY, I18N.get("org.openjump.core.ui.plugin.tools.JoinAttributesSpatiallyPlugIn.majority"));
@@ -280,7 +280,7 @@ public class JoinAttributesSpatiallyPlugIn extends ThreadedBasePlugIn {
         /**
          * copy from SpatialRelationOp public final static int CONTAINS = 0; public final static int
          * INTERSECTS = 1;
-         *
+	    *
          */
         this.spatialOpList.clear();
         this.spatialOpList.add(SpatialRelationOp.CONTAINS, I18N.get("org.openjump.core.ui.plugin.tools.JoinAttributesSpatiallyPlugIn.source-features-contained-in-a-target-feature"));

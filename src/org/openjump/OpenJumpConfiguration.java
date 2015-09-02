@@ -262,6 +262,9 @@ public class OpenJumpConfiguration {
         JoinAttributesSpatiallyPlugIn mySpatialJoin = new JoinAttributesSpatiallyPlugIn();
         mySpatialJoin.initialize(new PlugInContext(workbenchContext, null, null,
                 null, null));
+
+        SpatialJoinPlugIn spatialJoinPlugIn = new SpatialJoinPlugIn();
+        spatialJoinPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
         /*
          // -- SIGLE PlugIn
          PlanarGraphPlugIn coveragePlugIn = new PlanarGraphPlugIn();
@@ -345,9 +348,6 @@ public class OpenJumpConfiguration {
          */
 //        sstein 31.March08
 //         * function replaced by JUMP function of similar name that works better
-        SpatialJoinPlugIn spatialJoinPlugIn = new SpatialJoinPlugIn();
-        spatialJoinPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
-
         /**
          * ** GENERALIZATION ***
          */
