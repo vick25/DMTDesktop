@@ -37,10 +37,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,9 +72,18 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 public class GeoResult extends JDialog {
 
-    public GeoResult(java.awt.Frame parent, boolean modal, ArrayList<Integer> IDList) {
+    public GeoResult(java.awt.Frame parent, boolean modal, ArrayList<Integer> IDList, ArrayList<Integer> IDCloudImageList) {
         super(parent, modal);
         this.IDImagesList = IDList;
+        this.IDCloudImageList = IDCloudImageList;
+
+        try {
+            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
+        } catch (IOException ex) {
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
+        }
+
         tableModel = new MyTableModel();
         table = new SortableTable(tableModel);
 //        table.setSortable(false);
@@ -181,19 +193,19 @@ public class GeoResult extends JDialog {
         //===Get the images from DB to fill the table
         try {
             for (int i = 0; i < IDList.size(); i++) {
-                IDs += IDList.get(i) + ",";
+                IDs.append(IDList.get(i)).append(",");
             }
-            if (!IDs.isEmpty()) {
-                IDs = IDs.substring(0, IDs.length() - 1);
+            if (!IDs.toString().isEmpty()) {
+                IDs = new StringBuilder().append(IDs.substring(0, IDs.length() - 1));
             }
             ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT category_name FROM dmt_category JOIN dmt_image\n"
                     + "ON dmt_category.id_category = dmt_image.id_category\n"
-                    + "WHERE id_image IN (" + IDs + ") ORDER BY category_name ASC");
+                    + "WHERE id_image IN (" + IDs.toString() + ") ORDER BY category_name ASC");
             while (res.next()) {
                 categoryListModel.addElement(res.getString(1));
             }
-            res = Config.con.createStatement().executeQuery("SELECT DISTINCT YEAR(date) FROM dmt_image WHERE id_image IN "
-                    + "(" + IDs + ") ORDER BY YEAR(date) ASC");
+            res = Config.con.createStatement().executeQuery("SELECT DISTINCT YEAR(date) FROM dmt_image\n"
+                    + "WHERE id_image IN (" + IDs.toString() + ") ORDER BY YEAR(date) ASC");
             while (res.next()) {
                 yearListModel.addElement(res.getString(1));
             }
@@ -204,9 +216,13 @@ public class GeoResult extends JDialog {
             ListCategory.getCheckBoxListSelectionModel().addSelectionInterval(0, ListCategory.getModel().getSize() - 1);
             ListYear.getCheckBoxListSelectionModel().addSelectionInterval(0, ListYear.getModel().getSize() - 1);
 
-            fillTable("SELECT DISTINCT * FROM dmt_image WHERE dmt_image.id_image IN (" + IDs + ")\n"
+            //Method to fill the table with the list of images
+            fillTable("SELECT DISTINCT * FROM dmt_image WHERE dmt_image.id_image IN (" + IDs.toString() + ")\n"
                     + "ORDER BY dmt_image.id_image ASC");
             this.setTitle(new StringBuilder(table.getRowCount()).append(" ").append(I18N.get("GeoResult.title")).toString());
+
+            //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
+            runningSocketClient();
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
@@ -744,7 +760,7 @@ public class GeoResult extends JDialog {
             try {
                 yearListModel.clear();
                 ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT YEAR(date) FROM dmt_category JOIN dmt_image ON "
-                        + "dmt_image.id_category = dmt_category.id_category WHERE dmt_image.id_image IN (" + IDs + ") "
+                        + "dmt_image.id_category = dmt_category.id_category WHERE dmt_image.id_image IN (" + IDs.toString() + ") "
                         + criteriaSearch() + "ORDER BY YEAR(date) ASC");
                 while (res.next()) {
                     yearListModel.addElement(res.getString(1));
@@ -753,7 +769,7 @@ public class GeoResult extends JDialog {
                 yearListModel.insertElementAt(CheckBoxList.ALL, 0);
                 ListYear.getCheckBoxListSelectionModel().addSelectionInterval(0, ListYear.getModel().getSize() - 1);
                 fillTable("SELECT distinct * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
-                        + "dmt_category.id_category WHERE dmt_image.id_image IN (" + IDs + ") "
+                        + "dmt_category.id_category WHERE dmt_image.id_image IN (" + IDs.toString() + ") "
                         + criteriaSearch() + "ORDER BY dmt_image.id_image ASC");
             } catch (SQLException ex) {
                 JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
@@ -783,7 +799,7 @@ public class GeoResult extends JDialog {
             fillTable("SELECT distinct * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
                     + "dmt_category.id_category JOIN dmt_concern ON dmt_concern.id_image = dmt_image.id_image JOIN dmt_pathrow "
                     + "ON dmt_pathrow.path_row = dmt_concern.path_row WHERE dmt_image.id_image IN "
-                    + "(" + IDs + ") " + criteriaSearch() + "ORDER BY dmt_image.id_image ASC");
+                    + "(" + IDs.toString() + ") " + criteriaSearch() + "ORDER BY dmt_image.id_image ASC");
         }
     }//GEN-LAST:event_ListYearMouseClicked
 
@@ -1105,6 +1121,7 @@ public class GeoResult extends JDialog {
         return imagePath;
     }
 
+    //Method to fill table with images
     private void fillTable(String query) {
         try {
             table.unsort();
@@ -1123,8 +1140,8 @@ public class GeoResult extends JDialog {
                 table.setValueAt(headerChecked, nbRow - 1, 0);
                 table.setValueAt(res.getString("dmt_image.id_image"), nbRow - 1, 1);
                 table.setValueAt(res.getString("image_name"), nbRow - 1, 2);
-                table.setValueAt(res.getDate("date"), nbRow - 1, 3);
-                table.setValueAt(res.getDouble("size"), nbRow - 1, 4);
+                table.setValueAt(res.getDate("date"), nbRow - 1, 4);
+                table.setValueAt(res.getDouble("size"), nbRow - 1, 5);
                 nbRow++;
             }
             TableUtils.autoResizeAllColumns(table);
@@ -1133,6 +1150,91 @@ public class GeoResult extends JDialog {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                     ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
+    }
+
+    private void runningSocketClient() {
+        new Thread() {
+
+            @Override
+            public void run() {
+                DataInputStream in = null;
+                try {
+                    //send client data to the server
+                    outMetadata = new DataOutputStream(sclientMetadata.getOutputStream());
+                    //read data from the server
+                    in = new DataInputStream(sclientMetadata.getInputStream());
+                    int nbbit;
+                    String dataRead;
+                    while ((nbbit = in.read(TAMPON)) != -1) {
+                        dataRead = new String(TAMPON, 0, nbbit);
+
+                        if (dataRead.equals(HDDNOTCONNECTED)) {
+                            System.out.println(HDDNOTCONNECTED);
+                        } else if (dataRead.equals(FILENOTEXIST)) {
+                            System.out.println(FILENOTEXIST);
+                        } else if (dataRead.equals(METADATANOTEXIST)) {
+                            System.out.println(METADATANOTEXIST);
+                        } else if (dataRead.equals(CLOUDNOTEXIST)) {
+                            System.out.println(CLOUDNOTEXIST);
+                        } else {
+                            long zipFileSize = Long.parseLong(dataRead);  //read the file size
+                            System.out.println("ZipFileSize: " + zipFileSize);
+
+                            String cloudValue;
+//                                long cumulMetadata = 0;
+                            while ((nbbit = in.read(TAMPON)) != -1) {
+                                cloudValue = new String(TAMPON, 0, nbbit);
+                                System.out.println("Cloud value retrieve: " + cloudValue);
+//                                    new ReadMetadata(null, false, cloudValue).setVisible(true);
+                            }
+                            waitingFileBeSending = false;
+                        }
+                        waitingFileBeSending = false;
+                    }
+                } catch (IOException e) {
+                    JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                            e.getMessage(), null, null, e, Level.SEVERE, null));
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
+                    }
+                }
+            }
+        }.start();
+    }
+
+    //Method to fill the cloud cover of landsat images
+    public void fillCloudCover() {
+        new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    if (!IDCloudImageList.isEmpty()) {
+                        for (int i = 0; i < table.getRowCount(); i++) {
+                            for (int j = 0; j < IDCloudImageList.size(); j++) {
+                                if (Integer.parseInt(table.getValueAt(i, 1).toString()) == IDCloudImageList.get(j)) {
+                                    outMetadata.write(String.valueOf(IDCloudImageList.get(j)).getBytes());
+                                    outMetadata.flush();
+                                    Thread.sleep(10);
+                                    System.out.println(table.getValueAt(i, 1).toString() + " -- " + IDCloudImageList.get(j));
+
+                                    waitingFileBeSending = true;
+                                    while (waitingFileBeSending) {
+//////////                System.out.println("Waiting ...");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException | InterruptedException ex) {
+                    JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                            ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                }
+            }
+        }.start();
     }
 
     private String criteriaSearch() {
@@ -1144,7 +1246,7 @@ public class GeoResult extends JDialog {
             categories = "";
         }
         if (ListYear.getCheckBoxListSelectedValues().length != 0) {
-            years = " AND (year(date) IN (" + manyCriteria(ListYear.getCheckBoxListSelectedValues()) + "))";
+            years = " AND (YEAR(date) IN (" + manyCriteria(ListYear.getCheckBoxListSelectedValues()) + "))";
         } else {
             years = "";
         }
@@ -1153,12 +1255,11 @@ public class GeoResult extends JDialog {
     }
 
     private String manyCriteria(Object[] list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.length; i++) {
-            values += "\'" + list[i].toString() + "\',";
+            values.append("\'").append(list[i]).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
 
     private void createExcelFile(File file) {
@@ -1231,7 +1332,8 @@ public class GeoResult extends JDialog {
 
     private class MyTableModel extends TreeTableModel {
 
-        private final String[] COLUMNS_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+        private final String[] COLUMNS_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"),
+            I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
         private final ArrayList[] DATA;
 
         public MyTableModel() {
@@ -1310,6 +1412,7 @@ public class GeoResult extends JDialog {
             this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jidesoft.swing.JideButton BSubmit;
     private javax.swing.JCheckBox CBForm;
@@ -1341,9 +1444,10 @@ public class GeoResult extends JDialog {
     JXBusyLabel labBusyApercu;
     DefaultListModel categoryListModel, yearListModel;
     ArrayList<Integer> IDImagesList;
-    SortableTable table;
+    ArrayList<Integer> IDCloudImageList;
+    static SortableTable table;
     MyTableModel tableModel;
-    String IDs = "";
+    StringBuilder IDs = new StringBuilder();
 //    GeoResult geoResult;
     String pathPreviewFile = null;
     boolean headerChecked = false;
@@ -1355,4 +1459,11 @@ public class GeoResult extends JDialog {
     private ImagePreview imagePreview;
     private AdvancedSelection advancedSelection;
     private DataRequestForm dataRequestForm;
+    private Socket sclientMetadata;
+    private DataOutputStream outMetadata;
+    private boolean waitingFileBeSending = false;
+    private final int BUFFER = 1024 * 512;
+    private final byte TAMPON[] = new byte[BUFFER];
+    private final String HDDNOTCONNECTED = "HDD_NOT_CONNECTED", FILENOTEXIST = "FILE_NOT_EXIST",
+            METADATANOTEXIST = "METADATA_NOT_EXIST", CLOUDNOTEXIST = "CLOUD_NOT_EXIST";
 }

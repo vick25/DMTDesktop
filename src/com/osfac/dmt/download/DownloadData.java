@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -44,23 +46,43 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 public class DownloadData extends javax.swing.JFrame {
 
-    public DownloadData(ArrayList<String> idimagesList, int idDelivery) {
-        this(idimagesList);
+    public DownloadData(ArrayList<String> IDImagesList, int idDelivery) {
+        this(IDImagesList);
         this.idDelivery = idDelivery;
     }
 
-    public DownloadData(ArrayList<String> idimagesList) {
-        this.idImagesList = idimagesList;
+    public DownloadData(ArrayList<String> IDImagesList) {
+        this.idImagesList = IDImagesList;
         try {
             sClientDownload = new Socket(Config.host, Config.PORTDOWNLOAD);
         } catch (IOException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         initComponents(I18N.DMTResourceBundle);
+
+        //Initialize the status column list for the images column to be downloaded in the table
         initializingStatusList(true, idImagesList);
+        //Create the table of images
         createTable(idImagesList);
-        PanMore.setVisible(false);
+        //Show the support name for each image in the table
+        table.addMouseMotionListener(new MouseMotionAdapter() {
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                SortableTable aTable = (SortableTable) e.getSource();
+                itsRow = aTable.rowAtPoint(e.getPoint());
+                itsColumn = aTable.columnAtPoint(e.getPoint());
+                if (itsColumn == 0 && !imageSupportNameList.isEmpty()) {
+                    aTable.setToolTipText(imageSupportNameList.get(itsRow));
+                }
+                aTable.repaint();
+            }
+        });
+
+        PanMore.setVisible(false);//hide the lower panel
         setCellStyle();
+
         runingSocketClient(idImagesList);
         downloadData = this;
         timerSpeedTime = new Timer(1000, new ActionListener() {
@@ -658,7 +680,7 @@ public class DownloadData extends javax.swing.JFrame {
 
     private void confirmDataTreated(int idDelivery) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery set "
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery SET "
                     + "confirm_request_treated = ? WHERE id_delivery = ?");
             ps.setString(1, "Yes");
             ps.setInt(2, idDelivery);
@@ -705,16 +727,19 @@ public class DownloadData extends javax.swing.JFrame {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setShowGrid(false);
         try {
-            ResultSet res = Config.con.createStatement().executeQuery("SELECT image_path, size FROM dmt_image INNER JOIN "
-                    + "dmt_support ON dmt_support.id_support = dmt_image.id_support WHERE dmt_image.id_image "
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT image_path, size, support_name FROM dmt_image INNER JOIN\n"
+                    + "dmt_support ON dmt_support.id_support = dmt_image.id_support WHERE dmt_image.id_image\n"
                     + "IN (" + manyCriteria(idImagesList) + ")");
             int i = 0;
             while (res.next()) {
                 if (table.getRowCount() >= i) {
                     tableModel.addNewRow();
                 }
-                table.setValueAt(res.getString(1), i, 0);
-                table.setValueAt(res.getString(2), i, 1);
+                table.setValueAt(res.getString(1), i, 0); //image path
+                table.setValueAt(res.getString(2), i, 1); //size
+                if (!Config.isLiteVersion()) {
+                    imageSupportNameList.add(res.getString(3));
+                }
                 i++;
             }
             TableUtils.autoResizeAllColumns(table);
@@ -727,121 +752,45 @@ public class DownloadData extends javax.swing.JFrame {
         jScrollPane1.setViewportView(table);
     }
 
-    private class MyTableModel extends AbstractTableModel implements StyleModel {
-
-        private final String[] COLUMN_NAMES = {I18N.get("DownloadData.table-header-File"), I18N.get("DownloadData.table-header-Size"),
-            I18N.get("DownloadData.table-header-Status")};
-        private final ArrayList[] DATA;
-
-        public MyTableModel() {
-            DATA = new ArrayList[COLUMN_NAMES.length];
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i] = new ArrayList();
-            }
-        }
-
-        public boolean isNavigationOn() {
-            return true;
-        }
-
-        @Override
-        public CellStyle getCellStyleAt(int rowIndex, int columnIndex) {
-            if (columnIndex == table.getColumnCount() - 1) {
-                if (statusImages.get(rowIndex) == SWAITING) {
-                    return waiting;
-                } else if (statusImages.get(rowIndex) == SPROGRESSING) {
-                    return progressing;
-                } else if (statusImages.get(rowIndex) == SCOMPLETED) {
-                    return completed;
-                } else {
-                    return failed;
-                }
-            } else {
-                if (statusImages.get(rowIndex) == 1) {
-                    return cellTextBold;
-                } else {
-                    return cellText;
-                }
-            }
-        }
-
-        @Override
-        public boolean isCellStyleOn() {
-            return true;
-        }
-
-        @Override
-        public int getColumnCount() {
-            return COLUMN_NAMES.length;
-        }
-
-        @Override
-        public int getRowCount() {
-            return DATA[0].size();
-        }
-
-        @Override
-        public String getColumnName(int col) {
-            return COLUMN_NAMES[col];
-        }
-
-        @Override
-        public Object getValueAt(int row, int col) {
-            return DATA[col].get(row);
-        }
-
-        @Override
-        public Class getColumnClass(int c) {
-            return getValueAt(0, c).getClass();
-        }
-
-        @Override
-        public boolean isCellEditable(int row, int col) {
-            return (false);
-        }
-
-        @Override
-        public void setValueAt(Object value, int row, int col) {
-            DATA[col].set(row, value);
-            fireTableCellUpdated(row, col);
-        }
-
-        public void addNewRow() {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i].add("");
-            }
-            this.fireTableRowsInserted(0, DATA[0].size() - 1);
-        }
-
-        public void removeNewRow() {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i].remove(DATA[i].size() - 1);
-            }
-            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
-        }
-
-        public void removeNewRow(int index) {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i].remove(index);
-            }
-            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
-        }
-    }
-
     private String manyCriteria(ArrayList list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            values += "\'" + list.get(i) + "\',";
+            values.append("\'").append(list.get(i)).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
 
+    //Initialize the the status column of images to be downloaded in the table
     private void initializingStatusList(boolean targetFolder, ArrayList<String> listOfIDs) {
         for (int i = 0; i < listOfIDs.size(); i++) {
             statusImages.add(SWAITING);
         }
         initializingOthers(targetFolder, listOfIDs);
+    }
+
+    //Set the Number, Total size labels and the ProgressTotal with their initialize values
+    private void initializingOthers(boolean targetFolder, ArrayList<String> listOfIDs) {
+        ProgressTotal.setIndeterminate(true);
+        try {
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT SUM(size) FROM dmt_image "
+                    + "WHERE id_image IN (" + manyCriteria(listOfIDs) + ")");
+            while (res.next()) {
+                dataSizeTotal += res.getDouble(1) * (1024 * 1024);
+            }
+        } catch (SQLException e) {
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
+        }
+        ProgressTotal.setIndeterminate(false);
+        BTargetFolder.setEnabled(targetFolder);
+        labSize.setText(new StringBuilder(I18N.get("DownloadData.label-Total-size")).append(" ")
+                .append(convertCapacity(dataSizeTotal)).toString());
+        labNumber.setText(new StringBuilder(I18N.get("DownloadData.label-Number")).append(" ")
+                .append(idImagesList.size()).toString());
+        Long positionMax = new Long(dataSizeTotal);
+        if (positionMax > 2047483647) {
+            positionMax /= 1048576;
+        }
+        ProgressTotal.setMaximum(positionMax.intValue());
     }
 
     private boolean testBeforeCopyFile() {
@@ -863,28 +812,6 @@ public class DownloadData extends javax.swing.JFrame {
         return val;
     }
 
-    private void initializingOthers(boolean targetFolder, ArrayList<String> listOfIDs) {
-        ProgressTotal.setIndeterminate(true);
-        try {
-            ResultSet res = Config.con.createStatement().executeQuery("SELECT sum(size) FROM dmt_image "
-                    + "WHERE id_image IN (" + manyCriteria(listOfIDs) + ")");
-            while (res.next()) {
-                dataSizeTotal += res.getDouble(1) * (1024 * 1024);
-            }
-        } catch (SQLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
-        }
-        ProgressTotal.setIndeterminate(false);
-        BTargetFolder.setEnabled(targetFolder);
-        labSize.setText(I18N.get("DownloadData.label-Total-size") + " " + convertCapacity(dataSizeTotal));
-        labNumber.setText(I18N.get("DownloadData.label-Number") + " " + idImagesList.size());
-        Long positionMax = new Long(dataSizeTotal);
-        if (positionMax > 2047483647) {
-            positionMax /= 1048576;
-        }
-        ProgressTotal.setMaximum(positionMax.intValue());
-    }
-
     private void minusSize() {
         cumulSizeFile = 0;
         capacity_Treated = 0;
@@ -903,24 +830,24 @@ public class DownloadData extends javax.swing.JFrame {
         ProgressOnGoing.setValue((int) cumulSizeFile);
         pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
         pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-        ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
-                + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
-                + pourcentAll + "              "
-                + "                           " + TotalTime);
-        ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
-                + conversion(fileSize) + "                                               "
-                + pourcentFile + "                                              "
-                + FileTime);
+        ProgressTotal.setString(new StringBuilder().append(Config.convertOctetToAnyInDouble(cumulTotalSize)).append(" ")
+                .append(I18N.get("DownloadData.text-of")).append(" ")
+                .append(Config.convertOctetToAnyInDouble(dataSizeTotal)).append("                                         ")
+                .append(pourcentAll).append("              ").append("                           ").append(TotalTime).toString());
+        ProgressOnGoing.setString(new StringBuilder().append(conversion(cumulSizeFile)).append(" ")
+                .append(I18N.get("DownloadData.text-of")).append(" ").append(conversion(fileSize))
+                .append("                                               ").append(pourcentFile)
+                .append("                                              ").append(FileTime).toString());
     }
 
     private void endOfDownload(String title) {
         labImageName.setText("");
         this.setTitle(title);
-        ProgressTotal.setString("                                         "
-                + pourcentAll + "              "
-                + "                           ");
-        ProgressOnGoing.setString("                                               "
-                + pourcentFile + "                                              ");
+        ProgressTotal.setString(new StringBuilder("                                         ")
+                .append(pourcentAll).append("              ")
+                .append("                           ").toString());
+        ProgressOnGoing.setString(new StringBuilder("                                               ")
+                .append(pourcentFile).append("                                              ").toString());
     }
 
     private void speedAndDuration() {
@@ -949,8 +876,9 @@ public class DownloadData extends javax.swing.JFrame {
             } else {
                 time = tpsSec + " sec";
             }
-            this.setTitle(" " + pourcentAll + " - " + time + " " + "(" + s + ") - "
-                    + (a + 1) + " " + I18N.get("DownloadData.text-of") + " " + idImagesList.size());
+            this.setTitle(new StringBuilder(" ").append(pourcentAll).append(" - ").append(time)
+                    .append(" ").append("(").append(s).append(") - ").append(a + 1).append(" ")
+                    .append(I18N.get("DownloadData.text-of")).append(" ").append(idImagesList.size()).toString());
         }
     }
 
@@ -1017,7 +945,7 @@ public class DownloadData extends javax.swing.JFrame {
 
     private String getImageName(String idImage) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("SELECT image_name FROM dmt_image "
+            PreparedStatement ps = Config.con.prepareStatement("SELECT image_name FROM dmt_image\n"
                     + "WHERE id_image = ?");
             ps.setString(1, idImage);
             ResultSet res = ps.executeQuery();
@@ -1134,14 +1062,16 @@ public class DownloadData extends javax.swing.JFrame {
                 ProgressOnGoing.setValue((int) cumulSizeFile);
                 pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
                 pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-                ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize) + " " + I18N.get("DownloadData.text-of") + " "
-                        + Config.convertOctetToAnyInDouble(dataSizeTotal) + "                                         "
-                        + pourcentAll + "              "
-                        + "                           " + TotalTime);
-                ProgressOnGoing.setString(conversion(cumulSizeFile) + " " + I18N.get("DownloadData.text-of") + " "
-                        + conversion(fileSize) + "                                               "
-                        + pourcentFile + "                                              "
-                        + FileTime);
+                ProgressTotal.setString(new StringBuilder().append(Config.convertOctetToAnyInDouble(cumulTotalSize))
+                        .append(" ").append(I18N.get("DownloadData.text-of")).append(" ")
+                        .append(Config.convertOctetToAnyInDouble(dataSizeTotal)).append("                                         ")
+                        .append(pourcentAll).append("              ")
+                        .append("                           ") + TotalTime);
+                ProgressOnGoing.setString(new StringBuilder().append(conversion(cumulSizeFile)).append(" ")
+                        .append(I18N.get("DownloadData.text-of")).append(" ").append(conversion(fileSize))
+                        .append("                                               ")
+                        .append(pourcentFile).append("                                              ")
+                        .append(FileTime).toString());
                 if (endCopyFile >= fileSize) {
                     changeRowStatus(SCOMPLETED);
                     break;
@@ -1194,6 +1124,108 @@ public class DownloadData extends javax.swing.JFrame {
             return value.append((long) valeur).append(" Octets").toString();
         }
     }
+
+    private class MyTableModel extends AbstractTableModel implements StyleModel {
+
+        private final String[] COLUMN_NAMES = {I18N.get("DownloadData.table-header-File"), I18N.get("DownloadData.table-header-Size"),
+            I18N.get("DownloadData.table-header-Status")};
+        private final ArrayList[] DATA;
+
+        public MyTableModel() {
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
+            }
+        }
+
+        public boolean isNavigationOn() {
+            return true;
+        }
+
+        @Override
+        public CellStyle getCellStyleAt(int rowIndex, int columnIndex) {
+            if (columnIndex == table.getColumnCount() - 1) {
+                if (statusImages.get(rowIndex) == SWAITING) {
+                    return waiting;
+                } else if (statusImages.get(rowIndex) == SPROGRESSING) {
+                    return progressing;
+                } else if (statusImages.get(rowIndex) == SCOMPLETED) {
+                    return completed;
+                } else {
+                    return failed;
+                }
+            } else {
+                if (statusImages.get(rowIndex) == 1) {
+                    return cellTextBold;
+                } else {
+                    return cellText;
+                }
+            }
+        }
+
+        @Override
+        public boolean isCellStyleOn() {
+            return true;
+        }
+
+        @Override
+        public int getColumnCount() {
+            return COLUMN_NAMES.length;
+        }
+
+        @Override
+        public int getRowCount() {
+            return DATA[0].size();
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return COLUMN_NAMES[col];
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            return DATA[col].get(row);
+        }
+
+        @Override
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int col) {
+            return false;
+        }
+
+        @Override
+        public void setValueAt(Object value, int row, int col) {
+            DATA[col].set(row, value);
+            fireTableCellUpdated(row, col);
+        }
+
+        public void addNewRow() {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
+            }
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
+        }
+
+        public void removeNewRow() {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
+            }
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
+        }
+
+        public void removeNewRow(int index) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
+            }
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jidesoft.swing.JideButton BCancel;
     private com.jidesoft.swing.JideButton BDownload;
@@ -1220,6 +1252,7 @@ public class DownloadData extends javax.swing.JFrame {
     private ArrayList<String> idImagesFailedFiles = new ArrayList<>();
     private ArrayList<String> causesFaillure = new ArrayList<>();
     private ArrayList<Integer> statusImages = new ArrayList<>();
+    private ArrayList<String> imageSupportNameList = new ArrayList<>();
     private CellStyle progressing = new CellStyle();
     private CellStyle completed = new CellStyle();
     private CellStyle waiting = new CellStyle();
@@ -1239,6 +1272,7 @@ public class DownloadData extends javax.swing.JFrame {
     private long fileSize, cumulSizeFile, cumulTotalSize, t1, capacity_Treated = 0;
     private DataOutputStream outDownload;
     private int a;
+    private int itsRow = 0, itsColumn = 0;
     int idDelivery = 0;
     private String speed = "";
     private String pourcentAll = "0%", time = "", pourcentFile = "0%", FileTime = "0:0:0", TotalTime = "0:0:0";
