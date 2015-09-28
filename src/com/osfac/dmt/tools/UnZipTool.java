@@ -244,43 +244,43 @@ public class UnZipTool extends javax.swing.JDialog {
         panAllLayout.setHorizontalGroup(
                 panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panAllLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panAllLayout.createSequentialGroup()
-                .addComponent(ChBOpenFolder)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BUnzip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(panAllLayout.createSequentialGroup()
-                .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(panAllLayout.createSequentialGroup()
-                .addComponent(BAddFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(BRemoveFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panAllLayout.createSequentialGroup()
+                                        .addComponent(ChBOpenFolder)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(BUnzip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panAllLayout.createSequentialGroup()
+                                        .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(panAllLayout.createSequentialGroup()
+                                                        .addComponent(BAddFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(3, 3, 3)
+                                                        .addComponent(BRemoveFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap()));
 
         panAllLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{BCancel, BUnzip});
 
         panAllLayout.setVerticalGroup(
                 panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panAllLayout.createSequentialGroup()
-                .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(BAddFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BRemoveFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(BUnzip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(ChBOpenFolder))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(BAddFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BRemoveFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(BCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BUnzip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ChBOpenFolder))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,7 +292,7 @@ public class UnZipTool extends javax.swing.JDialog {
                 .addComponent(panAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE));
 
         pack();
-    }// </editor-fold>   
+    }// </editor-fold>
 
     private void BUnzipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BUnzipActionPerformed
         disableComponent();
@@ -335,10 +335,13 @@ public class UnZipTool extends javax.swing.JDialog {
             File[] tabFiles = fc.getSelectedFiles();
             for (int i = 0; i < tabFiles.length; i++) {
                 if (ListFiles.contains(tabFiles[i].getAbsolutePath())) {
-                    JOptionPane.showMessageDialog(parent, "\"" + tabFiles[i].getName() + "\" "
-                            + I18N.get("UnZipTool.already-shown-on-the-list"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, new StringBuilder("\"").append(tabFiles[i].getName())
+                            .append("\" ").append(I18N.get("UnZipTool.already-shown-on-the-list")).toString(),
+                            I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                 } else if (!tabFiles[i].getAbsolutePath().toLowerCase().endsWith("zip")) {
-                    JOptionPane.showMessageDialog(parent, I18N.get("UnZipTool.format-not-accaptable") + " : " + "\"" + tabFiles[i].getName() + "\"", I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, new StringBuilder(I18N.get("UnZipTool.format-not-accaptable"))
+                            .append(" : ").append("\"").append(tabFiles[i].getName()).append("\"").toString(),
+                            I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                 } else {
                     ListFiles.add(tabFiles[i].getAbsolutePath());
                     listFileName.add(tabFiles[i].getName());
@@ -400,8 +403,8 @@ public class UnZipTool extends javax.swing.JDialog {
             try {
                 fis.close();
             } catch (IOException e) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                        + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        e.getMessage(), null, null, e, Level.SEVERE, null));
                 doneSuccessfully = false;
             }
         }
@@ -424,8 +427,8 @@ public class UnZipTool extends javax.swing.JDialog {
             gzis.close();
             doneSuccessfully = true;
         } catch (IOException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
             doneSuccessfully = false;
         }
     }
@@ -448,7 +451,7 @@ public class UnZipTool extends javax.swing.JDialog {
         if (doneSuccessfully) {
             JOptionPane.showMessageDialog(parent, I18N.get("UnZipTool.extraction-done"));
 //            if (ChBOpenFolder.isSelected()) {
-//                
+//
 //            }
         }
     }
@@ -456,8 +459,9 @@ public class UnZipTool extends javax.swing.JDialog {
     private void displayFilesChoosen(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             if (!list.get(i).toLowerCase().endsWith("zip")) {
-                JOptionPane.showMessageDialog(parent, I18N.get("UnZipTool.format-not-accaptable") + "\""
-                        + "" + new File(list.get(i)).getName() + "\"", I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(parent, new StringBuilder(I18N.get("UnZipTool.format-not-accaptable"))
+                        .append("\"").append(new File(list.get(i)).getName()).append("\"").toString(),
+                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             } else {
                 ListFiles.add(list.get(i));
                 listFileName.add(new File(list.get(i)).getName());
@@ -469,6 +473,7 @@ public class UnZipTool extends javax.swing.JDialog {
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 UnZipTool dialog = new UnZipTool(new javax.swing.JFrame(), true, new ArrayList());
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {

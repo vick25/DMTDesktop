@@ -188,7 +188,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         menuBar.setFloatable(true);
         // add toolbars annd menus
         this.getDockableBarManager().addDockableBar(menuBar);
-        this.getDockableBarManager().addDockableBar(cbf.createStandardCommandBar());
+        this.getDockableBarManager().addDockableBar(cbf.createStandardCommandBar()); //Standard toolbar
+        this.getDockableBarManager().addDockableBar(cbf.createToolsQueryCommandBar()); //Tools queries toolbar
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -217,7 +218,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // set icon for the app frame
         DMTWorkbench.setIcon(this);
 
-        toolBar = new WorkbenchToolBar(workbenchContext);
+        toolBar = new WorkbenchToolBar(workbenchContext);//Manages the toolbar buttons
         toolBar.setTaskMonitorManager(new TaskMonitorManager());
 
         new RecursiveKeyListener(this) {
@@ -414,7 +415,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         this.toFront();
 
         if (Config.isFullVersion()) {
-            connectToFTPServer();
+            connectToFTPServer(); //Automatically connects to FTP server
         }
         if (Config.pref.getBoolean(SettingKeyFactory.OtherFeatures.ChKLayer, true)) {
             OpenFilePlugIn filePlugin = new OpenFilePlugIn(workbenchContext, new File(
@@ -548,11 +549,12 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         pan.add(statusPanel, BorderLayout.SOUTH);
     }
 
+    //Find all the images category and add them to the Search Images split button as a list of the Geographic search
     private void findImagesCategoriesAll() {
         try {
             ChBCategoryList.clear();
             DMTConfiguration.splBtnFindImagesData.removeAll();
-            ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT category_name "
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT category_name\n"
                     + "FROM dmt_category ORDER BY category_name");
             while (res.next()) {
                 ChBCategoryList.add(new JCheckBoxMenuItem(res.getString(1)));
@@ -572,7 +574,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         ChBCategoryList.get(i).setSelected(checkAll);
                     }
                     if (checkAll) {
-                        MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
+                        MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));//set the button text to Uncheck All
                     } else {
                         MICheckAll.setText(I18N.get("Text.select-All-categories"));
                     }
@@ -640,25 +642,25 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     private static String getCategoriesSelected() {
-        String categories = "";
+        StringBuilder categories = new StringBuilder();
         for (int i = 0; i < ChBCategoryList.size(); i++) {
             if (ChBCategoryList.get(i).isSelected()) {
-                categories += ChBCategoryList.get(i).getText() + ",";
+                categories.append(ChBCategoryList.get(i).getText()).append(",");
             }
         }
-        if (categories.endsWith(",")) {
-            categories = categories.substring(0, categories.length() - 1);
+        if (categories.toString().endsWith(",")) {
+            categories = new StringBuilder().append(categories.substring(0, categories.length() - 1));
         }
 
-        String value = "";
-        String tab[] = categories.split(",");
+        StringBuilder value = new StringBuilder();
+        String tab[] = categories.toString().split(",");
         for (int i = 0; i < tab.length; i++) {
-            value += "\'" + tab[i] + "\',";
+            value.append("\'").append(tab[i]).append("\',");
         }
-        if (value.endsWith(",")) {
-            value = value.substring(0, value.length() - 1);
+        if (value.toString().endsWith(",")) {
+            value = new StringBuilder().append(value.substring(0, value.length() - 1));
         }
-        return value;
+        return value.toString();
     }
 
     public static Connection remoteDBConnecting() {
@@ -869,7 +871,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     public static void actionFindData() {
-        final String categories = getCategoriesSelected();
+        final String categories = getCategoriesSelected(); //images category
+
         if (categories.isEmpty() || categories.equals("''")) {
             JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get(
                     "Text.WorkbenchFrame.categories-not-selected"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
@@ -890,12 +893,16 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         }
                         where = where.substring(0, where.length() - 3);
 //                        System.out.println(where);
-                        ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image\n"
+                        ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image, category_name\n"
                                 + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
                                 + "dmt_category.id_category WHERE\n" + where);
                         ArrayList<Integer> IDsImageList = new ArrayList<>();
+                        ArrayList<Integer> cloudCoverImageList = new ArrayList<>();
                         while (res.next()) {
                             IDsImageList.add(res.getInt(1));
+                            if (res.getString(2).equalsIgnoreCase("LANDSAT")) {
+                                cloudCoverImageList.add(res.getInt(1)); //get only the ID of Landsat image for cloud cover
+                            }
                         }
 //                        dbprocessing.setVisible(false);
                         progress.setProgress(100);
@@ -907,7 +914,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                             if (geoResult != null) {
                                 geoResult.dispose();
                             }
-                            geoResult = new GeoResult(DMTWorkbench.frame, true, IDsImageList);
+                            geoResult = new GeoResult(DMTWorkbench.frame, true, IDsImageList, cloudCoverImageList);
+                            Thread.sleep(30);
+                            if (Config.isFullVersion()) {
+                                geoResult.fillCloudCover();//Method to fill the cloud cover of images
+                            }
                             geoResult.setVisible(true);
                             if (previewLayer != null) {
                                 previewLayer.getLayerManager().dispose(DMTWorkbench.frame, previewLayer);
@@ -917,7 +928,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         FeatureTab = null;
                         where = null;
                         IDsImageList = null;
-                    } catch (SQLException | HeadlessException e) {
+                    } catch (SQLException | HeadlessException | InterruptedException e) {
                         JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                                 e.getMessage(), null, null, e, Level.SEVERE, null));
                     }
@@ -1026,7 +1037,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     public static void actionLoadLayers() {
-        new LoadDefaultLayers(DMTWorkbench.frame, true).setVisible(true);
+        if (loadDefaultLayers != null) {
+            loadDefaultLayers = null;
+        }
+        loadDefaultLayers = new LoadDefaultLayers(DMTWorkbench.frame, true);
+        loadDefaultLayers.setVisible(true);
     }
 
     private void clearUp() {
@@ -2258,6 +2273,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private boolean checkAll = false;
     private final JMenuItem MICheckAll = new JMenuItem();
     private static GeoResult geoResult;
+    private static LoadDefaultLayers loadDefaultLayers;
     public static JideButton DataRequestFound;
     public static JideButton BSConnect; //connect to FTP Server
     public static String TypeOfVersion = Config.FULL_VERSION;

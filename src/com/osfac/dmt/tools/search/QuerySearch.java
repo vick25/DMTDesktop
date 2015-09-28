@@ -137,7 +137,8 @@ public class QuerySearch extends javax.swing.JPanel {
             }
         });
         initComponents(I18N.DMTResourceBundle);
-        showItemInScrollPane(null);
+
+        showComponentInScrollPane(null);
         table.requestFocus();
         panImage = new JImagePanel();
         panImage.setLayout(new BorderLayout());
@@ -171,17 +172,18 @@ public class QuerySearch extends javax.swing.JPanel {
                     BReset.setEnabled(false);
                 }
                 if (table.getRowCount() > 0) {
-                    LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : " + table.getRowCount());
+                    LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed"))
+                            .append(" : ").append(table.getRowCount()).toString());
                     int rowChecked = 0;
                     for (int i = 0; i < table.getRowCount(); i++) {
                         if (table.getValueAt(i, 0).equals(true)) {
                             rowChecked++;
                         }
                     }
-                    LabImageChecked.setText(I18N.get("Text.Images-checked") + " : " + rowChecked);
+                    LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked")).append(" : ").append(rowChecked).toString());
                 } else {
-                    LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : 0");
-                    LabImageChecked.setText(I18N.get("Text.Images-checked") + " : 0");
+                    LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed")).append(" : 0").toString());
+                    LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked")).append(" : 0").toString());
                 }
 
                 enabledPopupItems();
@@ -207,10 +209,11 @@ public class QuerySearch extends javax.swing.JPanel {
                         TableUtils.autoResizeAllRows(table);
                         susp = false;
                         BAddSearch.setEnabled(true);
-                        showItemInScrollPane(table);
+                        showComponentInScrollPane(table);
 //                        WorkbenchFrame.dbprocessing.setVisible(false);
                         if (simulateNumber < 2000) {
-                            JOptionPane.showMessageDialog(DMTWorkbench.frame, simulateNumber + " " + I18N.get("Search.images-found"));
+                            JOptionPane.showMessageDialog(DMTWorkbench.frame, new StringBuilder().append(simulateNumber)
+                                    .append(" ").append(I18N.get("Search.images-found")).toString());
                         }
                     }
                 }
@@ -689,8 +692,8 @@ public class QuerySearch extends javax.swing.JPanel {
             new DataRequestForm(DMTWorkbench.frame, true, list, getSizeOfImages(list), list2).setVisible(true);
         } else {
             if (WorkbenchFrame.BSConnect.isEnabled()) {
-                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"
-                        + ""), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"),
+                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             } else {
                 new DownloadData(list).setVisible(true);
             }
@@ -699,13 +702,14 @@ public class QuerySearch extends javax.swing.JPanel {
 
     private void BSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSearchActionPerformed
         table.unsort();
-        clearVector();
         cleanTable();
+        clearVector();
         searchData();
     }//GEN-LAST:event_BSearchActionPerformed
 
     private void BAddSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BAddSearchActionPerformed
         table.unsort();
+        cleanTable();
         searchData();
     }//GEN-LAST:event_BAddSearchActionPerformed
 
@@ -729,7 +733,7 @@ public class QuerySearch extends javax.swing.JPanel {
         }
         //        BReset.setEnabled(false);
         BAddSearch.setEnabled(false);
-        showItemInScrollPane(null);
+        showComponentInScrollPane(null);
         WorkbenchFrame.progress.setIndeterminate(false);
         WorkbenchFrame.progress.setProgress(100);
     }//GEN-LAST:event_BResetActionPerformed
@@ -749,26 +753,33 @@ public class QuerySearch extends javax.swing.JPanel {
     private void MIExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIExcelActionPerformed
         JFileChooser fc = new JFileChooser(Config.getDefaultDirectory());
         fc.setFileFilter(new FileNameExtensionFilter(I18N.get("GeoResult.Export-file-type"), "xls"));
-        File file = new File(Config.defaultDirectory + File.separator + "data.xls");
+        File file = new File(new StringBuilder(Config.defaultDirectory).append(File.separator)
+                .append("data.xls").toString());
         fc.setSelectedFile(file);
         int result = fc.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             if (!fc.getSelectedFile().exists()) {
                 Config.setDefaultDirectory(fc.getSelectedFile().getParent());
                 if (!fc.getSelectedFile().getAbsolutePath().contains(".")) {
-                    createExcelFile(new File(fc.getSelectedFile().getAbsolutePath() + ".xls"));
+                    createExcelFile(new File(new StringBuilder(fc.getSelectedFile().getAbsolutePath())
+                            .append(".xls").toString()));
                 } else {
                     createExcelFile(fc.getSelectedFile());
                 }
             } else {
-                JOptionPane.showMessageDialog(this, fc.getSelectedFile().getName() + " " + I18N.get("GeoResult.Export-already-exists-message")
-                        + "", I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, new StringBuilder(fc.getSelectedFile().getName())
+                        .append(" ").append(I18N.get("GeoResult.Export-already-exists-message")).toString(),
+                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_MIExcelActionPerformed
 
     private void MICheckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MICheckingActionPerformed
-        new AdvancedSelection(DMTWorkbench.frame, true, table).setVisible(true);
+        if (advancedSelection != null) {
+            advancedSelection.dispose();
+        }
+        advancedSelection = new AdvancedSelection(DMTWorkbench.frame, true, table);
+        advancedSelection.setVisible(true);
     }//GEN-LAST:event_MICheckingActionPerformed
 
     private void MIClearTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIClearTableActionPerformed
@@ -788,7 +799,7 @@ public class QuerySearch extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_MIPropertiesActionPerformed
 
-    private static void showItemInScrollPane(JComponent component) {
+    private static void showComponentInScrollPane(JComponent component) {
         ScrlAll.setViewportView(component);
     }
 
@@ -889,14 +900,14 @@ public class QuerySearch extends javax.swing.JPanel {
     private String getSizeOfImages(ArrayList list) {
         double totalSize = 0.0;
         try {
-            ResultSet res = stat.executeQuery("select sum(size) from dmt_image where id_image in "
+            ResultSet res = stat.executeQuery("SELECT SUM(size) FROM dmt_image WHERE id_image IN\n"
                     + "(" + manyCriteria(list.toArray()) + ")");
             while (res.next()) {
                 totalSize = res.getDouble(1);
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         String size = Config.convertOctetToAnyInDouble((long) (totalSize * (1024 * 1024)));
         return size;
@@ -906,15 +917,16 @@ public class QuerySearch extends javax.swing.JPanel {
         try {
             panImage.repaint();
             panImage.setAutoSize(true);
-            String pathimg = Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net") + path;
+            StringBuilder pathimg = new StringBuilder(Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net"))
+                    .append(path);
 //            System.out.println(pathimg);
-            panImage.setImage(new ImageIcon(new URL(pathimg)).getImage());
+            panImage.setImage(new ImageIcon(new URL(pathimg.toString())).getImage());
             labBusyApercu.setVisible(false);
             panImage.repaint();
             WorkbenchFrame.progress.setProgress(100);
         } catch (MalformedURLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -940,8 +952,11 @@ public class QuerySearch extends javax.swing.JPanel {
                     messagePreview(I18N.get("Text.Loading"), true);
                     pathPreviewFile = getPathPreview(table.getValueAt(table.getSelectedRow(), 1).toString());
                     WorkbenchFrame.progress.setIndeterminate(true);
-                    WorkbenchFrame.progress.setProgressStatus(I18N.get("Text.Loading2") + " \"" + new File(pathPreviewFile).getName()
-                            + "\" " + I18N.get("Text.from.text") + " " + Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net") + "  ...");
+                    WorkbenchFrame.progress.setProgressStatus(new StringBuilder(I18N.get("Text.Loading2"))
+                            .append(" \"").append(new File(pathPreviewFile).getName()).append("\" ")
+                            .append(I18N.get("Text.from.text")).append(" ")
+                            .append(Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net"))
+                            .append("  ...").toString());
                     if (pathPreviewFile.equals("")) {
                         messagePreview(I18N.get("Text.Preview-not-available"), false);
                         WorkbenchFrame.progress.setProgress(100);
@@ -959,15 +974,15 @@ public class QuerySearch extends javax.swing.JPanel {
                 messagePreview();
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
     private String getPathPreview(String idImage) throws SQLException {
         String imagePath = "";
-        PreparedStatement ps = Config.con.prepareStatement("select preview_path from dmt_support where id_support = ("
-                + "select id_support from dmt_image where id_image = ?)");
+        PreparedStatement ps = Config.con.prepareStatement("SELECT preview_path FROM dmt_support WHERE id_support = ("
+                + "SELECT id_support FROM dmt_image WHERE id_image = ?)");
         ps.setString(1, idImage);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -994,43 +1009,43 @@ public class QuerySearch extends javax.swing.JPanel {
         String where, category, path, row, year, country, mission, slc = "", ortho;
 
         if (MainCriteria.CBCategory.getSelectedObjects().length != 0) {
-            category = " AND (category_name in (" + manyCriteria(MainCriteria.CBCategory.getSelectedObjects()) + "))";
+            category = " AND (category_name IN (" + manyCriteria(MainCriteria.CBCategory.getSelectedObjects()) + "))";
         } else {
             category = "";
         }
         if (MainCriteria.CBPath.getSelectedObjects().length != 0) {
-            path = " AND (path in (" + manyCriteria(MainCriteria.CBPath.getSelectedObjects()) + "))";
+            path = " AND (path IN (" + manyCriteria(MainCriteria.CBPath.getSelectedObjects()) + "))";
         } else {
             path = "";
         }
         if (MainCriteria.CBRow.getSelectedObjects().length != 0) {
-            row = " AND (row in (" + manyCriteria(MainCriteria.CBRow.getSelectedObjects()) + "))";
+            row = " AND (row IN (" + manyCriteria(MainCriteria.CBRow.getSelectedObjects()) + "))";
         } else {
             row = "";
         }
         if (MainCriteria.CBCountry.getSelectedObjects().length != 0) {
-            country = " AND (country_name in (" + manyCriteria(MainCriteria.CBCountry.getSelectedObjects()) + "))";
+            country = " AND (country_name IN (" + manyCriteria(MainCriteria.CBCountry.getSelectedObjects()) + "))";
         } else {
             country = "";
         }
         if (MainCriteria.CBYear.getSelectedObjects().length != 0) {
-            year = " AND (year(date) in (" + manyCriteria(MainCriteria.CBYear.getSelectedObjects()) + "))";
+            year = " AND (year(date) IN (" + manyCriteria(MainCriteria.CBYear.getSelectedObjects()) + "))";
         } else {
             year = "";
         }
         if (MainCriteria.CBMission.getSelectedObjects().length != 0) {
-            mission = " AND (mission in (" + manyCriteria(MainCriteria.CBMission.getSelectedObjects()) + "))";
+            mission = " AND (mission IN (" + manyCriteria(MainCriteria.CBMission.getSelectedObjects()) + "))";
         } else {
             mission = "";
         }
         if (MainCriteria.CBOrtho.getSelectedObjects().length != 0) {
-            ortho = " AND (ortho in (" + manyCriteria(MainCriteria.CBOrtho.getSelectedObjects()) + "))";
+            ortho = " AND (ortho IN (" + manyCriteria(MainCriteria.CBOrtho.getSelectedObjects()) + "))";
         } else {
             ortho = "";
         }
         if (MainCriteria.CBSLC.isEnabled()) {
             if (MainCriteria.CBSLC.getSelectedObjects().length != 0) {
-                slc = " AND (slc in (" + manyCriteria(MainCriteria.CBSLC.getSelectedObjects()) + "))";
+                slc = " AND (slc IN (" + manyCriteria(MainCriteria.CBSLC.getSelectedObjects()) + "))";
             } else {
                 slc = "";
             }
@@ -1047,7 +1062,7 @@ public class QuerySearch extends javax.swing.JPanel {
         return where;
     }
 
-    private boolean isContainingValues() {
+    private boolean isGeoCriteriaTableContainingValues() {
         boolean isEmpty = false;
         for (int i = 0; i < GeoCriteria.table.getRowCount(); i++) {
             if (GeoCriteria.table.getValueAt(i, 0).toString().equals("")
@@ -1058,9 +1073,10 @@ public class QuerySearch extends javax.swing.JPanel {
         return !isEmpty;
     }
 
+    //Get the shapes if the GeoCriteria table is filled with latlong values
     private String getShape() {
         String shape = "";
-        if (isContainingValues()) {
+        if (isGeoCriteriaTableContainingValues()) {
             if (GeoCriteria.RBPoint.isSelected()) {
                 shape = " AND (Intersects(GeomFromText('POINT(";
             } else if (GeoCriteria.RBLine.isSelected()) {
@@ -1071,7 +1087,7 @@ public class QuerySearch extends javax.swing.JPanel {
             try {
                 for (int i = 0; i < GeoCriteria.table.getRowCount(); i++) {
                     shape += Double.parseDouble(GeoCriteria.table.getValueAt(i, 0).toString()) + " "
-                            + "" + Double.parseDouble(GeoCriteria.table.getValueAt(i, 1).toString()) + ",";
+                            + Double.parseDouble(GeoCriteria.table.getValueAt(i, 1).toString()) + ",";
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, I18N.get("QuerySearch.Latitude-Longitude-values-are-no-valid"), I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
@@ -1087,35 +1103,34 @@ public class QuerySearch extends javax.swing.JPanel {
     }
 
     private String manyCriteria(Object[] list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.length; i++) {
-            values += "\'" + list[i].toString() + "\',";
+            values.append("\'").append(list[i].toString()).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
 
     private class MyTableModel extends TreeTableModel {
 
-        private String[] columnNames = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"
-            + ""), I18N.get("Text.ROW"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"),
+            I18N.get("Text.ROW"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+        private final ArrayList[] DATA;
 
         public MyTableModel() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
         @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
@@ -1128,12 +1143,12 @@ public class QuerySearch extends javax.swing.JPanel {
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -1143,48 +1158,44 @@ public class QuerySearch extends javax.swing.JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            if (col == 0) {
-                return (true);
-            } else {
-                return (false);
-            }
+            return col == 0;
         }
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 if (i == 0) {
-                    Data[i].add(false);
+                    DATA[i].add(false);
                 } else {
-                    Data[i].add("");
+                    DATA[i].add("");
                 }
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 
     public static void cancelExe() {
-        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("Search.interrupt-search-by-user"
-                + ""), I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
+        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("Search.interrupt-search-by-user"),
+                I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
             exe.dispose();
             WorkbenchFrame.progress.setProgress(100);
             TableUtils.autoResizeAllColumns(table);
@@ -1192,11 +1203,11 @@ public class QuerySearch extends javax.swing.JPanel {
             timerShow.stop();
             susp = false;
             BAddSearch.setEnabled(true);
-            showItemInScrollPane(table);
+            showComponentInScrollPane(table);
 //            WorkbenchFrame.dbprocessing.setVisible(false);
             if ((nbRow - 1) < 2000) {
-                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("Search.search-interrupt") + " "
-                        + "" + (nbRow - 1) + " " + I18N.get("Search.images-found2"));
+                JOptionPane.showMessageDialog(DMTWorkbench.frame, new StringBuilder(I18N.get("Search.search-interrupt"))
+                        .append(" ").append((nbRow - 1)).append(" ").append(I18N.get("Search.images-found2")).toString());
             }
         }
     }
@@ -1209,32 +1220,34 @@ public class QuerySearch extends javax.swing.JPanel {
         if (!WHERE.equals("")) {
             String query;
             if (MainCriteria.CBCountry.getSelectedObjects().length > 0) {
-                query = "select distinct * from dmt_category join dmt_image on dmt_category.id_category = dmt_image.id_category join "
-                        + "dmt_concern on dmt_concern.id_image = dmt_image.id_image join dmt_pathrow on dmt_pathrow.path_row = dmt_concern.path_row "
-                        + "join dmt_include on dmt_include.path_row = dmt_pathrow.path_row join dmt_country on dmt_country.id_country = "
-                        + "dmt_include.id_country " + WHERE + " order by dmt_image.id_image";
+                query = "SELECT DISTINCT * FROM dmt_category JOIN dmt_image ON dmt_category.id_category = dmt_image.id_category JOIN "
+                        + "dmt_concern ON dmt_concern.id_image = dmt_image.id_image JOIN dmt_pathrow ON dmt_pathrow.path_row = dmt_concern.path_row "
+                        + "JOIN dmt_include ON dmt_include.path_row = dmt_pathrow.path_row JOIN dmt_country ON dmt_country.id_country = "
+                        + "dmt_include.id_country " + WHERE + " ORDER BY dmt_image.id_image";
             } else {
-                query = "select distinct * from dmt_category join dmt_image on dmt_category.id_category = dmt_image.id_category join "
-                        + "dmt_concern on dmt_concern.id_image = dmt_image.id_image join dmt_pathrow on dmt_pathrow.path_row = dmt_concern.path_row "
-                        + "" + WHERE + " order by dmt_image.id_image";
+                query = "SELECT DISTINCT * FROM dmt_category JOIN dmt_image ON dmt_category.id_category = dmt_image.id_category JOIN "
+                        + "dmt_concern ON dmt_concern.id_image = dmt_image.id_image JOIN dmt_pathrow ON dmt_pathrow.path_row = dmt_concern.path_row "
+                        + WHERE + " ORDER BY dmt_image.id_image";
             }
 //            System.out.println(query);
-            simulateNumber = simulateQuery("select count(distinct dmt_image.id_image) " + query.substring(18));
+            simulateNumber = simulateQuery("SELECT COUNT(DISTINCT dmt_image.id_image) " + query.substring(18));
             if (simulateNumber == 0) {
                 WorkbenchFrame.progress.setProgress(100);
                 showItemInScrollPane(BLabLoading, I18N.get("Search.no-image-has-been-found"));
-                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("Search.no-image-has-been-found"), ""
-                        + I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
-                showItemInScrollPane(null);
+                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("Search.no-image-has-been-found"),
+                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                showComponentInScrollPane(null);
             } else {
                 if (simulateNumber >= 2000) {
-                    if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, simulateNumber + " " + I18N.get("Search.images-found") + " "
-                            + I18N.get("Search.request-requires-time"), ""
-                            + I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
+                    if (JOptionPane.showConfirmDialog(DMTWorkbench.frame,
+                            new StringBuilder().append(simulateNumber).append(" ")
+                            .append(I18N.get("Search.images-found")).append(" ")
+                            .append(I18N.get("Search.request-requires-time")).toString(),
+                            I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
                         vectThread.clear();
                         ID = 0;
                         timerShow.start();
-                        launghSearch(query);
+                        launchSearch(query); //method that do the launch of data
                     } else {
                         timerShow.stop();
                         WorkbenchFrame.progress.setProgress(100);
@@ -1243,12 +1256,12 @@ public class QuerySearch extends javax.swing.JPanel {
                     vectThread.clear();
                     ID = 0;
                     timerShow.start();
-                    launghSearch(query);
+                    launchSearch(query); //method that do the launch of data
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("Search.no-criteria-has-been-made"), ""
-                    + I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("Search.no-criteria-has-been-made"),
+                    I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -1260,7 +1273,7 @@ public class QuerySearch extends javax.swing.JPanel {
             wbb = Workbook.createWorkbook(file);
             String feuille = "OSFAC-DMT";
             sheet = wbb.createSheet(feuille, 0);
-            int p = 0;
+            int p;
             for (int gh = 0; gh < table.getColumnCount(); gh++) {
                 p = gh;
                 if (p < table.getColumnCount()) {
@@ -1270,7 +1283,7 @@ public class QuerySearch extends javax.swing.JPanel {
                 }
             }
             int a = 0;
-            int b = 0;
+            int b;
             for (int i = 0; i < table.getColumnCount(); i++) {
                 b = 0;
                 for (int j = 1; j < table.getRowCount() + 1; j++) {
@@ -1284,15 +1297,15 @@ public class QuerySearch extends javax.swing.JPanel {
             }
             wbb.write();
             wbb.close();
-            JOptionPane.showMessageDialog(this, I18N.get("GeoResult.Export-confirmation-message"
-                    + ""), I18N.get("Text.Confirm"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, I18N.get("GeoResult.Export-confirmation-message"),
+                    I18N.get("Text.Confirm"), JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException | WriteException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo("Fatal error"
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo("Fatal error", e.getMessage(), null, null,
+                    e, Level.SEVERE, null));
         }
     }
 
-    private void launghSearch(String query) {
+    private void launchSearch(String query) {
         showItemInScrollPane(BLabLoading, I18N.get("Search.processing"));
         try {
             if (simulateNumber > 0) {
@@ -1319,12 +1332,14 @@ public class QuerySearch extends javax.swing.JPanel {
     private void startSearch(ResultSet res) {
         try {
             IDIMAGE = res.getString("dmt_image.id_image");
-            vID.add(IDIMAGE);
-            vImage.add(res.getString("image_name"));
-            vPath.add(res.getString("path"));
-            vRow.add(res.getString("row"));
-            vDate.add(res.getDate("date"));
-            vSize.add(res.getDouble("size"));
+            if (!vID.contains(IDIMAGE)) {
+                vID.add(IDIMAGE);
+                vImage.add(res.getString("image_name"));
+                vPath.add(res.getString("path"));
+                vRow.add(res.getString("row"));
+                vDate.add(res.getDate("date"));
+                vSize.add(res.getDouble("size"));
+            }
             Runnable runA = new Runnable() {
                 @Override
                 public void run() {
@@ -1334,8 +1349,8 @@ public class QuerySearch extends javax.swing.JPanel {
             Thread ta = new Thread(runA, "thread");
             vectThread.add(ta);
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -1356,11 +1371,12 @@ public class QuerySearch extends javax.swing.JPanel {
             progres++;
             RunSearch.progression.setValue(progres);
             RunSearch.progression.setMaximum(Max);
-            RunSearch.progression.setString(progres + " / " + simulateNumber);
+            RunSearch.progression.setString(new StringBuilder().append(progres).append(" / ")
+                    .append(simulateNumber).toString());
             susp = true;
         } catch (Exception ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -1378,8 +1394,8 @@ public class QuerySearch extends javax.swing.JPanel {
             Max = suite;
             WorkbenchFrame.progress.setProgress(100);
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return suite;
     }
@@ -1411,8 +1427,8 @@ public class QuerySearch extends javax.swing.JPanel {
         while (nbTable > 0) {
             tableModel.removeNewRow(--nbTable);
         }
-        LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : 0");
-        LabImageChecked.setText(I18N.get("Text.Images-checked") + " : 0");
+        LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed")).append(" : 0").toString());
+        LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked")).append(" : 0").toString());
         messagePreview();
     }
 
@@ -1469,4 +1485,5 @@ public class QuerySearch extends javax.swing.JPanel {
     ArrayList<String> vRow = new ArrayList<>();
     ArrayList<Date> vDate = new ArrayList<>();
     ArrayList<Double> vSize = new ArrayList<>();
+    private AdvancedSelection advancedSelection;
 }

@@ -14,8 +14,7 @@ import javax.swing.JToolBar;
 import org.openjump.swing.listener.InvokeMethodActionListener;
 
 /**
- * Extends JToolBar to create an {@link JToolBar} with certain buttons enabled
- * (for saving state).
+ * Extends JToolBar to create an {@link JToolBar} with certain buttons enabled (for saving state).
  */
 public class EnableableToolBar extends JToolBar {
 
@@ -37,8 +36,8 @@ public class EnableableToolBar extends JToolBar {
         for (Iterator i = buttonToEnableCheckMap.keySet().iterator();
                 i.hasNext();) {
             JComponent component = (JComponent) i.next();
-            EnableCheck enableCheck =
-                    (EnableCheck) buttonToEnableCheckMap.get(component);
+            EnableCheck enableCheck
+                    = (EnableCheck) buttonToEnableCheckMap.get(component);
             component.setEnabled(enableCheck.check(component) == null);
         }
     }

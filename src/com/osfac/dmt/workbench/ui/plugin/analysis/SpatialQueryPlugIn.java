@@ -3,6 +3,7 @@ package com.osfac.dmt.workbench.ui.plugin.analysis;
 import com.osfac.dmt.I18N;
 import com.osfac.dmt.feature.FeatureCollection;
 import com.osfac.dmt.task.TaskMonitor;
+import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.WorkbenchContext;
 import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.model.StandardCategoryNames;
@@ -17,12 +18,15 @@ import com.osfac.dmt.workbench.ui.GenericNames;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.SelectionManager;
+import com.osfac.dmt.workbench.ui.WorkbenchFrame;
+import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
+import com.osfac.dmt.workbench.ui.images.IconLoader;
 import com.osfac.dmt.workbench.ui.plugin.FeatureInstaller;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Collection;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -57,6 +61,7 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
     public SpatialQueryPlugIn() {
         functionNames = GeometryPredicate.getNames();
     }
+
     private String categoryName = StandardCategoryNames.RESULT;
 
     public void setCategoryName(String value) {
@@ -68,14 +73,28 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
         return I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Spatial-Query");
     }
 
+    public ImageIcon getIcon() {
+        return IconLoader.icon("spatial_query.png");
+    }
+
     @Override
     public void initialize(PlugInContext context) throws Exception {
+        DMTWorkbench workbench = context.getWorkbenchContext().getWorkbench();
+        WorkbenchFrame frame = workbench.getFrame();
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
-        featureInstaller.addMainMenuItem(
-                this,
-                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
-                new JMenuItem(this.getName() + "..."),
+//        featureInstaller.addMainMenuItem(
+//                this,
+//                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
+//                new JMenuItem(this.getName() + "..."),
+//                createEnableCheck(context.getWorkbenchContext()));
+        //[Added by Vick]
+        featureInstaller.addMainMenuItemWithJava14Fix(this, new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
+                new StringBuilder(this.getName()).append("...").toString(), false, this.getIcon(),
                 createEnableCheck(context.getWorkbenchContext()));
+
+        // Add tool-bar Icon [Victor Kadiata]
+        WorkbenchToolBar toolBar = frame.getToolBar();
+        toolBar.addPlugIn(getIcon(), this, createEnableCheck(context.getWorkbenchContext()), context.getWorkbenchContext());
     }
 
     public static MultiEnableCheck createEnableCheck(WorkbenchContext workbenchContext) {
@@ -169,9 +188,10 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
 
     private void setDialogValues(MultiInputDialog dialog, PlugInContext context) {
         //dialog.setSideBarImage(new ImageIcon(getClass().getResource("DiffSegments.png")));
-        dialog.setSideBarDescription(
-                I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Finds-the-Source-features-which-have-a-given-spatial-relationship-to-some-feature-in-the-Mask-layer")
-                + " (" + I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.ie-where-Source.Relationship(Mask)-is-true") + ")");
+        dialog.setSideBarDescription(new StringBuilder(
+                I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Finds-the-Source-features-which-have-a-given-spatial-relationship-to-some-feature-in-the-Mask-layer"))
+                .append(" (").append(I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.ie-where-Source.Relationship(Mask)-is-true"))
+                .append(")").toString());
 
         //Set initial layer values to the first and second layers in the layer list.
         //In #initialize we've already checked that the number of layers >= 1. [Bob Boseko]
@@ -215,8 +235,7 @@ public class SpatialQueryPlugIn extends AbstractPlugIn implements ThreadedPlugIn
         paramField.setOpaque(paramUsed);
     }
 
-    private class MethodItemListener
-            implements ItemListener {
+    private class MethodItemListener implements ItemListener {
 
         @Override
         public void itemStateChanged(ItemEvent e) {

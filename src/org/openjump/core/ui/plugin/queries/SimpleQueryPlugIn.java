@@ -1,9 +1,12 @@
 package org.openjump.core.ui.plugin.queries;
 
 import com.osfac.dmt.I18N;
+import static com.osfac.dmt.workbench.DMTWorkbench.frame;
 import com.osfac.dmt.workbench.plugin.AbstractPlugIn;
 import com.osfac.dmt.workbench.plugin.PlugInContext;
 import com.osfac.dmt.workbench.ui.MenuNames;
+import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
+import com.osfac.dmt.workbench.ui.images.IconLoader;
 
 /**
  * SimpleQueryPlugIn is a query editor and processor. It has the following capabilities :
@@ -27,7 +30,12 @@ public class SimpleQueryPlugIn extends AbstractPlugIn {
 
         context.getFeatureInstaller().addMainMenuItemWithJava14Fix(this,
                 new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES}, new StringBuilder(
-                        this.getName()).append("...").toString(), false, null, null);
+                        this.getName()).append("...").toString(), false,
+                IconLoader.icon("simple_query.png"), null);
+
+        // Add tool-bar Icon [Victor Kadiata]
+        WorkbenchToolBar toolBar = frame.getToolBar();
+        toolBar.addPlugIn(IconLoader.icon("simple_query.png"), this, null, context.getWorkbenchContext());
     }
 
     @Override

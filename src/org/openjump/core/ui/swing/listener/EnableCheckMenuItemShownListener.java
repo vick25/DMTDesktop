@@ -26,6 +26,7 @@ public class EnableCheckMenuItemShownListener implements MenuItemShownListener {
         this.enabledMessage = enabledMessage;
     }
 
+    @Override
     public void menuItemShown(JMenuItem menuItem) {
         String errorMessage = null;
         try {

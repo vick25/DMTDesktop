@@ -12,6 +12,7 @@ public class NewTaskPlugIn extends AbstractPlugIn {
     public NewTaskPlugIn() {
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         reportNothingToUndoYet(context);
         context.getWorkbenchFrame().addTaskFrame();

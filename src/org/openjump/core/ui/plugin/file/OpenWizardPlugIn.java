@@ -35,6 +35,7 @@ public class OpenWizardPlugIn extends AbstractThreadedUiPlugIn {
         registry.createEntry(KEY, wizard);
     }
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         super.initialize(context);
         DMTWorkbench workbench = workbenchContext.getWorkbench();
@@ -55,6 +56,7 @@ public class OpenWizardPlugIn extends AbstractThreadedUiPlugIn {
                 + "{pos:3}", false, icon, enableCheck);
     }
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         Registry registry = workbenchContext.getRegistry();
 
@@ -71,19 +73,16 @@ public class OpenWizardPlugIn extends AbstractThreadedUiPlugIn {
                     lastWizard = wizard;
                 }
             }
-
         }
         dialog.setSelectedWizard(lastWizard);
         dialog.pack();
         GUIUtil.centreOnWindow(dialog);
         dialog.setVisible(true);
         lastWizard = dialog.getSelectedWizard();
-        if (dialog.wasFinishPressed()) {
-            return true;
-        }
-        return false;
+        return dialog.wasFinishPressed();
     }
 
+    @Override
     public void run(TaskMonitor monitor, PlugInContext context) throws Exception {
         WizardGroup wizard = dialog.getSelectedWizard();
         wizard.run(dialog, monitor);

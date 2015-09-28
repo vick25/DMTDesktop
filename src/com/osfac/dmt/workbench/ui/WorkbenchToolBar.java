@@ -193,14 +193,38 @@ public class WorkbenchToolBar extends EnableableToolBar {
                     DMTCommandBarFactory.redo.setEnabled(button.isEnabled());
                 }
             }).start();
+        } else if (plugIn.getName().equalsIgnoreCase(I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Spatial-Query"))) {
+            button.setVisible(false);
+            DMTCommandBarFactory.spatialQuery.addActionListener(listener);
+            new Timer(200, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    DMTCommandBarFactory.spatialQuery.setEnabled(button.isEnabled());
+                }
+            }).start();
+        } else if (plugIn.getName().equalsIgnoreCase(I18N.get("org.openjump.core.ui.plugin.queries.SearchAllAttributes.search-all-attributes"))) {
+            button.setVisible(false);
+            DMTCommandBarFactory.searchAllAttributes.addActionListener(listener);
+        } else if (plugIn.getName().equalsIgnoreCase(I18N.get("org.openjump.core.ui.plugin.queries.SimpleQuery.menuitem"))) {
+            button.setVisible(false);
+            DMTCommandBarFactory.simpleQuery.addActionListener(listener);
+        } else if (plugIn.getName().equalsIgnoreCase(I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Attribute-Query"))) {
+            button.setVisible(false);
+            DMTCommandBarFactory.attributQuery.addActionListener(listener);
+            new Timer(200, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    DMTCommandBarFactory.attributQuery.setEnabled(button.isEnabled());
+                }
+            }).start();
         }
         add(button, plugIn.getName(), icon, listener, enableCheck);
         button.setFocusable(false);
         return button;
     }
 
-    public JButton addPlugIn(final int index, final PlugIn plugIn,
-            final Icon icon, final EnableCheck enableCheck,
+    //Open and Save datasets plugin added to the toolbar
+    public JButton addPlugIn(final int index, final PlugIn plugIn, final Icon icon, final EnableCheck enableCheck,
             final WorkbenchContext workbenchContext) {
         final JideButton button = new JideButton();
         button.setFocusable(false);

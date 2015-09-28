@@ -26,7 +26,12 @@ public class DMTIconsFactory {
         public static final String OPEN_BIG = "/com/osfac/dmt/images/open_big.png";
         public static final String SAVE_DATASETS = "/com/osfac/dmt/images/save_datasets.png";
         public static final String HELP = "/com/osfac/dmt/images/help.png";
-        //---Tool bar
+        //---Tool bar - Tools Queries
+        public static final String SPATIAL_QUERY = "/com/osfac/dmt/images/spatial_query.png";
+        public static final String ATTRB_QUERY = "/com/osfac/dmt/images/regular-expression-search.png";
+        public static final String SIMPLE_QUERY = "/com/osfac/dmt/images/simple_query.png";
+        public static final String SEARCH_ALL_ATTRB = "/com/osfac/dmt/images/search.png";
+        //---Map Tool bar
         public static final String ZOOM_IN_OUT = "/com/osfac/dmt/images/Magnify2.gif";
         public static final String HAND = "/com/osfac/dmt/images/BigHand.gif";
         public static final String FULL_EXTENT = "/com/osfac/dmt/images/World2.gif";

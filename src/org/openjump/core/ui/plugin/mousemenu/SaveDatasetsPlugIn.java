@@ -90,11 +90,12 @@ public class SaveDatasetsPlugIn extends AbstractPlugIn {
     // sCanNotSaveReadOnly
     private static final String sNoModifiedWritableLayerSelected = I18N.get("org.openjump.core.ui.plugin.mousemenu.SaveDatasetsPlugIn.No-modified-writable-layer-selected");
     private boolean saveAll = false;
-    private int saveReadOnlySources = -1; //-1 - ask; 0 - don't save; 1 - save; 
+    private int saveReadOnlySources = -1; //-1 - ask; 0 - don't save; 1 - save;
     private String pathToSaveReadOnlySources = "";
     private String extToSaveReadOnlySources = "";
     private JFileChooser fileChooser;
 
+    @Override
     public void initialize(PlugInContext context) throws Exception {
         WorkbenchContext workbenchContext = context.getWorkbenchContext();
         WorkbenchFrame frame = workbenchContext.getWorkbench().getFrame();
@@ -115,6 +116,7 @@ public class SaveDatasetsPlugIn extends AbstractPlugIn {
     public static final ImageIcon ICON = IconLoader.icon("disk_multiple.png");
     public static final ImageIcon ICON2 = IconLoader.icon("disk_multiple_small.png");
 
+    @Override
     public boolean execute(PlugInContext context) throws Exception {
         try {
             WorkbenchContext workbenchContext = context.getWorkbenchContext();
@@ -187,7 +189,7 @@ public class SaveDatasetsPlugIn extends AbstractPlugIn {
                 }
             }
 
-            //remove any layers which have no data sources, ie, 
+            //remove any layers which have no data sources, ie,
             //those that have not been previously saved
             for (int i = layerList.size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) layerList.get(i);
@@ -401,19 +403,20 @@ public class SaveDatasetsPlugIn extends AbstractPlugIn {
                 .add(checkFactory.createWindowWithSelectionManagerMustBeActiveCheck())
                 .add(checkFactory.createAtLeastNLayersMustBeSelectedCheck(1))
                 .add(new EnableCheck() {
-            public String check(JComponent component) {
-                Layer[] lyrs = workbenchContext.getLayerNamePanel().getSelectedLayers();
-                boolean changesToSave = false;
-                for (Layer lyr : lyrs) {
-                    if (!lyr.isReadonly()
+                    @Override
+                    public String check(JComponent component) {
+                        Layer[] lyrs = workbenchContext.getLayerNamePanel().getSelectedLayers();
+                        boolean changesToSave = false;
+                        for (Layer lyr : lyrs) {
+                            if (!lyr.isReadonly()
                             && lyr.hasReadableDataSource()
                             && lyr.isFeatureCollectionModified()) {
-                        return null;
+                                return null;
+                            }
+                        }
+                        return sNoModifiedWritableLayerSelected;
                     }
-                }
-                return sNoModifiedWritableLayerSelected;
-            }
-        });
+                });
     }
 
     public void setSaveAll() {
@@ -628,7 +631,6 @@ public class SaveDatasetsPlugIn extends AbstractPlugIn {
             //some part of them have been added to the original layer
             //the rest of the features are in the array lists waiting
             //to be added to the appropriate layers
-
             featureCollection = layer.getFeatureCollectionWrapper();
             featureList = layer.getFeatureCollectionWrapper().getFeatures();
             layerBit = new BitSet();

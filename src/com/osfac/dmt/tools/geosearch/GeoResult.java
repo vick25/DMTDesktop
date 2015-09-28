@@ -25,6 +25,7 @@ import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.model.LayerManagerProxy;
 import com.osfac.dmt.workbench.model.UndoableCommand;
 import com.osfac.dmt.workbench.ui.WorkbenchFrame;
+import static com.osfac.dmt.workbench.ui.WorkbenchFrame.progress;
 import com.osfac.dmt.workbench.ui.plugin.WKTDisplayHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -1172,22 +1173,15 @@ public class GeoResult extends JDialog {
                             System.out.println(HDDNOTCONNECTED);
                         } else if (dataRead.equals(FILENOTEXIST)) {
                             System.out.println(FILENOTEXIST);
-                        } else if (dataRead.equals(METADATANOTEXIST)) {
-                            System.out.println(METADATANOTEXIST);
-                        } else if (dataRead.equals(CLOUDNOTEXIST)) {
-                            System.out.println(CLOUDNOTEXIST);
                         } else {
-                            long zipFileSize = Long.parseLong(dataRead);  //read the file size
-                            System.out.println("ZipFileSize: " + zipFileSize);
-
+//                            long zipFileSize = Long.parseLong(dataRead);  //read the file size
+//                            System.out.println("ZipFileSize: " + zipFileSize);
                             String cloudValue;
-//                                long cumulMetadata = 0;
                             while ((nbbit = in.read(TAMPON)) != -1) {
                                 cloudValue = new String(TAMPON, 0, nbbit);
-                                System.out.println("Cloud value retrieve: " + cloudValue);
-//                                    new ReadMetadata(null, false, cloudValue).setVisible(true);
+                                System.out.println("Cloud value retrieved for " + currentIDCloud + ": " + cloudValue);
+                                break;
                             }
-                            waitingFileBeSending = false;
                         }
                         waitingFileBeSending = false;
                     }
@@ -1205,6 +1199,14 @@ public class GeoResult extends JDialog {
         }.start();
     }
 
+    private void fillTableColumnCloudValue(String cloudValue) {
+        table.setValueAt(cloudValue, 1, 3);
+    }
+
+    private int getTableRowIndex(int ID) {
+        return 0;
+    }
+
     //Method to fill the cloud cover of landsat images
     public void fillCloudCover() {
         new Thread() {
@@ -1213,14 +1215,16 @@ public class GeoResult extends JDialog {
             public void run() {
                 try {
                     if (!IDCloudImageList.isEmpty()) {
+                        progress.setProgressStatus(I18N.get("WorkbenchFrame.Retrieving-cloud-images-value-from-metadata"));
+                        progress.setIndeterminate(true);
                         for (int i = 0; i < table.getRowCount(); i++) {
                             for (int j = 0; j < IDCloudImageList.size(); j++) {
                                 if (Integer.parseInt(table.getValueAt(i, 1).toString()) == IDCloudImageList.get(j)) {
-                                    outMetadata.write(String.valueOf(IDCloudImageList.get(j)).getBytes());
+                                    currentIDCloud = IDCloudImageList.get(j);
+//                                    System.err.println("ID: " + table.getValueAt(i, 1).toString() + " -- " + IDCloudImageList.get(j));
+                                    outMetadata.write(String.valueOf(currentIDCloud).getBytes());
                                     outMetadata.flush();
                                     Thread.sleep(10);
-                                    System.out.println(table.getValueAt(i, 1).toString() + " -- " + IDCloudImageList.get(j));
-
                                     waitingFileBeSending = true;
                                     while (waitingFileBeSending) {
 //////////                System.out.println("Waiting ...");
@@ -1228,8 +1232,9 @@ public class GeoResult extends JDialog {
                                 }
                             }
                         }
+                        progress.setProgress(100);
                     }
-                } catch (IOException | InterruptedException ex) {
+                } catch (IOException | InterruptedException | NullPointerException ex) {
                     JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                             ex.getMessage(), null, null, ex, Level.SEVERE, null));
                 }
@@ -1238,20 +1243,22 @@ public class GeoResult extends JDialog {
     }
 
     private String criteriaSearch() {
-        String where, categories, years;
+        StringBuilder where = new StringBuilder(), categories, years;
 
         if (ListCategory.getCheckBoxListSelectedValues().length != 0) {
-            categories = " AND (category_name IN (" + manyCriteria(ListCategory.getCheckBoxListSelectedValues()) + "))";
+            categories = new StringBuilder(" AND (category_name IN (")
+                    .append(manyCriteria(ListCategory.getCheckBoxListSelectedValues())).append("))");
         } else {
-            categories = "";
+            categories = new StringBuilder();
         }
         if (ListYear.getCheckBoxListSelectedValues().length != 0) {
-            years = " AND (YEAR(date) IN (" + manyCriteria(ListYear.getCheckBoxListSelectedValues()) + "))";
+            years = new StringBuilder(" AND (YEAR(date) IN (").
+                    append(manyCriteria(ListYear.getCheckBoxListSelectedValues())).append("))");
         } else {
-            years = "";
+            years = new StringBuilder();
         }
-        where = categories + years;
-        return where;
+        where.append(categories.toString()).append(years.toString());
+        return where.toString();
     }
 
     private String manyCriteria(Object[] list) {
@@ -1455,13 +1462,13 @@ public class GeoResult extends JDialog {
     private WKTDisplayHelper helper = new WKTDisplayHelper();
     private ArrayList<UndoableCommand> commandList = new ArrayList<>();
     private HashMap<Integer, Integer> commandKey = new HashMap<>();
-    private int currentCommand;
+    private int currentCommand, currentIDCloud;
     private ImagePreview imagePreview;
     private AdvancedSelection advancedSelection;
     private DataRequestForm dataRequestForm;
     private Socket sclientMetadata;
     private DataOutputStream outMetadata;
-    private boolean waitingFileBeSending = false;
+    private volatile boolean waitingFileBeSending = false;
     private final int BUFFER = 1024 * 512;
     private final byte TAMPON[] = new byte[BUFFER];
     private final String HDDNOTCONNECTED = "HDD_NOT_CONNECTED", FILENOTEXIST = "FILE_NOT_EXIST",

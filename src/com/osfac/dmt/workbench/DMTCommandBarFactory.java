@@ -802,6 +802,29 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         return commandBar;
     }
 
+    public CommandBar createToolsQueryCommandBar() {
+        CommandBar commandBar = new CommandBar(I18N.get("Text.Tools.Queries"));
+        commandBar.setInitSide(DockableBarContext.DOCK_SIDE_NORTH);
+        commandBar.setInitMode(DockableBarContext.STATE_HORI_DOCKED);
+        commandBar.setInitIndex(1);
+        commandBar.setInitSubindex(0);
+
+        spatialQuery = createButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SPATIAL_QUERY));
+        spatialQuery.setToolTipText(I18N.get("ui.plugin.analysis.SpatialQueryPlugIn.Spatial-Query"));
+        attributQuery = createButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.ATTRB_QUERY));
+        attributQuery.setToolTipText(I18N.get("ui.plugin.analysis.AttributeQueryPlugIn.Attribute-Query"));
+        simpleQuery = createButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SIMPLE_QUERY));
+        simpleQuery.setToolTipText(I18N.get("org.openjump.core.ui.plugin.queries.SimpleQuery.menuitem"));
+        searchAllAttributes = createButton(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.SEARCH_ALL_ATTRB));
+        searchAllAttributes.setToolTipText(I18N.get("org.openjump.core.ui.plugin.queries.SearchAllAttributes.search-all-attributes"));
+
+        commandBar.add(spatialQuery);
+        commandBar.add(attributQuery);
+        commandBar.add(simpleQuery);
+        commandBar.add(searchAllAttributes);
+        return commandBar;
+    }
+
     public DockableFrame createFrameMenuTree() {
         DockableFrame frame = new DockableFrame(I18N.get("Text.Tutorial-and-Requests"),
                 DMTIconsFactory.getImageIcon(DMTIconsFactory.ShortCut.SHORTCUT));
@@ -814,7 +837,8 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         return frame;
     }
 
-    public static AbstractButton newProject, open, saveDataset, undo, redo;
+    public static AbstractButton newProject, open, saveDataset, undo, redo, spatialQuery,
+            attributQuery, simpleQuery, searchAllAttributes;
     public String _lastDirectory = ".";
     private byte[] _fullScreenLayout;
     private boolean _autohideAll = false;

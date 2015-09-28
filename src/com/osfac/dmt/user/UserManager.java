@@ -33,11 +33,11 @@ public class UserManager extends javax.swing.JPanel {
         filterField.setTableModel(tableModel);
         table = new SortableTable();
         table.setTableStyleProvider(new RowStripeTableStyleProvider(
-                new Color[]{Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1, ""
-                                    + "253, 253, 244")), Config.getColorFromKey(Config.pref
+                new Color[]{Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1,
+                                    "253, 253, 244")), Config.getColorFromKey(Config.pref
                             .get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255")),
-                    Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe3Color3, ""
-                                    + "210, 255, 210"))}));
+                    Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe3Color3,
+                                    "210, 255, 210"))}));
         table.getTableHeader().setReorderingAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addMouseListener(new MouseAdapter() {
@@ -91,7 +91,7 @@ public class UserManager extends javax.swing.JPanel {
     private void fillTable() {
         try {
             int nbRow = 0;
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_user where id_user not in (?,?)");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_user WHERE id_user NOT IN (?,?)");
             ps.setInt(1, 3);
             ps.setInt(2, 4);
             ResultSet res = ps.executeQuery();
@@ -116,8 +116,8 @@ public class UserManager extends javax.swing.JPanel {
             BSendEmail.setEnabled(true);
             BRefresh.setEnabled(true);
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
@@ -131,35 +131,35 @@ public class UserManager extends javax.swing.JPanel {
 
     private class MyTableModelUser extends AbstractTableModel {
 
-        private String[] columnNames = {I18N.get("UserManager.ID"), I18N.get("UserManager.First-name"
-            + ""), I18N.get("UserManager.Family-name"), I18N.get("UserManager.Email"), I18N.get("UserManager.Privilege")};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {I18N.get("UserManager.ID"), I18N.get("UserManager.First-name"),
+            I18N.get("UserManager.Family-name"), I18N.get("UserManager.Email"), I18N.get("UserManager.Privilege")};
+        private final ArrayList[] DATA;
 
         public MyTableModelUser() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
         @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -174,29 +174,29 @@ public class UserManager extends javax.swing.JPanel {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].add("");
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 
@@ -498,11 +498,12 @@ public class UserManager extends javax.swing.JPanel {
     }//GEN-LAST:event_BRefreshActionPerformed
 
     private void BDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDeleteActionPerformed
-        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("UserManager.This-will-delete")
-                + " \"" + table.getValueAt(table.getSelectedRow(), 1) + " " + table.getValueAt(table.getSelectedRow(), 2) + "\"."
-                + " " + I18N.get("UserManager.This-will-delete2"), I18N.get("Text.Confirm"), 0) == 0) {
+        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, new StringBuilder(I18N.get("UserManager.This-will-delete"))
+                .append(" \"").append(table.getValueAt(table.getSelectedRow(), 1)).append(" ")
+                .append(table.getValueAt(table.getSelectedRow(), 2)).append("\".").append(" ")
+                .append(I18N.get("UserManager.This-will-delete2")).toString(), I18N.get("Text.Confirm"), 0) == 0) {
             try {
-                PreparedStatement ps = Config.con.prepareStatement("delete from dmt_user where id_user = ?");
+                PreparedStatement ps = Config.con.prepareStatement("DELETE FROM dmt_user WHERE id_user = ?");
                 ps.setInt(1, Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));
                 int res1 = ps.executeUpdate();
                 if (res1 == 1) {
@@ -510,16 +511,16 @@ public class UserManager extends javax.swing.JPanel {
                     updateTable();
                 }
             } catch (SQLException ex) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                        + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        ex.getMessage(), null, null, ex, Level.SEVERE, null));
             }
         }
     }//GEN-LAST:event_BDeleteActionPerformed
 
     private void BPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPasswordActionPerformed
         if (WorkbenchFrame.idUser != Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())) {
-            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("UserManager.message-not-allowed-to-change-password")
-                    + "", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("UserManager.message-not-allowed-to-change-password"),
+                    "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             new ChangePassword(DMTWorkbench.frame, true, table.getValueAt(table.getSelectedRow(), 3).toString()).setVisible(true);
         }

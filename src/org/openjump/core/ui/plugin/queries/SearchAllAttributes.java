@@ -35,6 +35,7 @@ package org.openjump.core.ui.plugin.queries;
 
 import com.osfac.dmt.I18N;
 import com.osfac.dmt.feature.Feature;
+import static com.osfac.dmt.workbench.DMTWorkbench.frame;
 import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.model.LayerManager;
 import com.osfac.dmt.workbench.plugin.AbstractPlugIn;
@@ -43,6 +44,8 @@ import com.osfac.dmt.workbench.ui.GUIUtil;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.SelectionManager;
+import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
+import com.osfac.dmt.workbench.ui.images.IconLoader;
 import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -84,8 +87,12 @@ public class SearchAllAttributes extends AbstractPlugIn {
     @Override
     public void initialize(PlugInContext context) throws Exception {
         context.getFeatureInstaller().addMainMenuItem(this,
-                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES}, getName() + "...", false, null,
-                null);
+                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES}, getName() + "...", false,
+                IconLoader.icon("search.png"), null);
+
+        // Add tool-bar Icon [Victor Kadiata]
+        WorkbenchToolBar toolBar = frame.getToolBar();
+        toolBar.addPlugIn(IconLoader.icon("search.png"), this, null, context.getWorkbenchContext());
     }
 
     @Override

@@ -571,7 +571,7 @@ public class DMTConfiguration implements Setup {
         featureInstaller.addMainMenuItemWithJava14Fix(newTaskPlugIn, new String[]{
             MenuNames.FILE, MenuNames.FILE_NEW},
                 newTaskPlugIn.getName(), false, NewTaskPlugIn.getIcon2(), null); //New Project
-        featureInstaller.addMenuSeparator(new String[]{MenuNames.FILE, MenuNames.FILE_NEW}); // ===================
+        featureInstaller.addMenuSeparator(new String[]{MenuNames.FILE, MenuNames.FILE_NEW}); // Separator
         featureInstaller.addMainMenuItem(addNewLayerPlugIn,
                 new String[]{MenuNames.FILE, MenuNames.FILE_NEW},
                 new JMenuItem(I18N.get("com.osfac.dmt.workbench.ui.plugin.AddNewLayerPlugIn.name"), IconLoader.icon("layers.png")),
@@ -929,16 +929,13 @@ public class DMTConfiguration implements Setup {
                 ZoomToSelectedItemsPlugIn.createEnableCheck(workbenchContext),
                 workbenchContext);
         add(new ZoomRealtimeTool(), workbenchContext);  //TODO: move to OpenJumpConfiguration if possible
-        frame.getToolBar()
-                .addPlugIn(
-                        zoomToFencePlugIn.getIcon(),
-                        zoomToFencePlugIn,
-                        new MultiEnableCheck()
-                        .add(
-                                checkFactory
-                                .createWindowWithLayerViewPanelMustBeActiveCheck())
-                        .add(checkFactory.createFenceMustBeDrawnCheck()),
-                        workbenchContext);
+        frame.getToolBar().addPlugIn(
+                zoomToFencePlugIn.getIcon(),
+                zoomToFencePlugIn,
+                new MultiEnableCheck()
+                .add(checkFactory.createWindowWithLayerViewPanelMustBeActiveCheck())
+                .add(checkFactory.createFenceMustBeDrawnCheck()),
+                workbenchContext);
         frame.getToolBar().addSeparator();
         frame.getToolBar().addPlugIn(zoomPreviousPlugIn.getIcon(),
                 zoomPreviousPlugIn,

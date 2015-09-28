@@ -215,11 +215,13 @@ public class Config {
         }
         host = IPAddress;
 
-        //Change the Workbench Frame Title upon changing the Server IP address
-        DMTWorkbench.frame.setTitle(new StringBuilder(I18N.get("ui.WorkbenchFrame.title")).append(" ")
-                .append(I18N.get("JUMPWorkbench.version.number")).append(" ")
-                .append(WorkbenchFrame.TypeOfVersion).append("   [").append(I18N.get("Text.Server-IP-Address-text"))
-                .append(" ").append(Config.host).append("]").toString());
+        //Change the Workbench Frame Title upon changing the Server IP address [Vick]
+        if (DMTWorkbench.frame != null) {
+            DMTWorkbench.frame.setTitle(new StringBuilder(I18N.get("ui.WorkbenchFrame.title")).append(" ")
+                    .append(I18N.get("JUMPWorkbench.version.number")).append(" ")
+                    .append(WorkbenchFrame.TypeOfVersion).append("   [").append(I18N.get("Text.Server-IP-Address-text"))
+                    .append(" ").append(Config.host).append("]").toString());
+        }
     }
 
     public static String encrypt(String s) {
@@ -506,7 +508,8 @@ public class Config {
     //
     public static final int PORTMAINSERVER = 5651;
     public static final int PORTDOWNLOAD = 5657;
-//
+    public static final int PORTMETADATA = 5654;
+    //
     public static final String LITE_VERSION = "LITE";
     public static final String FULL_VERSION = "FULL";
 //

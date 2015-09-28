@@ -1404,9 +1404,10 @@ public class DataRequestForm extends javax.swing.JDialog {
                             idReq.put("logo", getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/001.png"));
                             InputStream inForm = getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/form.jasper");
                             JasperPrint jp = JasperFillManager.fillReport(inForm, idReq, Config.con);
-                            File directory = new File(new JFileChooser().getCurrentDirectory() + File.separator + "OSFAC-DMT"
-                                    + File.separator + Config.correctText(new SimpleDateFormat("yyyy-MM-dd",
-                                                    new DateFormatSymbols()).format(new Date())));
+                            File directory = new File(new StringBuilder().append(new JFileChooser().getCurrentDirectory())
+                                    .append(File.separator).append("OSFAC-DMT").append(File.separator)
+                                    .append(Config.correctText(new SimpleDateFormat("yyyy-MM-dd",
+                                                            new DateFormatSymbols()).format(new Date()))).toString());
                             directory.mkdirs();
                             String pathPDF = verification(requestPDF(directory));
                             JasperExportManager.exportReportToPdfFile(jp, pathPDF);
@@ -1428,10 +1429,13 @@ public class DataRequestForm extends javax.swing.JDialog {
                                     }
                                 }.start();
                             }
-                            WorkbenchFrame.progress.setProgressStatus(I18N.get("ReviewDataRequestForm.Sending-Email-to") + " dmt@osfac.net ......");
+                            WorkbenchFrame.progress.setProgressStatus(
+                                    new StringBuilder(I18N.get("ReviewDataRequestForm.Sending-Email-to"))
+                                    .append(" dmt@osfac.net ......").toString());
                             WorkbenchFrame.progress.setIndeterminate(true);
-                            sendEmail(pathPDF, Config.capitalFirstLetter(txtFirstName.getText()) + " " + txtFamilyName.getText().toUpperCase() + " "
-                                    + txtOtherName.getText().toUpperCase(), idDelivery);
+                            sendEmail(pathPDF, new StringBuilder(Config.capitalFirstLetter(txtFirstName.getText()))
+                                    .append(" ").append(txtFamilyName.getText().toUpperCase()).append(" ")
+                                    .append(txtOtherName.getText().toUpperCase()).toString(), idDelivery);
                         } catch (JRException ex) {
                             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
                         }
@@ -1854,12 +1858,8 @@ public class DataRequestForm extends javax.swing.JDialog {
             //Sujet de message
             msg.setSubject(I18N.get("ReviewDataRequestForm.Email-subject-to-requester"));
             StringBuilder emailContent;
-            String title;
-            if (RBMale.isSelected()) {
-                title = "Mr";
-            } else {
-                title = "Ms";
-            }
+            String title = (RBMale.isSelected()) ? "Mr" : "Ms";
+
             if (getCategories(idDelivery).contains("ASTER") || getCategories(idDelivery).contains("SPOT")) {
                 emailContent = new StringBuilder(title).append(" <b>").append(names)
                         .append(I18N.get("ReviewDataRequestForm.Email-content-to-other"));
@@ -1936,13 +1936,12 @@ public class DataRequestForm extends javax.swing.JDialog {
     }
 
     private String getPathRow() {
-        String pathrow = "";
+        StringBuilder pathrow = new StringBuilder();
         for (int i = 0; i < vPathRow.size(); i++) {
-            pathrow += "P" + vPathRow.get(i).toString().substring(0, 3) + "-R0"
-                    + "" + vPathRow.get(i).toString().substring(3) + "; ";
+            pathrow.append("P").append(vPathRow.get(i).substring(0, 3)).append("-R0")
+                    .append(vPathRow.get(i).substring(3)).append("; ");
         }
-        pathrow = pathrow.substring(0, pathrow.length() - 2);
-        return pathrow;
+        return pathrow.substring(0, pathrow.length() - 2);
     }
 
     private String getCountry(int idDelivery) {
@@ -1969,7 +1968,7 @@ public class DataRequestForm extends javax.swing.JDialog {
 
     private int insertRequester() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_requester VALUES "
+            PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_requester VALUES\n"
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             ps.setString(2, Config.capitalFirstLetter(txtFirstName.getText()));
@@ -2005,7 +2004,7 @@ public class DataRequestForm extends javax.swing.JDialog {
 
     private int insertRequester(Connection con) {
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO dmt_requester VALUES "
+            PreparedStatement ps = con.prepareStatement("INSERT INTO dmt_requester VALUES\n"
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             ps.setString(2, Config.capitalFirstLetter(txtFirstName.getText()));
@@ -2192,12 +2191,11 @@ public class DataRequestForm extends javax.swing.JDialog {
     }
 
     private String manyCriteria(ArrayList list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            values += "\'" + list.get(i) + "\',";
+            values.append("\'").append(list.get(i)).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
 
     private void createTable(ArrayList vID) {
@@ -2244,19 +2242,19 @@ public class DataRequestForm extends javax.swing.JDialog {
 
     public class MyTableModel extends AbstractTableModel {
 
-        private final String[] COLUMNS_NAMES = {I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+        private final String[] COLUMN_NAMES = {I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
         private final ArrayList[] DATA;
 
         public MyTableModel() {
-            DATA = new ArrayList[COLUMNS_NAMES.length];
-            for (int i = 0; i < COLUMNS_NAMES.length; i++) {
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 DATA[i] = new ArrayList();
             }
         }
 
         @Override
         public int getColumnCount() {
-            return COLUMNS_NAMES.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
@@ -2266,7 +2264,7 @@ public class DataRequestForm extends javax.swing.JDialog {
 
         @Override
         public String getColumnName(int col) {
-            return COLUMNS_NAMES[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
@@ -2291,7 +2289,7 @@ public class DataRequestForm extends javax.swing.JDialog {
         }
 
         public void addNewRow() {
-            for (int i = 0; i < COLUMNS_NAMES.length; i++) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 if (i == 0) {
                     DATA[i].add(false);
                 } else {
@@ -2302,14 +2300,14 @@ public class DataRequestForm extends javax.swing.JDialog {
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < COLUMNS_NAMES.length; i++) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 DATA[i].remove(DATA[i].size() - 1);
             }
             this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < COLUMNS_NAMES.length; i++) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
                 DATA[i].remove(index);
             }
             this.fireTableRowsDeleted(0, DATA[0].size() - 1);

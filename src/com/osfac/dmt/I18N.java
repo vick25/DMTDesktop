@@ -85,7 +85,7 @@ public final class I18N {
     /**
      * The resource bundle for the I18N instance.
      */
-    private ResourceBundle resourceBundle;
+    private final ResourceBundle resourceBundle;
 
     /**
      * The core OpenJUMP I18N instance.

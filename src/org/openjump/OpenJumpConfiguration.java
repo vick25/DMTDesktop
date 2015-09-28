@@ -25,6 +25,7 @@ import com.osfac.dmt.workbench.ui.plugin.analysis.AttributeQueryPlugIn;
 import com.osfac.dmt.workbench.ui.plugin.analysis.SpatialJoinPlugIn;
 import com.osfac.dmt.workbench.ui.plugin.analysis.SpatialQueryPlugIn;
 import com.osfac.dmt.workbench.ui.renderer.RenderingManager;
+import com.osfac.dmt.workbench.ui.task.TaskMonitorManager;
 import de.latlon.deejump.plugin.SaveLegendPlugIn;
 import de.latlon.deejump.plugin.style.LayerStyle2SLDPlugIn;
 import java.nio.charset.Charset;
@@ -99,6 +100,8 @@ import org.openjump.core.ui.swing.wizard.WizardGroup;
  * @author sstein
  */
 public class OpenJumpConfiguration {
+
+    private static TaskMonitorManager taskMonitorManager = null;
 
     //Method called from the DMTConfiguration
     public static void loadOpenJumpPlugIns(final WorkbenchContext workbenchContext) throws Exception {
@@ -294,6 +297,7 @@ public class OpenJumpConfiguration {
         /**
          * ** QUERY ***
          */
+
         SpatialQueryPlugIn mySpatialQueryPlugIn = new SpatialQueryPlugIn();
         mySpatialQueryPlugIn.initialize(new PlugInContext(workbenchContext, null, null, null, null));
 

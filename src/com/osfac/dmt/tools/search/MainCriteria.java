@@ -30,8 +30,8 @@ public class MainCriteria extends javax.swing.JPanel {
                     int index;
                     ResultSet res;
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-category-images"));
-                    PreparedStatement ps = Config.con.prepareStatement("select distinct category_name from dmt_category "
-                            + "order by category_name asc");
+                    PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT category_name FROM dmt_category\n"
+                            + "ORDER BY category_name ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelCategory = new DefaultComboBoxModel();
                     modelCategory.insertElementAt(CheckBoxList.ALL, 0);
@@ -44,7 +44,8 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBCategory.setSelectedIndex(-1);
 
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-path"));
-                    ps = Config.con.prepareStatement("SELECT distinct path FROM dmt_pathrow where path_row in(select path_row from dmt_concern where id_image in (select id_image from dmt_image where id_category=2)) order by path asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT path FROM dmt_pathrow WHERE path_row IN\n"
+                            + "(SELECT path_row FROM dmt_concern WHERE id_image IN (SELECT id_image FROM dmt_image WHERE id_category=2)) ORDER BY path ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelPath = new DefaultComboBoxModel();
                     modelPath.insertElementAt(CheckBoxList.ALL, 0);
@@ -56,10 +57,10 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBPath.setModel(modelPath);
                     CBPath.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-row"));
-                    ps = Config.con.prepareStatement("SELECT distinct row FROM dmt_pathrow inner join dmt_concern "
-                            + "on dmt_pathrow.path_row=dmt_concern.path_row inner join dmt_image on "
-                            + "dmt_image.id_image=dmt_concern.id_image inner join dmt_category on "
-                            + "dmt_category.id_category=dmt_image.id_category where category_name = 'Landsat' order by row asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT row FROM dmt_pathrow INNER JOIN dmt_concern "
+                            + "ON dmt_pathrow.path_row=dmt_concern.path_row INNER JOIN dmt_image ON "
+                            + "dmt_image.id_image=dmt_concern.id_image INNER JOIN dmt_category ON "
+                            + "dmt_category.id_category=dmt_image.id_category WHERE category_name = 'Landsat' ORDER BY row ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelRow = new DefaultComboBoxModel();
                     modelRow.insertElementAt(CheckBoxList.ALL, 0);
@@ -71,7 +72,7 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBRow.setModel(modelRow);
                     CBRow.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-year"));
-                    ps = Config.con.prepareStatement("SELECT distinct year(date) FROM dmt_image order by year(date) asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT YEAR(date) FROM dmt_image ORDER BY YEAR(date) ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelYear = new DefaultComboBoxModel();
                     modelYear.insertElementAt(CheckBoxList.ALL, 0);
@@ -83,7 +84,7 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBYear.setModel(modelYear);
                     CBYear.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-country"));
-                    ps = Config.con.prepareStatement("SELECT distinct country_name FROM dmt_country");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT country_name FROM dmt_country");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelCountry = new DefaultComboBoxModel();
                     modelCountry.insertElementAt(CheckBoxList.ALL, 0);
@@ -95,7 +96,7 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBCountry.setModel(modelCountry);
                     CBCountry.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-ortho-rectified"));
-                    ps = Config.con.prepareStatement("SELECT distinct ortho FROM dmt_image where ortho <> '' order by ortho asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT ortho FROM dmt_image WHERE ortho <> '' ORDER BY ortho ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelOrtho = new DefaultComboBoxModel();
                     modelOrtho.insertElementAt(CheckBoxList.ALL, 0);
@@ -107,7 +108,7 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBOrtho.setModel(modelOrtho);
                     CBOrtho.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-SLC"));
-                    ps = Config.con.prepareStatement("SELECT distinct slc FROM dmt_image where slc <> '' order by slc asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT slc FROM dmt_image WHERE slc <> '' ORDER BY slc ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelSLC = new DefaultComboBoxModel();
                     modelSLC.insertElementAt(CheckBoxList.ALL, 0);
@@ -119,9 +120,9 @@ public class MainCriteria extends javax.swing.JPanel {
                     CBSLC.setModel(modelSLC);
                     CBSLC.setSelectedIndex(-1);
                     WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.Filling-mission"));
-                    ps = Config.con.prepareStatement("SELECT distinct mission FROM dmt_image inner join "
-                            + "dmt_category on dmt_category.id_category=dmt_image.id_category "
-                            + "where category_name = 'Landsat' and mission <> '' order by mission asc");
+                    ps = Config.con.prepareStatement("SELECT DISTINCT mission FROM dmt_image INNER JOIN "
+                            + "dmt_category ON dmt_category.id_category=dmt_image.id_category "
+                            + "WHERE category_name = 'Landsat' and mission <> '' ORDER BY mission ASC");
                     res = ps.executeQuery();
                     DefaultComboBoxModel modelmission = new DefaultComboBoxModel();
                     modelmission.insertElementAt(CheckBoxList.ALL, 0);
@@ -397,39 +398,39 @@ public class MainCriteria extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(labCategory)
-                .addComponent(labPath)
-                .addComponent(labRow)
-                .addComponent(labYear))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(CBCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                .addComponent(CBYear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CBPath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CBRow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labCategory)
+                                .addComponent(labPath)
+                                .addComponent(labRow)
+                                .addComponent(labYear))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(CBCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                                .addComponent(CBYear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(CBPath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(CBRow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labCategory))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labPath))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labRow))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labYear))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labCategory))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labPath))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labRow))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labYear))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -467,57 +468,57 @@ public class MainCriteria extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(labCountry)
-                .addComponent(labOrtho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelSLC)
-                .addComponent(labMission, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(CBSLC, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                .addComponent(CBMission, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addComponent(CBOrtho, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addComponent(CBCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap()));
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(labCountry)
+                                .addComponent(labOrtho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(labelSLC)
+                                .addComponent(labMission, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(CBSLC, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                .addComponent(CBMission, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(CBOrtho, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(CBCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addContainerGap()));
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labCountry))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBMission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labMission))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBOrtho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labOrtho))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(CBSLC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(labelSLC))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labCountry))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBMission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labMission))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBOrtho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labOrtho))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(CBSLC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labelSLC))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(4, 4, 4)));
+                        .addGap(4, 4, 4)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(4, 4, 4)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))));
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))));
     }// </editor-fold>
 
     private void CBCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CBCategoryItemStateChanged
@@ -547,10 +548,10 @@ public class MainCriteria extends javax.swing.JPanel {
         try {
             if (catSelected) {
                 int index;
-                ResultSet res = Config.con.createStatement().executeQuery("SELECT distinct year(date) "
-                        + "FROM dmt_image inner join dmt_category on dmt_category.id_category = dmt_image.id_category "
-                        + "where category_name in (" + manyCriteria(CBCategory.getSelectedObjects()) + ") "
-                        + "order by year(date) asc");
+                ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT YEAR(date)\n"
+                        + "FROM dmt_image INNER JOIN dmt_category ON dmt_category.id_category = dmt_image.id_category\n"
+                        + "WHERE category_name IN (" + manyCriteria(CBCategory.getSelectedObjects()) + ")\n"
+                        + "ORDER BY YEAR(date) ASC");
                 DefaultComboBoxModel modelYear = new DefaultComboBoxModel();
                 modelYear.insertElementAt(CheckBoxList.ALL, 0);
                 index = 1;
@@ -561,12 +562,12 @@ public class MainCriteria extends javax.swing.JPanel {
                 CBYear.setModel(modelYear);
                 CBYear.setSelectedIndex(-1);
 
-//                res = Config.con.createStatement().executeQuery("SELECT distinct path FROM dmt_pathrow "
-//                        + "inner join dmt_concern on dmt_concern.path_row = dmt_pathrow.path_row inner join "
-//                        + "dmt_image on dmt_image.id_image = dmt_concern.id_image inner join dmt_category on "
-//                        + "dmt_category.id_category = dmt_image.id_category where "
-//                        + "category_name in (" + manyCriteria(CBCategory.getSelectedObjects()) + ") "
-//                        + "order by path asc");
+//                res = Config.con.createStatement().executeQuery("SELECT DISTINCT path FROM dmt_pathrow "
+//                        + "INNER JOIN dmt_concern ON dmt_concern.path_row = dmt_pathrow.path_row INNER JOIN "
+//                        + "dmt_image ON dmt_image.id_image = dmt_concern.id_image INNER JOIN dmt_category ON "
+//                        + "dmt_category.id_category = dmt_image.id_category WHERE "
+//                        + "category_name IN (" + manyCriteria(CBCategory.getSelectedObjects()) + ") "
+//                        + "ORDER BY path ASC");
 //                DefaultComboBoxModel modelPath = new DefaultComboBoxModel();
 //                modelPath.insertElementAt(CheckBoxList.ALL, 0);
 //                index = 1;
@@ -578,18 +579,17 @@ public class MainCriteria extends javax.swing.JPanel {
 //                CBPath.setSelectedIndex(-1);
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
     private String manyCriteria(Object[] list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.length; i++) {
-            values += "\'" + list[i].toString() + "\',";
+            values.append("\'").append(list[i].toString()).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static com.jidesoft.combobox.CheckBoxListComboBox CBCategory;

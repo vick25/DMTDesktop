@@ -83,7 +83,9 @@ public class DownloadData extends javax.swing.JFrame {
         PanMore.setVisible(false);//hide the lower panel
         setCellStyle();
 
-        runingSocketClient(idImagesList);
+        //Method thats read and copy images from Server to target
+        runningSocketClient(idImagesList);
+
         downloadData = this;
         timerSpeedTime = new Timer(1000, new ActionListener() {
             @Override
@@ -989,7 +991,8 @@ public class DownloadData extends javax.swing.JFrame {
         return "";
     }
 
-    private void runingSocketClient(final ArrayList<String> idImagesList) {
+    //Method that reads and copy the images from server to target
+    private void runningSocketClient(final ArrayList<String> idImagesList) {
         new Thread() {
             @Override
             public void run() {
@@ -1006,11 +1009,11 @@ public class DownloadData extends javax.swing.JFrame {
                         table.scrollRowToVisible(a);
                         if (dataRead.equals(HDDNOTCONNECTED)) {
                             showFailureAction(HDD_Name + " " + I18N.get("DownloadData.text-HDD-not-connected"));
-//                            JOptionPane.showMessageDialog(downloadData, getHardDriveName(idImagesList.get(a)) + ""
+//                            JOptionPane.showMessageDialog(downloadData, getHardDriveName(idImagesList.get(a))
 //                                    + " is not connected to the server !!!", "Fatal Error", JOptionPane.ERROR_MESSAGE);
                         } else if (dataRead.equals(FILENOTEXIST)) {
                             showFailureAction(imageName + " " + I18N.get("DownloadData.text-File-does-not-existed"));
-//                            JOptionPane.showMessageDialog(downloadData, imageName + ""
+//                            JOptionPane.showMessageDialog(downloadData, imageName
 //                                    + " doesn't exist in the server !!!", "Fatal Error", JOptionPane.ERROR_MESSAGE);
                         } else {
                             fileSize = Long.parseLong(dataRead);
@@ -1020,7 +1023,18 @@ public class DownloadData extends javax.swing.JFrame {
                             }
                             File targetFile = new File(destByCategory(labTargetFolder.getText(), idImagesList.get(a))
                                     + File.separator + imageName);
+                            //Check if file exists in destination folder and skip if true
+//                            if (!fileInTargetFolder(targetFile, fileSize)) {
+//                                //Download method
                             downloadingAction(targetFile, positionCumul, imageName, in);
+//                            } else {
+//                                System.out.println("file already exists");
+//                                int nbRead;
+//                                while ((nbRead = in.read(TAMPON)) != -1) {
+//                                    break;
+//                                }
+//                                waitingFileBeSending = false;
+//                            }
                         }
                         waitingFileBeSending = false;
                     }
@@ -1035,6 +1049,19 @@ public class DownloadData extends javax.swing.JFrame {
                 }
             }
         }.start();
+    }
+
+    private boolean fileInTargetFolder(File targetFile, long fromFileSize) {
+        if (targetFile.exists() && !targetFile.isDirectory() && targetFile.isFile()) {
+            long toFileSize = targetFile.length();
+            System.out.println("toFileSize " + toFileSize);
+            System.out.println("fromFileSize " + fromFileSize);
+            while (true) {
+                System.out.println("file exists " + (toFileSize >= fromFileSize));
+                return (toFileSize >= fromFileSize); // check if the size length is different
+            }
+        }
+        return false;
     }
 
     private void downloadingAction(File targetFile, Long positionCumul,

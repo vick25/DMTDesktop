@@ -8,6 +8,7 @@ import com.osfac.dmt.feature.FeatureDataset;
 import com.osfac.dmt.feature.FeatureSchema;
 import com.osfac.dmt.task.TaskMonitor;
 import com.osfac.dmt.util.StringUtil;
+import com.osfac.dmt.workbench.DMTWorkbench;
 import com.osfac.dmt.workbench.WorkbenchContext;
 import com.osfac.dmt.workbench.model.Layer;
 import com.osfac.dmt.workbench.model.StandardCategoryNames;
@@ -21,6 +22,8 @@ import com.osfac.dmt.workbench.ui.GenericNames;
 import com.osfac.dmt.workbench.ui.MenuNames;
 import com.osfac.dmt.workbench.ui.MultiInputDialog;
 import com.osfac.dmt.workbench.ui.SelectionManager;
+import com.osfac.dmt.workbench.ui.WorkbenchFrame;
+import com.osfac.dmt.workbench.ui.WorkbenchToolBar;
 import com.osfac.dmt.workbench.ui.images.IconLoader;
 import com.osfac.dmt.workbench.ui.plugin.FeatureInstaller;
 import com.vividsolutions.jts.geom.Geometry;
@@ -40,7 +43,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 
 /**
@@ -87,12 +89,22 @@ public class AttributeQueryPlugIn extends AbstractPlugIn implements ThreadedPlug
 
     @Override
     public void initialize(PlugInContext context) throws Exception {
+        DMTWorkbench workbench = context.getWorkbenchContext().getWorkbench();
+        WorkbenchFrame frame = workbench.getFrame();
         FeatureInstaller featureInstaller = new FeatureInstaller(context.getWorkbenchContext());
-        featureInstaller.addMainMenuItem(
-                this,
-                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
-                new JMenuItem(this.getName() + "..."),
+//        featureInstaller.addMainMenuItem(
+//                this,
+//                new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
+//                new JMenuItem(this.getName() + "..."),
+//                createEnableCheck(context.getWorkbenchContext()));
+        //[Added by Vick]
+        featureInstaller.addMainMenuItemWithJava14Fix(this, new String[]{MenuNames.TOOLS, MenuNames.TOOLS_QUERIES},
+                new StringBuilder(this.getName()).append("...").toString(), false, this.getIcon(),
                 createEnableCheck(context.getWorkbenchContext()));
+
+        // Add tool-bar Icon [Victor Kadiata]
+        WorkbenchToolBar toolBar = frame.getToolBar();
+        toolBar.addPlugIn(getIcon(), this, createEnableCheck(context.getWorkbenchContext()), context.getWorkbenchContext());
     }
 
     public static MultiEnableCheck createEnableCheck(WorkbenchContext workbenchContext) {
