@@ -1110,89 +1110,6 @@ public class QuerySearch extends javax.swing.JPanel {
         return values.substring(0, values.length() - 1);
     }
 
-    private class MyTableModel extends TreeTableModel {
-
-        private final String[] COLUMN_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"),
-            I18N.get("Text.ROW"), I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
-        private final ArrayList[] DATA;
-
-        public MyTableModel() {
-            DATA = new ArrayList[COLUMN_NAMES.length];
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i] = new ArrayList();
-            }
-        }
-
-        @Override
-        public int getColumnCount() {
-            return COLUMN_NAMES.length;
-        }
-
-        @Override
-        public int getRowCount() {
-            return DATA[0].size();
-        }
-
-        @Override
-        public EditorContext getEditorContextAt(int row, int column) {
-            if (column == 0) {
-                return BooleanCheckBoxCellEditor.CONTEXT;
-            }
-            return null;
-        }
-
-        @Override
-        public String getColumnName(int col) {
-            return COLUMN_NAMES[col];
-        }
-
-        @Override
-        public Object getValueAt(int row, int col) {
-            return DATA[col].get(row);
-        }
-
-        @Override
-        public Class getColumnClass(int c) {
-            return getValueAt(0, c).getClass();
-        }
-
-        @Override
-        public boolean isCellEditable(int row, int col) {
-            return col == 0;
-        }
-
-        @Override
-        public void setValueAt(Object value, int row, int col) {
-            DATA[col].set(row, value);
-            fireTableCellUpdated(row, col);
-        }
-
-        public void addNewRow() {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                if (i == 0) {
-                    DATA[i].add(false);
-                } else {
-                    DATA[i].add("");
-                }
-            }
-            this.fireTableRowsInserted(0, DATA[0].size() - 1);
-        }
-
-        public void removeNewRow() {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i].remove(DATA[i].size() - 1);
-            }
-            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
-        }
-
-        public void removeNewRow(int index) {
-            for (int i = 0; i < COLUMN_NAMES.length; i++) {
-                DATA[i].remove(index);
-            }
-            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
-        }
-    }
-
     public static void cancelExe() {
         if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("Search.interrupt-search-by-user"),
                 I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
@@ -1441,6 +1358,90 @@ public class QuerySearch extends javax.swing.JPanel {
         vSize.clear();
         vectThread.clear();
     }
+
+    private class MyTableModel extends TreeTableModel {
+
+        private final String[] COLUMN_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"),
+            I18N.get("Text.ROW"), I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+        private final ArrayList[] DATA;
+
+        public MyTableModel() {
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            return COLUMN_NAMES.length;
+        }
+
+        @Override
+        public int getRowCount() {
+            return DATA[0].size();
+        }
+
+        @Override
+        public EditorContext getEditorContextAt(int row, int column) {
+            if (column == 0) {
+                return BooleanCheckBoxCellEditor.CONTEXT;
+            }
+            return null;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return COLUMN_NAMES[col];
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            return DATA[col].get(row);
+        }
+
+        @Override
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int col) {
+            return col == 0;
+        }
+
+        @Override
+        public void setValueAt(Object value, int row, int col) {
+            DATA[col].set(row, value);
+            fireTableCellUpdated(row, col);
+        }
+
+        public void addNewRow() {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                if (i == 0) {
+                    DATA[i].add(false);
+                } else {
+                    DATA[i].add("");
+                }
+            }
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
+        }
+
+        public void removeNewRow() {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
+            }
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
+        }
+
+        public void removeNewRow(int index) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
+            }
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static com.jidesoft.swing.JideButton BAddSearch;
     private org.jdesktop.swingx.JXBusyLabel BLabLoading;
