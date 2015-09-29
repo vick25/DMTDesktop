@@ -66,7 +66,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 public class QuerySearch extends javax.swing.JPanel {
 
     public QuerySearch() {
-        exe = new RunSearch(null, true);
+        runSearch = new RunSearch(null, true);
         tableModel = new MyTableModel();
         table = new SortableTable(tableModel);
 //        table.setSortable(false);
@@ -201,7 +201,7 @@ public class QuerySearch extends javax.swing.JPanel {
                         ID++;
                     }
                     if (RunSearch.progression.getValue() == simulateNumber) {
-                        exe.dispose();
+                        runSearch.dispose();
                         WorkbenchFrame.progress.setProgress(100);
                         table.scrollRowToVisible(0);
                         timerShow.stop();
@@ -1090,7 +1090,8 @@ public class QuerySearch extends javax.swing.JPanel {
                             + Double.parseDouble(GeoCriteria.table.getValueAt(i, 1).toString()) + ",";
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, I18N.get("QuerySearch.Latitude-Longitude-values-are-no-valid"), I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, I18N.get("QuerySearch.Latitude-Longitude-values-are-no-valid"),
+                        I18N.get("com.osfac.dmt.Config.Error"), JOptionPane.ERROR_MESSAGE);
                 return "";
             }
             if (GeoCriteria.RBPolygon.isSelected()) {
@@ -1113,7 +1114,7 @@ public class QuerySearch extends javax.swing.JPanel {
     public static void cancelExe() {
         if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("Search.interrupt-search-by-user"),
                 I18N.get("Text.Confirm"), JOptionPane.YES_OPTION) == 0) {
-            exe.dispose();
+            runSearch.dispose();
             WorkbenchFrame.progress.setProgress(100);
             TableUtils.autoResizeAllColumns(table);
             TableUtils.autoResizeAllRows(table);
@@ -1199,8 +1200,8 @@ public class QuerySearch extends javax.swing.JPanel {
             }
             WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.displaying"));
             susp = true;
-            exe = new RunSearch(DMTWorkbench.frame, true);
-            exe.setVisible(true);
+            runSearch = new RunSearch(DMTWorkbench.frame, true);
+            runSearch.setVisible(true);
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
@@ -1473,7 +1474,7 @@ public class QuerySearch extends javax.swing.JPanel {
     static Statement stat = null;
     static boolean susp = false;
     static int Max, nbRow = 1, T = 0, ID = 0, simulateNumber, progres = 0;
-    static RunSearch exe;
+    static RunSearch runSearch;
     String IDIMAGE = "";
     JImagePanel panImage;
     JXBusyLabel labBusyApercu;
