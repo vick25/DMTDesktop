@@ -1113,7 +1113,7 @@ public class QuerySearch extends javax.swing.JPanel {
     private class MyTableModel extends TreeTableModel {
 
         private final String[] COLUMN_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"),
-            I18N.get("Text.ROW"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+            I18N.get("Text.ROW"), I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
         private final ArrayList[] DATA;
 
         public MyTableModel() {
@@ -1265,46 +1265,6 @@ public class QuerySearch extends javax.swing.JPanel {
         }
     }
 
-    private void createExcelFile(File file) {
-        try {
-            WritableWorkbook wbb;
-            WritableSheet sheet;
-            Label label;
-            wbb = Workbook.createWorkbook(file);
-            String feuille = "OSFAC-DMT";
-            sheet = wbb.createSheet(feuille, 0);
-            int p;
-            for (int gh = 0; gh < table.getColumnCount(); gh++) {
-                p = gh;
-                if (p < table.getColumnCount()) {
-                    label = new Label(gh, 0, table.getColumnName(p));
-                    sheet.addCell(label);
-                    p++;
-                }
-            }
-            int a = 0;
-            int b;
-            for (int i = 0; i < table.getColumnCount(); i++) {
-                b = 0;
-                for (int j = 1; j < table.getRowCount() + 1; j++) {
-                    if (a < table.getColumnCount()) {
-                        label = new Label(i, j, table.getValueAt(b, a).toString());
-                        sheet.addCell(label);
-                        b++;
-                    }
-                }
-                a++;
-            }
-            wbb.write();
-            wbb.close();
-            JOptionPane.showMessageDialog(this, I18N.get("GeoResult.Export-confirmation-message"),
-                    I18N.get("Text.Confirm"), JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException | WriteException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo("Fatal error", e.getMessage(), null, null,
-                    e, Level.SEVERE, null));
-        }
-    }
-
     private void launchSearch(String query) {
         showItemInScrollPane(BLabLoading, I18N.get("Search.processing"));
         try {
@@ -1364,8 +1324,8 @@ public class QuerySearch extends javax.swing.JPanel {
             table.setValueAt(vImage.get(T), T, 2);
             table.setValueAt(vPath.get(T), T, 3);
             table.setValueAt(vRow.get(T), T, 4);
-            table.setValueAt(vDate.get(T), T, 5);
-            table.setValueAt(vSize.get(T), T, 6);
+            table.setValueAt(vDate.get(T), T, 6);
+            table.setValueAt(vSize.get(T), T, 7);
             T++;
             nbRow++;
             progres++;
@@ -1398,6 +1358,46 @@ public class QuerySearch extends javax.swing.JPanel {
                     ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return suite;
+    }
+
+    private void createExcelFile(File file) {
+        try {
+            WritableWorkbook wbb;
+            WritableSheet sheet;
+            Label label;
+            wbb = Workbook.createWorkbook(file);
+            String feuille = "OSFAC-DMT";
+            sheet = wbb.createSheet(feuille, 0);
+            int p;
+            for (int gh = 0; gh < table.getColumnCount(); gh++) {
+                p = gh;
+                if (p < table.getColumnCount()) {
+                    label = new Label(gh, 0, table.getColumnName(p));
+                    sheet.addCell(label);
+                    p++;
+                }
+            }
+            int a = 0;
+            int b;
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                b = 0;
+                for (int j = 1; j < table.getRowCount() + 1; j++) {
+                    if (a < table.getColumnCount()) {
+                        label = new Label(i, j, table.getValueAt(b, a).toString());
+                        sheet.addCell(label);
+                        b++;
+                    }
+                }
+                a++;
+            }
+            wbb.write();
+            wbb.close();
+            JOptionPane.showMessageDialog(this, I18N.get("GeoResult.Export-confirmation-message"),
+                    I18N.get("Text.Confirm"), JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException | WriteException e) {
+            JXErrorPane.showDialog(null, new ErrorInfo("Fatal error", e.getMessage(), null, null,
+                    e, Level.SEVERE, null));
+        }
     }
 
     private class MyItemListener implements ItemListener {
