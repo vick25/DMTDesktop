@@ -222,7 +222,7 @@ public class QuerySearch extends javax.swing.JPanel {
         if (Config.isLiteVersion() || Config.isSimpleUser()) {
             CBForm.setVisible(false);
         }
-        panSwitcher.add(createTabbedPane());
+        panSwitcher.add(createTabbedPane()); //Panel search options
     }
 
     @SuppressWarnings("unchecked")
@@ -236,7 +236,7 @@ public class QuerySearch extends javax.swing.JPanel {
         MIChecking = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         MIClearTable = new javax.swing.JMenuItem();
-        MIChekAll = new javax.swing.JMenuItem();
+        MICheckAll = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         MIProperties = new javax.swing.JMenuItem();
         BSubmit = new com.jidesoft.swing.JideButton();
@@ -291,13 +291,13 @@ public class QuerySearch extends javax.swing.JPanel {
         });
         TabPopupMenu.add(MIClearTable);
 
-        MIChekAll.setText(bundle.getString("Search.MIChekAll.text")); // NOI18N
-        MIChekAll.addActionListener(new java.awt.event.ActionListener() {
+        MICheckAll.setText(bundle.getString("Search.MIChekAll.text")); // NOI18N
+        MICheckAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MIChekAllActionPerformed(evt);
+                MICheckAllActionPerformed(evt);
             }
         });
-        TabPopupMenu.add(MIChekAll);
+        TabPopupMenu.add(MICheckAll);
         TabPopupMenu.add(jSeparator2);
 
         MIProperties.setText(bundle.getString("Search.MIProperties.text")); // NOI18N
@@ -467,7 +467,7 @@ public class QuerySearch extends javax.swing.JPanel {
         MIChecking = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         MIClearTable = new javax.swing.JMenuItem();
-        MIChekAll = new javax.swing.JMenuItem();
+        MICheckAll = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         MIProperties = new javax.swing.JMenuItem();
         BSubmit = new com.jidesoft.swing.JideButton();
@@ -522,13 +522,13 @@ public class QuerySearch extends javax.swing.JPanel {
         });
         TabPopupMenu.add(MIClearTable);
 
-        MIChekAll.setText(bundle.getString("Search.MIChekAll.text")); // NOI18N
-        MIChekAll.addActionListener(new java.awt.event.ActionListener() {
+        MICheckAll.setText(bundle.getString("Search.MIChekAll.text")); // NOI18N
+        MICheckAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MIChekAllActionPerformed(evt);
+                MICheckAllActionPerformed(evt);
             }
         });
-        TabPopupMenu.add(MIChekAll);
+        TabPopupMenu.add(MICheckAll);
         TabPopupMenu.add(jSeparator2);
 
         MIProperties.setText(bundle.getString("Search.MIProperties.text")); // NOI18N
@@ -788,12 +788,12 @@ public class QuerySearch extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_MIClearTableActionPerformed
 
-    private void MIChekAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIChekAllActionPerformed
+    private void MICheckAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MICheckAllActionPerformed
         headerChecked = !headerChecked;
         for (int i = 0; i < table.getRowCount(); i++) {
             table.setValueAt(headerChecked, i, 0);
         }
-    }//GEN-LAST:event_MIChekAllActionPerformed
+    }//GEN-LAST:event_MICheckAllActionPerformed
 
     private void MIPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIPropertiesActionPerformed
         // TODO add your handling code here:
@@ -871,9 +871,9 @@ public class QuerySearch extends javax.swing.JPanel {
         MIProperties.setEnabled(false);
         MISubmit.setEnabled(BSubmit.isEnabled());
         if (!headerChecked) {
-            MIChekAll.setText(I18N.get("Text.select-All-categories"));
+            MICheckAll.setText(I18N.get("Text.select-All-categories"));
         } else {
-            MIChekAll.setText(I18N.get("Text.Unselect-All-categories"));
+            MICheckAll.setText(I18N.get("Text.Unselect-All-categories"));
         }
     }
 
@@ -980,7 +980,6 @@ public class QuerySearch extends javax.swing.JPanel {
     }
 
     private String getPathPreview(String idImage) throws SQLException {
-        String imagePath = "";
         PreparedStatement ps = Config.con.prepareStatement("SELECT preview_path FROM dmt_support WHERE id_support = ("
                 + "SELECT id_support FROM dmt_image WHERE id_image = ?)");
         ps.setString(1, idImage);
@@ -988,7 +987,7 @@ public class QuerySearch extends javax.swing.JPanel {
         while (res.next()) {
             return res.getString(1);
         }
-        return imagePath;
+        return "";
     }
 
     private void submitEnable() {
@@ -1006,60 +1005,70 @@ public class QuerySearch extends javax.swing.JPanel {
     }
 
     private String criteriaSearch() {
-        String where, category, path, row, year, country, mission, slc = "", ortho;
+        StringBuilder where, category, path, row, year, country, mission, slc = new StringBuilder(), ortho;
 
         if (MainCriteria.CBCategory.getSelectedObjects().length != 0) {
-            category = " AND (category_name IN (" + manyCriteria(MainCriteria.CBCategory.getSelectedObjects()) + "))";
+            category = new StringBuilder("\nAND (category_name IN (")
+                    .append(manyCriteria(MainCriteria.CBCategory.getSelectedObjects())).append("))");
         } else {
-            category = "";
+            category = new StringBuilder();
         }
         if (MainCriteria.CBPath.getSelectedObjects().length != 0) {
-            path = " AND (path IN (" + manyCriteria(MainCriteria.CBPath.getSelectedObjects()) + "))";
+            path = new StringBuilder("\nAND (path IN (")
+                    .append(manyCriteria(MainCriteria.CBPath.getSelectedObjects())).append("))");
         } else {
-            path = "";
+            path = new StringBuilder();
         }
         if (MainCriteria.CBRow.getSelectedObjects().length != 0) {
-            row = " AND (row IN (" + manyCriteria(MainCriteria.CBRow.getSelectedObjects()) + "))";
+            row = new StringBuilder("\nAND (row IN (")
+                    .append(manyCriteria(MainCriteria.CBRow.getSelectedObjects())).append("))");
         } else {
-            row = "";
+            row = new StringBuilder();
         }
         if (MainCriteria.CBCountry.getSelectedObjects().length != 0) {
-            country = " AND (country_name IN (" + manyCriteria(MainCriteria.CBCountry.getSelectedObjects()) + "))";
+            country = new StringBuilder("\nAND (country_name IN (")
+                    .append(manyCriteria(MainCriteria.CBCountry.getSelectedObjects())).append("))");
         } else {
-            country = "";
+            country = new StringBuilder();
         }
         if (MainCriteria.CBYear.getSelectedObjects().length != 0) {
-            year = " AND (year(date) IN (" + manyCriteria(MainCriteria.CBYear.getSelectedObjects()) + "))";
+            year = new StringBuilder("\nAND (YEAR(date) IN (")
+                    .append(manyCriteria(MainCriteria.CBYear.getSelectedObjects())).append("))");
         } else {
-            year = "";
+            year = new StringBuilder();
         }
         if (MainCriteria.CBMission.getSelectedObjects().length != 0) {
-            mission = " AND (mission IN (" + manyCriteria(MainCriteria.CBMission.getSelectedObjects()) + "))";
+            mission = new StringBuilder("\nAND (mission IN (")
+                    .append(manyCriteria(MainCriteria.CBMission.getSelectedObjects())).append("))");
         } else {
-            mission = "";
+            mission = new StringBuilder();
         }
         if (MainCriteria.CBOrtho.getSelectedObjects().length != 0) {
-            ortho = " AND (ortho IN (" + manyCriteria(MainCriteria.CBOrtho.getSelectedObjects()) + "))";
+            ortho = new StringBuilder("\nAND (ortho IN (")
+                    .append(manyCriteria(MainCriteria.CBOrtho.getSelectedObjects())).append("))");
         } else {
-            ortho = "";
+            ortho = new StringBuilder();
         }
         if (MainCriteria.CBSLC.isEnabled()) {
             if (MainCriteria.CBSLC.getSelectedObjects().length != 0) {
-                slc = " AND (slc IN (" + manyCriteria(MainCriteria.CBSLC.getSelectedObjects()) + "))";
+                slc = new StringBuilder("\nAND (slc IN (")
+                        .append(manyCriteria(MainCriteria.CBSLC.getSelectedObjects())).append("))");
             } else {
-                slc = "";
+                slc = new StringBuilder();
             }
         }
 
-        where = category + path + row + country + mission + slc + ortho + year + getShape();
-        if (where.startsWith(" AND")) {
-            where = where.substring(4);
+        where = new StringBuilder().append(category.toString()).append(path.toString())
+                .append(row.toString()).append(country.toString()).append(mission.toString())
+                .append(slc.toString()).append(ortho.toString()).append(year.toString()).append(getShape());
+        if (where.toString().startsWith("\nAND")) {
+            where = new StringBuilder(where.substring(4));
         }
-        if (!where.isEmpty()) {
-            where = "WHERE " + where;
+        if (!where.toString().isEmpty()) {
+            where = new StringBuilder("WHERE\n").append(where);
         }
 //        System.err.println(where);
-        return where;
+        return where.toString();
     }
 
     private boolean isGeoCriteriaTableContainingValues() {
@@ -1075,19 +1084,19 @@ public class QuerySearch extends javax.swing.JPanel {
 
     //Get the shapes if the GeoCriteria table is filled with latlong values
     private String getShape() {
-        String shape = "";
+        StringBuilder shape = new StringBuilder();
         if (isGeoCriteriaTableContainingValues()) {
             if (GeoCriteria.RBPoint.isSelected()) {
-                shape = " AND (Intersects(GeomFromText('POINT(";
+                shape = new StringBuilder("\nAND (Intersects(GeomFromText('POINT(");
             } else if (GeoCriteria.RBLine.isSelected()) {
-                shape = " AND (Intersects(GeomFromText('LINESTRING(";
+                shape = new StringBuilder("\nAND (Intersects(GeomFromText('LINESTRING(");
             } else {
-                shape = " AND (Intersects(GeomFromText('POLYGON((";
+                shape = new StringBuilder("\nAND (Intersects(GeomFromText('POLYGON((");
             }
             try {
                 for (int i = 0; i < GeoCriteria.table.getRowCount(); i++) {
-                    shape += Double.parseDouble(GeoCriteria.table.getValueAt(i, 0).toString()) + " "
-                            + Double.parseDouble(GeoCriteria.table.getValueAt(i, 1).toString()) + ",";
+                    shape.append(Double.parseDouble(GeoCriteria.table.getValueAt(i, 0).toString()))
+                            .append(" ").append(Double.parseDouble(GeoCriteria.table.getValueAt(i, 1).toString())).append(",");
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, I18N.get("QuerySearch.Latitude-Longitude-values-are-no-valid"),
@@ -1095,12 +1104,12 @@ public class QuerySearch extends javax.swing.JPanel {
                 return "";
             }
             if (GeoCriteria.RBPolygon.isSelected()) {
-                shape = shape.substring(0, shape.length() - 1) + "))'), shape) = 1)";
+                shape = new StringBuilder().append(shape.substring(0, shape.length() - 1)).append("))'), shape) = 1)");
             } else {
-                shape = shape.substring(0, shape.length() - 1) + ")'), shape) = 1)";
+                shape = new StringBuilder().append(shape.substring(0, shape.length() - 1)).append(")'), shape) = 1)");
             }
         }
-        return shape;
+        return shape.toString();
     }
 
     private String manyCriteria(Object[] list) {
@@ -1134,7 +1143,9 @@ public class QuerySearch extends javax.swing.JPanel {
         table.unsort();
         panImage.setImage(null);
         panImage.repaint();
+        //Get the user's criterai to make searches to the DB
         final String WHERE = criteriaSearch();
+
         if (!WHERE.equals("")) {
             String query;
             if (MainCriteria.CBCountry.getSelectedObjects().length > 0) {
@@ -1452,8 +1463,8 @@ public class QuerySearch extends javax.swing.JPanel {
     private javax.swing.JCheckBox CBForm;
     private static javax.swing.JLabel LabImageChecked;
     private static javax.swing.JLabel LabImageDisplayed;
+    private javax.swing.JMenuItem MICheckAll;
     private javax.swing.JMenuItem MIChecking;
-    private javax.swing.JMenuItem MIChekAll;
     private javax.swing.JMenuItem MIClearTable;
     private javax.swing.JMenuItem MIExcel;
     private javax.swing.JMenuItem MIProperties;
