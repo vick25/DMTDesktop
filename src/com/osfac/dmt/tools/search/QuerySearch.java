@@ -30,9 +30,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +69,13 @@ import org.jdesktop.swingx.error.ErrorInfo;
 public class QuerySearch extends javax.swing.JPanel {
 
     public QuerySearch() {
+        try {
+            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
+        } catch (IOException ex) {
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
+        }
+
         runSearch = new RunSearch(null, true);
         tableModel = new MyTableModel();
         table = new SortableTable(tableModel);
@@ -211,6 +221,8 @@ public class QuerySearch extends javax.swing.JPanel {
                         BAddSearch.setEnabled(true);
                         showComponentInScrollPane(table);
 //                        WorkbenchFrame.dbprocessing.setVisible(false);
+                        //Method to fill the cloud cover of images
+                        fillCloudCover();
                         if (simulateNumber < 2000) {
                             JOptionPane.showMessageDialog(DMTWorkbench.frame, new StringBuilder().append(simulateNumber)
                                     .append(" ").append(I18N.get("Search.images-found")).toString());
@@ -222,7 +234,10 @@ public class QuerySearch extends javax.swing.JPanel {
         if (Config.isLiteVersion() || Config.isSimpleUser()) {
             CBForm.setVisible(false);
         }
-        panSwitcher.add(createTabbedPane()); //Panel search options
+        //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
+        runningSocketClient();
+        //Panel search options
+        panSwitcher.add(createTabbedPane());
     }
 
     @SuppressWarnings("unchecked")
@@ -1198,7 +1213,7 @@ public class QuerySearch extends javax.swing.JPanel {
         showItemInScrollPane(BLabLoading, I18N.get("Search.processing"));
         try {
             if (simulateNumber > 0) {
-                progres = 0;
+                progress = 0;
             }
             WorkbenchFrame.progress.setProgressStatus(I18N.get("Search.processing"));
             stat = Config.con.createStatement();
@@ -1223,6 +1238,9 @@ public class QuerySearch extends javax.swing.JPanel {
             IDIMAGE = res.getString("dmt_image.id_image");
             if (!vID.contains(IDIMAGE)) {
                 vID.add(IDIMAGE);
+                if (res.getString("category_name").equalsIgnoreCase("LANDSAT")) {
+                    cloudCoverImageList.add(Integer.parseInt(IDIMAGE)); //get only the ID of Landsat image for cloud cover
+                }
                 vImage.add(res.getString("image_name"));
                 vPath.add(res.getString("path"));
                 vRow.add(res.getString("row"));
@@ -1257,10 +1275,10 @@ public class QuerySearch extends javax.swing.JPanel {
             table.setValueAt(vSize.get(T), T, 7);
             T++;
             nbRow++;
-            progres++;
-            RunSearch.progression.setValue(progres);
+            progress++;
+            RunSearch.progression.setValue(progress);
             RunSearch.progression.setMaximum(Max);
-            RunSearch.progression.setString(new StringBuilder().append(progres).append(" / ")
+            RunSearch.progression.setString(new StringBuilder().append(progress).append(" / ")
                     .append(simulateNumber).toString());
             susp = true;
         } catch (Exception ex) {
@@ -1269,6 +1287,7 @@ public class QuerySearch extends javax.swing.JPanel {
         }
     }
 
+    //Method to get the count of the request
     private int simulateQuery(String query) {
         int suite = 0;
         try {
@@ -1369,6 +1388,110 @@ public class QuerySearch extends javax.swing.JPanel {
         vDate.clear();
         vSize.clear();
         vectThread.clear();
+    }
+
+    private void runningSocketClient() {
+        new Thread() {
+
+            @Override
+            public void run() {
+                DataInputStream in = null;
+                try {
+                    //send client data to the server
+                    outMetadata = new DataOutputStream(sclientMetadata.getOutputStream());
+                    //read data from the server
+                    in = new DataInputStream(sclientMetadata.getInputStream());
+                    int nbbit;
+                    String dataRead;
+                    while ((nbbit = in.read(TAMPON)) != -1) {
+                        dataRead = new String(TAMPON, 0, nbbit);
+
+                        switch (dataRead) {
+                            case HDDNOTCONNECTED:
+                                System.out.println(HDDNOTCONNECTED);
+                                break;
+                            case FILENOTEXIST:
+                                System.out.println(FILENOTEXIST);
+                                break;
+                            default:
+                                String cloudValue;
+                                while ((nbbit = in.read(TAMPON)) != -1) {
+                                    cloudValue = new String(TAMPON, 0, nbbit);
+                                    fillColumnWithCloudValue(currentIDCloud, cloudValue);
+                                    break;
+                                }
+                                break;
+                        }
+                        waitSentFile = false;
+                    }
+                } catch (IOException e) {
+                    JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                            e.getMessage(), null, null, e, Level.SEVERE, null));
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+//                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
+                    }
+                }
+            }
+        }.start();
+    }
+
+    private void fillColumnWithCloudValue(int ID, String cloudValue) {
+        try {
+            double cloudVal = Double.valueOf(cloudValue.trim());
+            table.setValueAt(cloudVal, getTableRowIndex(ID), 5);
+        } catch (NumberFormatException e) {
+            table.setValueAt(-1, getTableRowIndex(ID), 5);
+        }
+    }
+
+    private int getTableRowIndex(int ID) {
+        for (int i = 0; i < table.getRowCount(); i++) {
+            if (Integer.parseInt(table.getValueAt(i, 1).toString()) == ID) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    //Method to fill the cloud cover of landsat images
+    private void fillCloudCover() {
+        new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    if (!cloudCoverImageList.isEmpty()) {
+                        WorkbenchFrame.progress.setProgressStatus(I18N.get("WorkbenchFrame.Retrieving-cloud-images-value-from-metadata"));
+                        WorkbenchFrame.progress.setIndeterminate(true);
+                        for (int i = 0; i < table.getRowCount(); i++) {
+                            for (int j = 0; j < cloudCoverImageList.size(); j++) {
+                                if (Integer.parseInt(table.getValueAt(i, 1).toString()) == cloudCoverImageList.get(j)) {
+                                    currentIDCloud = cloudCoverImageList.get(j);
+                                    outMetadata.write(String.valueOf(currentIDCloud).getBytes());
+                                    outMetadata.flush();
+                                    yield();
+                                    Thread.sleep(10);
+                                    waitSentFile = true;
+                                    while (waitSentFile) {
+//////////                System.out.println("Waiting ...");
+                                    }
+                                }
+                            }
+                        }
+                        WorkbenchFrame.progress.setProgress(100);
+                    }
+                } catch (IOException | InterruptedException ex) {
+                    JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                            ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                } catch (NullPointerException ex) {
+                    WorkbenchFrame.progress.setProgress(100);
+                    return;
+                }
+            }
+        }.start();
     }
 
     private class MyTableModel extends TreeTableModel {
@@ -1484,7 +1607,7 @@ public class QuerySearch extends javax.swing.JPanel {
     static MyTableModel tableModel;
     static Statement stat = null;
     static boolean susp = false;
-    static int Max, nbRow = 1, T = 0, ID = 0, simulateNumber, progres = 0;
+    static int Max, nbRow = 1, T = 0, ID = 0, simulateNumber, progress = 0, currentIDCloud;
     static RunSearch runSearch;
     String IDIMAGE = "";
     JImagePanel panImage;
@@ -1498,5 +1621,12 @@ public class QuerySearch extends javax.swing.JPanel {
     ArrayList<String> vRow = new ArrayList<>();
     ArrayList<Date> vDate = new ArrayList<>();
     ArrayList<Double> vSize = new ArrayList<>();
+    ArrayList<Integer> cloudCoverImageList = new ArrayList<>(); //cloud image ID list
     private AdvancedSelection advancedSelection;
+    private Socket sclientMetadata;
+    private DataOutputStream outMetadata;
+    private volatile boolean waitSentFile = false;
+    private final int BUFFER = 1024 * 512;
+    private final byte TAMPON[] = new byte[BUFFER];
+    private final String HDDNOTCONNECTED = "HDD_NOT_CONNECTED", FILENOTEXIST = "FILE_NOT_EXIST";
 }

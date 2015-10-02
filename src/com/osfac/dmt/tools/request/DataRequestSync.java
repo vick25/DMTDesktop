@@ -170,8 +170,8 @@ public class DataRequestSync extends javax.swing.JDialog {
     }//GEN-LAST:event_BCancelActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-//        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, "Do you really want to abort database synchronizing?"
-//                + "", I18N.get("Text.Confirm"), 0) == 0) {
+//        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, "Do you really want to abort database synchronizing?",
+//                I18N.get("Text.Confirm"), 0) == 0) {
 //            this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //            thread.interrupt();
 //            this.dispose();
@@ -195,13 +195,14 @@ public class DataRequestSync extends javax.swing.JDialog {
                 labTask.setText(I18N.get("DataRequestSync.text-connecting-to-remote-database-done"));
                 if (con != null) {
                     try {
-                        number = doCount("select count(*) from dmt_delivery "
-                                + "where confirm_request_treated = ?", con, "No");
+                        number = doCount("SELECT COUNT(*) FROM dmt_delivery WHERE confirm_request_treated = ?",
+                                con, "No");
                         PBar.setMaximum(number);
-                        labTask.setText(I18N.get("DataRequestSync.Number-of-items-to-be-synchronized") + " " + number);
+                        labTask.setText(new StringBuilder(I18N.get("DataRequestSync.Number-of-items-to-be-synchronized"))
+                                .append(" ").append(number).toString());
                         WorkbenchFrame.DataRequestFound.setToolTipText(labTask.getText());
-                        PreparedStatement ps = con.prepareStatement("select * from dmt_delivery "
-                                + "where confirm_request_treated = ?");
+                        PreparedStatement ps = con.prepareStatement("SELECT * FROM dmt_delivery "
+                                + "WHERE confirm_request_treated = ?");
                         ps.setString(1, "No");
                         ResultSet res = ps.executeQuery();
                         int i = 0;
@@ -212,8 +213,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                             if (idRequesterNew != -1) {
                                 insertDelivery(idRequesterNew, findDeliveryData(res.getInt(1), con), con, res.getInt(1));
                                 PBar.setValue(++i);
-                                WorkbenchFrame.DataRequestFound.setToolTipText(I18N.get("DataRequestSync.Synchronizing-database")
-                                        + PBar.getString());
+                                WorkbenchFrame.DataRequestFound.setToolTipText(new StringBuilder(I18N.get("DataRequestSync.Synchronizing-database"))
+                                        .append(PBar.getString()).toString());
                                 confirmSync(res.getInt(1), con);
                             }
                         }
@@ -236,9 +237,9 @@ public class DataRequestSync extends javax.swing.JDialog {
     private ArrayList<String> findDeliveryData(int idDelivery, Connection con) {
         ArrayList<String> data = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("select id_user,"
+            PreparedStatement ps = con.prepareStatement("SELECT id_user,"
                     + "image_size,request_date,pathrow,confirm_email_sent,confirm_request_treated,"
-                    + "form_path from dmt_delivery where id_delivery = ?");
+                    + "form_path FROM dmt_delivery WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             ResultSetMetaData rsmd = res.getMetaData();
@@ -258,7 +259,7 @@ public class DataRequestSync extends javax.swing.JDialog {
     private int insertDelivery(int idRequester, ArrayList<String> data, Connection con, int idDeliveryOld) {
         int idDelivery = -1;
         try {
-            PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)",
+            PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_delivery VALUES (?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             ps.setInt(2, idRequester);
@@ -272,21 +273,21 @@ public class DataRequestSync extends javax.swing.JDialog {
                     idDelivery = res.getInt(1);
                     ArrayList<Integer> list = getIDUsage(idDeliveryOld, con);
                     for (int i = 0; i < list.size(); i++) {
-                        ps = Config.con.prepareStatement("insert into dmt_choose values (?,?)");
+                        ps = Config.con.prepareStatement("INSERT INTO dmt_choose VALUES (?,?)");
                         ps.setInt(1, idDelivery);
                         ps.setInt(2, list.get(i));
                         int result2 = ps.executeUpdate();
                     }
                     ArrayList<Integer> IDImages = getIDImages(idDeliveryOld, con);
                     for (int i = 0; i < IDImages.size(); i++) {
-                        ps = Config.con.prepareStatement("insert into dmt_deliver values (?,?)");
+                        ps = Config.con.prepareStatement("INSERT INTO dmt_deliver VALUES (?,?)");
                         ps.setInt(1, IDImages.get(i));
                         ps.setInt(2, idDelivery);
                         int result3 = ps.executeUpdate();
                     }
                 }
             }
-            labTask.setText(NewRequester + " " + I18N.get("DataRequestSync.added-successfully"));
+            labTask.setText(new StringBuilder(NewRequester).append(" ").append(I18N.get("DataRequestSync.added-successfully")).toString());
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                     ex.getMessage(), null, null, ex, Level.SEVERE, null));
@@ -297,7 +298,7 @@ public class DataRequestSync extends javax.swing.JDialog {
     private ArrayList<Integer> getIDImages(int idDelivery, Connection con) {
         ArrayList<Integer> list = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("select id_image from dmt_deliver where id_delivery = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT id_image FROM dmt_deliver WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -313,7 +314,7 @@ public class DataRequestSync extends javax.swing.JDialog {
     private ArrayList<Integer> getIDUsage(int idDelivery, Connection con) {
         ArrayList<Integer> list = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("select id_usage from dmt_choose where id_delivery = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT id_usage FROM dmt_choose WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -329,10 +330,10 @@ public class DataRequestSync extends javax.swing.JDialog {
     private ArrayList<String> findRequesterData(int idDelivery, Connection con) {
         ArrayList<String> RequesterData = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("select firstname,"
+            PreparedStatement ps = con.prepareStatement("SELECT firstname,"
                     + "familyname,othername,sex,adress,phone,email,profession,institution,nationality,"
-                    + "interest_area,usefulness,comment from dmt_requester inner join dmt_delivery "
-                    + "on dmt_requester.id_requester = dmt_delivery.id_requester where id_delivery = ?");
+                    + "interest_area,usefulness,comment FROM dmt_requester INNER JOIN dmt_delivery "
+                    + "ON dmt_requester.id_requester = dmt_delivery.id_requester WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             ResultSetMetaData rsmd = res.getMetaData();
@@ -351,7 +352,7 @@ public class DataRequestSync extends javax.swing.JDialog {
 
     private int insertRequester(ArrayList<String> data) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("insert into dmt_requester values "
+            PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_requester VALUES "
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
@@ -362,8 +363,10 @@ public class DataRequestSync extends javax.swing.JDialog {
             if (result == 1) {
                 ResultSet res = ps.getGeneratedKeys();
                 if (res.next()) {
-                    NewRequester = data.get(0) + " " + data.get(1) + " " + data.get(2);
-                    labTask.setText(NewRequester + " " + I18N.get("DataRequestSync.has-been-found"));
+                    NewRequester = new StringBuilder().append(data.get(0)).append(" ").append(data.get(1))
+                            .append(" ").append(data.get(2)).toString();
+                    labTask.setText(new StringBuilder(NewRequester).append(" ")
+                            .append(I18N.get("DataRequestSync.has-been-found")).toString());
                     return res.getInt(1);
                 }
             }
@@ -391,8 +394,8 @@ public class DataRequestSync extends javax.swing.JDialog {
 
     private void confirmSync(int idDeliveryOld, Connection con) {
         try {
-            PreparedStatement ps = con.prepareStatement("update dmt_delivery set confirm_request_treated = ? "
-                    + "where id_delivery = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE dmt_delivery SET confirm_request_treated = ? "
+                    + "WHERE id_delivery = ?");
             ps.setString(1, "Yes");
             ps.setInt(2, idDeliveryOld);
             int result = ps.executeUpdate();

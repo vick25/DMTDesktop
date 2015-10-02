@@ -171,15 +171,15 @@ public class Config {
 
     public static String convertOctetToAnyInDouble(long valeur) {
         if ((valeur >= 1024) && (valeur < (1024 * 1024))) {
-            return df.format((double) valeur / 1024) + " Ko";
+            return new StringBuilder().append(df.format((double) valeur / 1024)).append(" Ko").toString();
         } else if ((valeur >= (1024 * 1024)) && (valeur < (1024 * 1024 * 1024))) {
-            return df.format((double) valeur / (1024 * 1024)) + " Mo";
+            return new StringBuilder().append(df.format((double) valeur / (1024 * 1024))).append(" Mo").toString();
         } else if ((valeur >= (1024 * 1024 * 1024))) {
-            return df.format((double) valeur / (1024 * 1024 * 1024)) + " Go";
+            return new StringBuilder().append(df.format((double) valeur / (1024 * 1024 * 1024))).append(" Go").toString();
         } else if ((valeur >= (1024 * 1024 * 1024 * 1024))) {
-            return df.format((double) valeur / (1024 * 1024 * 1024 * 1024)) + " To";
+            return new StringBuilder().append(df.format((double) valeur / (1024 * 1024 * 1024 * 1024))).append(" To").toString();
         } else {
-            return df.format((double) valeur) + " Octets";
+            return new StringBuilder().append(df.format((double) valeur)).append(" Octets").toString();
         }
     }
 
@@ -263,7 +263,7 @@ public class Config {
         if (s.isEmpty()) {
             return s;
         } else {
-            return s.substring(0, 1).toUpperCase() + s.substring(1);
+            return new StringBuilder().append(s.substring(0, 1).toUpperCase()).append(s.substring(1)).toString();
         }
     }
 
@@ -345,7 +345,7 @@ public class Config {
         if (s.isEmpty()) {
             return s;
         } else {
-            return s.substring(0, 1).toUpperCase() + s.substring(1);
+            return new StringBuilder().append(s.substring(0, 1).toUpperCase()).append(s.substring(1)).toString();
         }
     }
 
@@ -446,7 +446,8 @@ public class Config {
                 olay.setOverlayVisible(textArea.getDocument().getLength() == 0);
             }
         });
-        olay.addOverlayComponent(StyledLabelBuilder.createStyledLabel("{" + text + ":f:gray}"));
+        olay.addOverlayComponent(StyledLabelBuilder.createStyledLabel(new StringBuilder("{").append(text)
+                .append(":f:gray}").toString()));
         return olay;
     }
 

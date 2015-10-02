@@ -263,7 +263,8 @@ public final class DMTWorkbench {
         Config.lookAndFeel = Config.pref.get(SettingKeyFactory.Theme.LOOKANDFEEL, Config.lookAndFeel);
         ((Office2003Painter) Office2003Painter.getInstance()).setColorName(Config.lookAndFeel);
         LookAndFeelFactory.installDefaultLookAndFeelAndExtension();
-        LookAndFeelFactory.installJideExtension(LookAndFeelFactory.OFFICE2003_STYLE);//Set the theme
+        LookAndFeelFactory.installJideExtension(LookAndFeelFactory.OFFICE2003_STYLE);//Set the default theme
+        Config.pref.putInt(SettingKeyFactory.Language.INDEX, 0);//Set the default language
 //        long start = PlugInManager.secondsSince(0);
         try {
             // first fetch parameters, LOCALE might be changed with -i18n switch

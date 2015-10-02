@@ -166,7 +166,7 @@
     </mapping>
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.open.OpenProjectWizard - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">C:\Users\OSFACLAP4\Documents</value>
+      <value class="java.lang.String">D:\Lidar\Data\Landsat</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">RELATIVE_ANGLE_CONSTRAINT</key>
@@ -196,7 +196,7 @@
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
-      <value class="java.lang.String">D:\Lidar\Data\RGC\Tr  Limite_bassin lukaya</value>
+      <value class="java.lang.String">C:\geoserver_data\data\data\cmm\lidar\shapefiles\parc_rgc</value>
     </mapping>
     <mapping>
       <key class="java.lang.String">com.osfac.dmt.workbench.ui.snap.SnapToVerticesPolicy - ENABLED</key>
@@ -209,16 +209,16 @@
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
       <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\WSTATION03\Documents\From Bob\Netbeansprojects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_Gabon.shp</item>
-        <item class="java.lang.String">C:\Program Files (x86)\OSFAC\OSFAC-DMT Desktop\default layers\Territoire_Tchad.shp</item>
-        <item class="java.lang.String">D:\Lidar\Data\RGC\Tr  Limite_bassin lukaya\BV_Lukaya.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Collectivite_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\District_RDC.shp</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
+        <item class="java.lang.String">D:\Lidar\Data\LO81830642015062LGN00.tar.gz</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_Angola.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_RCA.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Province_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\District_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\grille_landsat.shp</item>
       </value>
     </mapping>
     <mapping>

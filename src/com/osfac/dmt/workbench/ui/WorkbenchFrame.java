@@ -417,6 +417,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         if (Config.isFullVersion()) {
             connectToFTPServer(); //Automatically connects to FTP server
         }
+        //Open the default shapefile
         if (Config.pref.getBoolean(SettingKeyFactory.OtherFeatures.ChKLayer, true)) {
             OpenFilePlugIn filePlugin = new OpenFilePlugIn(workbenchContext, new File(
                     "default layers/Pays_COMIFAC.shp"));
@@ -887,21 +888,25 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         Object FeatureTab[] = activeTaskFrame.getLayerViewPanel().
                                 getSelectionManager().getFeatureSelection().getSelectedItems().toArray();
 
-                        String where = " (category_name IN (" + categories + ")) AND\n";
+                        StringBuffer where = new StringBuffer(" (category_name IN (").append(categories).append(")) AND\n");
                         for (int i = 0; i < FeatureTab.length; i++) {
-                            where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) OR";
+                            where.append(" (Intersects(GeomFromText('").append(FeatureTab[i]).append("'), shape) = 1) OR");
                         }
-                        where = where.substring(0, where.length() - 3);
+                        where = new StringBuffer(where.substring(0, where.length() - 3));
 //                        System.out.println(where);
                         ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image, category_name\n"
                                 + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
-                                + "dmt_category.id_category WHERE\n" + where);
+                                + "dmt_category.id_category WHERE\n" + where.toString());
+//                        System.out.println("SELECT DISTINCT id_image, category_name\n"
+//                                + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
+//                                + "dmt_category.id_category WHERE\n" + where.toString());
                         ArrayList<Integer> IDsImageList = new ArrayList<>();
                         ArrayList<Integer> cloudCoverImageList = new ArrayList<>();
                         while (res.next()) {
                             IDsImageList.add(res.getInt(1));
+                            // get only the ID of Landsat image for cloud cover
                             if (res.getString(2).equalsIgnoreCase("LANDSAT")) {
-                                cloudCoverImageList.add(res.getInt(1)); //get only the ID of Landsat image for cloud cover
+                                cloudCoverImageList.add(res.getInt(1));
                             }
                         }
 //                        dbprocessing.setVisible(false);
@@ -1504,7 +1509,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // Sometimes we want to create a LayerManager with no categories
         task.getLayerManager().addCategory(StandardCategoryNames.WORKING);
         task.getLayerManager().addCategory(StandardCategoryNames.SYSTEM);
-        task.setName(I18N.get("ui.WorkbenchFrame.task") + " " + taskSequence++);
+        task.setName(new StringBuilder(I18N.get("ui.WorkbenchFrame.task")).append(" ").append(taskSequence++).toString());
         return task;
     }
 
@@ -1576,6 +1581,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         new Timer(100, new ActionListener() {
             private int tickCount = 0;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     tickCount++;
@@ -1652,13 +1658,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             message = I18N.get("ui.WorkbenchFrame.no-description-was-provided");
         } else if (t.getLocalizedMessage().toLowerCase().indexOf(
                 I18N.get("ui.WorkbenchFrame.side-location-conflict")) > -1) {
-            message = t.getLocalizedMessage() + " -- "
-                    + I18N.get("ui.WorkbenchFrame.check-for-invalid-geometries");
+            message = new StringBuilder().append(t.getLocalizedMessage()).append(" -- ")
+                    .append(I18N.get("ui.WorkbenchFrame.check-for-invalid-geometries")).toString();
         } else {
             message = t.getLocalizedMessage();
         }
-        return message + "\n\n (" + StringUtil.toFriendlyName(t.getClass().getName())
-                + ")";
+        return new StringBuilder(message).append("\n\n (").append(StringUtil.toFriendlyName(t.getClass().getName()))
+                .append(")").toString();
     }
 
     public boolean hasInternalFrame(JInternalFrame internalFrame) {
@@ -1679,7 +1685,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     @Override
     public void warnUser(String warning) {
-        log(I18N.get("ui.WorkbenchFrame.warning") + ": " + warning);
+        log(new StringBuilder(I18N.get("ui.WorkbenchFrame.warning")).append(": ").append(warning).toString());
         flashStatusMessage(warning, Color.yellow);
     }
 
@@ -1954,10 +1960,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 if (!associatedFrames.isEmpty()) {
                     // Confirm you want to close them first
                     if (confirmClose(
-                            StringUtil.split(
-                                    I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
-                                    + " "
-                                    + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
+                            StringUtil.split(new StringBuilder(
+                                            I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
+                                    .append(" ")
+                                    .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
                                     60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                         for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                             GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
@@ -1977,10 +1983,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             if (!associatedFrames.isEmpty()) {
                 // Confirm you want to close them first
                 if (confirmClose(
-                        StringUtil.split(
-                                I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame")
-                                + " "
-                                + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
+                        StringUtil.split(new StringBuilder(
+                                        I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
+                                .append(" ")
+                                .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
                                 60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                     for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                         GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
@@ -2025,17 +2031,17 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             return pane.getValue().equals(action);
         }
         JOptionPane pane = new JOptionPane(
-                StringUtil.split(modifiedLayers.size() + " "
-                        + I18N.get("ui.WorkbenchFrame.dataset")
-                        + StringUtil.s(modifiedLayers.size())
-                        + " "
-                        + ((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
-                                : I18N.get("ui.WorkbenchFrame.has-been-modified"))
-                        + " ("
-                        + ((modifiedLayers.size() > 3) ? "e.g. " : "")
-                        + StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
-                                        0, Math.min(3, modifiedLayers.size()))) + ").\n"
-                        + I18N.get("ui.WorkbenchFrame.continue"), 80),
+                StringUtil.split(new StringBuilder().append(modifiedLayers.size()).append(" ")
+                        .append(I18N.get("ui.WorkbenchFrame.dataset"))
+                        .append(StringUtil.s(modifiedLayers.size()))
+                        .append(" ")
+                        .append((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
+                                        : I18N.get("ui.WorkbenchFrame.has-been-modified"))
+                        .append(" (")
+                        .append(((modifiedLayers.size() > 3) ? "e.g. " : ""))
+                        .append(StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
+                                                0, Math.min(3, modifiedLayers.size())))).append(").\n")
+                        .append(I18N.get("ui.WorkbenchFrame.continue")).toString(), 80),
                 JOptionPane.WARNING_MESSAGE);
         pane.setOptions(new String[]{action, I18N.get("ui.WorkbenchFrame.cancel")});
         pane.createDialog(this, "OSFAC-DMT").setVisible(true);
@@ -2164,9 +2170,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
-                    setTitle((panel.selectedNodes(Layer.class).size() != 1) ? ("("
-                            + panel.selectedNodes(Layer.class).size() + " "
-                            + I18N.get("ui.WorkbenchFrame.layers-selected") + ")")
+                    setTitle((panel.selectedNodes(Layer.class).size() != 1) ? (new StringBuilder("(")
+                            .append(panel.selectedNodes(Layer.class).size()).append(" ")
+                            .append(I18N.get("ui.WorkbenchFrame.layers-selected")).append(")").toString())
                             : ((Layerable) panel.selectedNodes(Layer.class).iterator().next()).getName());
                 }
 
@@ -2186,9 +2192,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
-                    setTitle((panel.selectedNodes(WMSLayer.class).size() != 1) ? ("("
-                            + panel.selectedNodes(WMSLayer.class).size() + " "
-                            + I18N.get("ui.WorkbenchFrame.wms-layers-selected") + ")")
+                    setTitle((panel.selectedNodes(WMSLayer.class).size() != 1) ? (new StringBuilder("(")
+                            .append(panel.selectedNodes(WMSLayer.class).size()).append(" ")
+                            .append(I18N.get("ui.WorkbenchFrame.wms-layers-selected")).append(")").toString())
                             : ((Layerable) panel.selectedNodes(WMSLayer.class).iterator().next()).getName());
                 }
 

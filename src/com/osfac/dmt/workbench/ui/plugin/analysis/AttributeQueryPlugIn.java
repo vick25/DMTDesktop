@@ -71,7 +71,7 @@ public class AttributeQueryPlugIn extends AbstractPlugIn implements ThreadedPlug
     private String funcNameToRun;
     private String value = "";
     private boolean complementResult = false;
-    private boolean caseInsensitive = false;
+    private boolean caseInsensitive = true;
     private boolean exceptionThrown = false;
     private JRadioButton updateSourceRB;
     private JRadioButton createNewLayerRB;
@@ -305,12 +305,14 @@ public class AttributeQueryPlugIn extends AbstractPlugIn implements ThreadedPlug
 
         JComboBox lyrCombo = dialog.addLayerComboBox(LAYER, initLayer, context.getLayerManager());
         lyrCombo.addItemListener(new LayerItemListener());
+        lyrCombo.setFocusable(false); //Vick
         attrComboBox = dialog.addComboBox(ATTRIBUTE, attrName, functionNames, null);
         final JComboBox dropBox = dialog.addComboBox(PREDICATE, funcNameToRun, functionNames, null);
         dialog.addTextField(VALUE, value, 20, null, null);
 
         final JCheckBox caseBox = dialog.addCheckBox(DIALOG_CASE_INSENSITIVE, caseInsensitive);
         caseBox.setEnabled(caseBoxEnabled(dropBox));
+        caseBox.setFocusable(false); //Vick
 
         // en/disable caseInsensitive box by user input
         dropBox.addActionListener(new ActionListener() {
@@ -326,6 +328,7 @@ public class AttributeQueryPlugIn extends AbstractPlugIn implements ThreadedPlug
         final String OUTPUT_GROUP = "OUTPUT_GROUP";
         createNewLayerRB = dialog.addRadioButton(CREATE_LYR, OUTPUT_GROUP, createLayer, CREATE_LYR);
         updateSourceRB = dialog.addRadioButton(UPDATE_SRC, OUTPUT_GROUP, !createLayer, UPDATE_SRC);
+        dialog.requestFocus(); //Vick
 
         updateUI(initLayer);
     }

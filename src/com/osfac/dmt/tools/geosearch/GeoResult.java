@@ -1179,11 +1179,12 @@ public class GeoResult extends JDialog {
                             String cloudValue;
                             while ((nbbit = in.read(TAMPON)) != -1) {
                                 cloudValue = new String(TAMPON, 0, nbbit);
-                                System.out.println("Cloud value retrieved for " + currentIDCloud + ": " + cloudValue);
+//                                System.out.println("Cloud value retrieved for " + currentIDCloud + ": " + cloudValue);
+                                fillColumnWithCloudValue(currentIDCloud, cloudValue);
                                 break;
                             }
                         }
-                        waitingFileBeSending = false;
+                        waitSentFile = false;
                     }
                 } catch (IOException e) {
                     JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
@@ -1192,18 +1193,28 @@ public class GeoResult extends JDialog {
                     try {
                         in.close();
                     } catch (IOException e) {
-                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
+//                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), e.getMessage(), null, null, e, Level.SEVERE, null));
                     }
                 }
             }
         }.start();
     }
 
-    private void fillTableColumnCloudValue(String cloudValue) {
-        table.setValueAt(cloudValue, 1, 3);
+    private void fillColumnWithCloudValue(int ID, String cloudValue) {
+        try {
+            double cloudVal = Double.parseDouble(cloudValue.trim());
+            table.setValueAt(cloudVal, getTableRowIndex(ID), 3);
+        } catch (NumberFormatException e) {
+            table.setValueAt(-1, getTableRowIndex(ID), 3);
+        }
     }
 
     private int getTableRowIndex(int ID) {
+        for (int i = 0; i < table.getRowCount(); i++) {
+            if (Integer.parseInt(table.getValueAt(i, 1).toString()) == ID) {
+                return i;
+            }
+        }
         return 0;
     }
 
@@ -1224,9 +1235,10 @@ public class GeoResult extends JDialog {
 //                                    System.err.println("ID: " + table.getValueAt(i, 1).toString() + " -- " + IDCloudImageList.get(j));
                                     outMetadata.write(String.valueOf(currentIDCloud).getBytes());
                                     outMetadata.flush();
+                                    yield();
                                     Thread.sleep(10);
-                                    waitingFileBeSending = true;
-                                    while (waitingFileBeSending) {
+                                    waitSentFile = true;
+                                    while (waitSentFile) {
 //////////                System.out.println("Waiting ...");
                                     }
                                 }
@@ -1234,9 +1246,12 @@ public class GeoResult extends JDialog {
                         }
                         progress.setProgress(100);
                     }
-                } catch (IOException | InterruptedException | NullPointerException ex) {
+                } catch (IOException | InterruptedException ex) {
                     JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                             ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                } catch (NullPointerException ex) {
+                    progress.setProgress(100);
+                    return;
                 }
             }
         }.start();
@@ -1468,7 +1483,7 @@ public class GeoResult extends JDialog {
     private DataRequestForm dataRequestForm;
     private Socket sclientMetadata;
     private DataOutputStream outMetadata;
-    private volatile boolean waitingFileBeSending = false;
+    private volatile boolean waitSentFile = false;
     private final int BUFFER = 1024 * 512;
     private final byte TAMPON[] = new byte[BUFFER];
     private final String HDDNOTCONNECTED = "HDD_NOT_CONNECTED", FILENOTEXIST = "FILE_NOT_EXIST",
