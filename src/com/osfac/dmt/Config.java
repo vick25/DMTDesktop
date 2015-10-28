@@ -57,6 +57,7 @@ public class Config {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             try {
+                //Check if the version of the current software
                 if (isLiteVersion()) {
                     host = "127.0.0.1";
                     username = "root";

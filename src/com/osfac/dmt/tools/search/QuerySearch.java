@@ -69,12 +69,12 @@ import org.jdesktop.swingx.error.ErrorInfo;
 public class QuerySearch extends javax.swing.JPanel {
 
     public QuerySearch() {
-        try {
-            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
-        } catch (IOException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
-        }
+//        try {
+//            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
+//        } catch (IOException ex) {
+//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+//                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
+//        }
 
         runSearch = new RunSearch(null, true);
         tableModel = new MyTableModel();
@@ -234,8 +234,8 @@ public class QuerySearch extends javax.swing.JPanel {
         if (Config.isLiteVersion() || Config.isSimpleUser()) {
             CBForm.setVisible(false);
         }
-        //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
-        runningSocketClient();
+//        //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
+//        runningSocketClient();
         //Panel search options
         panSwitcher.add(createTabbedPane());
     }
@@ -1158,7 +1158,7 @@ public class QuerySearch extends javax.swing.JPanel {
         table.unsort();
         panImage.setImage(null);
         panImage.repaint();
-        //Get the user's criterai to make searches to the DB
+        //Get the user's criteria to make searches to the DB
         final String WHERE = criteriaSearch();
 
         if (!WHERE.equals("")) {
@@ -1238,14 +1238,16 @@ public class QuerySearch extends javax.swing.JPanel {
             IDIMAGE = res.getString("dmt_image.id_image");
             if (!vID.contains(IDIMAGE)) {
                 vID.add(IDIMAGE);
-                if (res.getString("category_name").equalsIgnoreCase("LANDSAT")) {
-                    cloudCoverImageList.add(Integer.parseInt(IDIMAGE)); //get only the ID of Landsat image for cloud cover
-                }
+//                if (res.getString("category_name").equalsIgnoreCase("LANDSAT")) {
+//                    cloudCoverImageList.add(Integer.parseInt(IDIMAGE)); //get only the ID of Landsat image for cloud cover
+//                }
                 vImage.add(res.getString("image_name"));
                 vPath.add(res.getString("path"));
                 vRow.add(res.getString("row"));
                 vDate.add(res.getDate("date"));
                 vSize.add(res.getDouble("size"));
+                vCloud.add(res.getDouble("cloud_cover"));
+                vNdvi.add(res.getDouble("ndvi"));
             }
             Runnable runA = new Runnable() {
                 @Override
@@ -1271,8 +1273,10 @@ public class QuerySearch extends javax.swing.JPanel {
             table.setValueAt(vImage.get(T), T, 2);
             table.setValueAt(vPath.get(T), T, 3);
             table.setValueAt(vRow.get(T), T, 4);
-            table.setValueAt(vDate.get(T), T, 6);
-            table.setValueAt(vSize.get(T), T, 7);
+            table.setValueAt(vCloud.get(T), T, 5);
+            table.setValueAt(vNdvi.get(T), T, 6);
+            table.setValueAt(vDate.get(T), T, 7);
+            table.setValueAt(vSize.get(T), T, 8);
             T++;
             nbRow++;
             progress++;
@@ -1387,6 +1391,9 @@ public class QuerySearch extends javax.swing.JPanel {
         vRow.clear();
         vDate.clear();
         vSize.clear();
+        vNdvi.clear();
+        vCloud.clear();
+        cloudCoverImageList.clear();
         vectThread.clear();
     }
 
@@ -1497,7 +1504,8 @@ public class QuerySearch extends javax.swing.JPanel {
     private class MyTableModel extends TreeTableModel {
 
         private final String[] COLUMN_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"), I18N.get("Text.PATH"),
-            I18N.get("Text.ROW"), I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+            I18N.get("Text.ROW"), I18N.get("Text.CLOUDCOVER"), I18N.get("Text.NDVI"), I18N.get("Text.DATE"),
+            I18N.get("Text.SIZE-IN-MO")};
         private final ArrayList[] DATA;
 
         public MyTableModel() {
@@ -1621,6 +1629,8 @@ public class QuerySearch extends javax.swing.JPanel {
     ArrayList<String> vRow = new ArrayList<>();
     ArrayList<Date> vDate = new ArrayList<>();
     ArrayList<Double> vSize = new ArrayList<>();
+    ArrayList<Double> vNdvi = new ArrayList<>();
+    ArrayList<Double> vCloud = new ArrayList<>();
     ArrayList<Integer> cloudCoverImageList = new ArrayList<>(); //cloud image ID list
     private AdvancedSelection advancedSelection;
     private Socket sclientMetadata;
