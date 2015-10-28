@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench-state>
+  <properties>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_PAINT_AREA</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - LINE_PAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_PAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_FORM</key>
+      <value class="java.lang.String">SQUARE</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.view.EasyPanelEZ_LIST_KEY</key>
+      <value class="java.util.ArrayList">
+        <item class="java.lang.String">Right Click to Assign Button F1</item>
+        <item class="java.lang.String">Right Click to Assign Button F2</item>
+        <item class="java.lang.String">Right Click to Assign Button F3</item>
+        <item class="java.lang.String">Right Click to Assign Button F4</item>
+        <item class="java.lang.String">Right Click to Assign Button F5</item>
+        <item class="java.lang.String">Right Click to Assign Button F6</item>
+        <item class="java.lang.String">Right Click to Assign Button F7</item>
+        <item class="java.lang.String">Right Click to Assign Button F8</item>
+        <item class="java.lang.String">Right Click to Assign Button F9</item>
+        <item class="java.lang.String">Right Click to Assign Button F10</item>
+      </value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT_DISTANCE</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_FORM</key>
+      <value class="java.lang.String">SQUARE</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - LINE_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">CONSTRAIN_INCREMENTAL_ANGLE - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">CONSTRAIN_ANGLE - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT_COLOR</key>
+      <value class="java.awt.Color">0, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FOLLOWING_SIZE</key>
+      <value class="java.lang.Integer">5</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">CONSTRAIN_LENGTH - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - FILL_COLOR</key>
+      <value class="java.awt.Color">255, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_COLOR</key>
+      <value class="java.awt.Color">255, 200, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_POINT_SIZE</key>
+      <value class="java.lang.Integer">5</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadDatasetPlugIn - LAST FORMAT</key>
+      <value class="java.lang.String">OSFAC-DMT</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_FONT</key>
+      <value class="java.awt.Font">Dialog, 0, 24</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FONT</key>
+      <value class="java.awt.Font">Dialog, 0, 12</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">RELATIVE_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_FORM</key>
+      <value class="java.lang.String">SQUARE</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - SUMMARY_PAINT_LENGTH</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FONT_COLOR</key>
+      <value class="java.awt.Color">0, 0, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_FIRST_SIZE</key>
+      <value class="java.lang.Integer">10</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">LENGTH_CONSTRAINT</key>
+      <value class="java.lang.Double">0.5</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.SelectionStyllingOptionsPanel SELECTION_STYLE_COLOR</key>
+      <value class="java.awt.Color">255, 255, 0, 255</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER COORDINATE SYSTEM</key>
+      <value class="java.lang.String">Unspecified</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.PROJECTS</key>
+      <value class="java.util.LinkedHashSet" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datasource.LoadFileDataSourceQueryChooser - FILE CHOOSER DIRECTORY</key>
+      <value class="java.lang.String">C:\geoserver_data\data\data\cmm\lidar\shapefiles\parc_rgc</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">com.osfac.dmt.workbench.datastore.ConnectionManager - CONNECTION DESCRIPTORS</key>
+      <value class="java.util.ArrayList" />
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Double">30.0</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
+      <value class="java.util.LinkedHashSet">
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\dist\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\dist\default layers\Territoire_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\dist\default layers\Collectivite_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Desktop\osfacdmt_full_dist\default layers\Collectivite_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Desktop\Grace\LANDSAT\LE71780592000362SGS00\L71178059_05920001227_B30.TIF</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Desktop\Grace\LANDSAT\LE71780592000362SGS00\L71178059_05920001227_B40.TIF</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Desktop\Grace\LANDSAT\LE71780592000362SGS00\L71178059_05920001227_B50.TIF</item>
+        <item class="java.lang.String">C:\Users\WSTATION03\Desktop\osfacdmt_full_dist\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\osfacdmt_full_dist\default layers\Territoire_RDC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\osfacdmt_full_dist\default layers\Pays_COMIFAC.shp</item>
+      </value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">ABSOLUTE_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">INCREMENTAL_ANGLE_CONSTRAINT</key>
+      <value class="java.lang.Integer">8</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">org.openjump.core.ui.plugin.tools.AdvancedMeasureOptionsPanel - VERTEX_PAINT</key>
+      <value class="java.lang.Boolean">true</value>
+    </mapping>
+    <mapping>
+      <key class="java.lang.String">class com.osfac.dmt.workbench.ui.snap.GridRenderer - ENABLED</key>
+      <value class="java.lang.Boolean">false</value>
+    </mapping>
+  </properties>
+</workbench-state>
+

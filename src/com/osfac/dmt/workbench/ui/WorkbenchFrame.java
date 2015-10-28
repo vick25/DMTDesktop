@@ -904,10 +904,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         ArrayList<Integer> cloudCoverImageList = new ArrayList<>();
                         while (res.next()) {
                             IDsImageList.add(res.getInt(1));
-                            // get only the ID of Landsat image for cloud cover
-                            if (res.getString(2).equalsIgnoreCase("LANDSAT")) {
-                                cloudCoverImageList.add(res.getInt(1));
-                            }
+//                            // get only the ID of Landsat image for cloud cover
+//                            if (res.getString(2).equalsIgnoreCase("LANDSAT")) {
+//                                cloudCoverImageList.add(res.getInt(1));
+//                            }
                         }
 //                        dbprocessing.setVisible(false);
                         progress.setProgress(100);
@@ -920,10 +920,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                                 geoResult.dispose();
                             }
                             geoResult = new GeoResult(DMTWorkbench.frame, true, IDsImageList, cloudCoverImageList);
-                            Thread.sleep(30);
-                            if (Config.isFullVersion()) {
-                                geoResult.fillCloudCover();//Method to fill the cloud cover of images
-                            }
+//                            Thread.sleep(30);
+//                            if (Config.isFullVersion()) {
+//                                geoResult.fillCloudCover();//Method to fill the cloud cover of images
+//                            }
                             geoResult.setVisible(true);
                             if (previewLayer != null) {
                                 previewLayer.getLayerManager().dispose(DMTWorkbench.frame, previewLayer);
@@ -933,7 +933,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         FeatureTab = null;
                         where = null;
                         IDsImageList = null;
-                    } catch (SQLException | HeadlessException | InterruptedException e) {
+                    } catch (SQLException | HeadlessException e) {
                         JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                                 e.getMessage(), null, null, e, Level.SEVERE, null));
                     }
@@ -1149,6 +1149,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     private void actionLanguage(int index) {
+//        System.out.println(Config.pref.getInt(SettingKeyFactory.Language.INDEX, index));
         if (index != Config.pref.getInt(SettingKeyFactory.Language.INDEX, index)) {
             Config.pref.put(SettingKeyFactory.Language.ABREV, LanguagePanel.customCombo.petStrings[index]);
             Config.pref.putInt(SettingKeyFactory.Language.INDEX, index);

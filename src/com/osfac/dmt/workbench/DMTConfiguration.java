@@ -717,9 +717,9 @@ public class DMTConfiguration implements Setup {
                             @Override
                             public String check(JComponent component) {
                                 ((JCheckBoxMenuItem) component)
-                                .setSelected(ShowScaleRenderer
-                                        .isEnabled(workbenchContext
-                                                .getLayerViewPanel()));
+                                        .setSelected(ShowScaleRenderer
+                                                .isEnabled(workbenchContext
+                                                        .getLayerViewPanel()));
                                 return null;
                             }
                         }));
@@ -736,9 +736,9 @@ public class DMTConfiguration implements Setup {
                             @Override
                             public String check(JComponent component) {
                                 ((JCheckBoxMenuItem) component)
-                                .setSelected(ScaleBarRenderer
-                                        .isEnabled(workbenchContext
-                                                .getLayerViewPanel()));
+                                        .setSelected(ScaleBarRenderer
+                                                .isEnabled(workbenchContext
+                                                        .getLayerViewPanel()));
                                 return null;
                             }
                         }));
@@ -772,13 +772,13 @@ public class DMTConfiguration implements Setup {
 
         featureInstaller.addMainMenuItemWithJava14Fix(cloneWindowPlugIn, new String[]{MenuNames.WINDOW},
                 cloneWindowPlugIn.getName(), false, null, new EnableCheck() {
-                    @Override
-                    public String check(JComponent component) {
-                        return (!(workbenchContext.getWorkbench().getFrame()
+            @Override
+            public String check(JComponent component) {
+                return (!(workbenchContext.getWorkbench().getFrame()
                         .getActiveInternalFrame() instanceof CloneableInternalFrame)) ? I18N.get("JUMPConfiguration.not-available-for-the-current-window")
                                 : null;
-                    }
-                });
+            }
+        });
         //featureInstaller.addMenuSeparator(MenuNames.WINDOW); // ===================
 
         /**
@@ -822,7 +822,7 @@ public class DMTConfiguration implements Setup {
 
         String MENU_LAYER = MenuNames.LAYER;
         //--[sstein 21Mar2008] -- disabled because of new menu structure by Paul
-       /*
+        /*
          featureInstaller.addLayerViewMenuItem(addNewLayerPlugIn, MENU_LAYER,
          addNewLayerPlugIn.getName());
          featureInstaller.addLayerViewMenuItem(addDatastoreLayerPlugIn, MENU_LAYER,
@@ -832,14 +832,14 @@ public class DMTConfiguration implements Setup {
          runDatastoreQueryPlugIn.getName() + "...");
          */
         //--[sstein 21Mar2008] -- disabled because of new menu structure by Paul
-       /*
+        /*
          featureInstaller.addLayerViewMenuItem(addWMSQueryPlugIn, MENU_LAYER,
          addWMSQueryPlugIn.getName() + "...");
 
          featureInstaller.addLayerViewMenuItem(addImageLayerPlugIn, MENU_LAYER,
          addImageLayerPlugIn.getName() + "...");
          */
-        /*
+ /*
          featureInstaller.addMainMenuItem(addNewCategoryPlugIn, MENU_LAYER,
          addNewCategoryPlugIn.getName(), null, addNewCategoryPlugIn
          .createEnableCheck(workbenchContext));

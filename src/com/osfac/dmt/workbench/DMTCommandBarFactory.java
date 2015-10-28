@@ -171,7 +171,7 @@ public class DMTCommandBarFactory extends CommandBarFactory {
         MIStatistic.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.STATISTIC));
         MICreateUser.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.Standard.USER));
         MIStack.setIcon(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.STACK));
-        MIStack.setEnabled(false);
+        MIStack.setEnabled(true);
         if (Config.isLiteVersion() || Config.isSimpleUser()) {
             menu.add(MIGeoSearch, 0);
             menu.add(MIQuerySearch, 1);

@@ -68,11 +68,12 @@ public class DataRequestManager extends javax.swing.JPanel {
         table = new HierarchicalTable();
         table.setTableStyleProvider(new RowStripeTableStyleProvider(
                 new Color[]{Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1, ""
-                    + "253, 253, 244")), Config.getColorFromKey(Config.pref
-                    .get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255"))}));
+                            + "253, 253, 244")), Config.getColorFromKey(Config.pref
+                            .get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255"))}));
         table.getTableHeader().setReorderingAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setComponentFactory(new HierarchicalTableComponentFactory() {
+            @Override
             public Component createChildComponent(HierarchicalTable table, Object value, int row) {
                 if (value == null) {
                     return new JPanel();
@@ -83,36 +84,45 @@ public class DataRequestManager extends javax.swing.JPanel {
 
             private JComponent createPanel(final TableModel model, final int row) {
                 TableModel emptyTableModel = new TableModel() {
+                    @Override
                     public int getRowCount() {
                         return 0;
                     }
 
+                    @Override
                     public int getColumnCount() {
                         return model.getColumnCount();
                     }
 
+                    @Override
                     public String getColumnName(int columnIndex) {
                         return model.getColumnName(columnIndex);
                     }
 
+                    @Override
                     public Class<?> getColumnClass(int columnIndex) {
                         return model.getColumnClass(columnIndex);
                     }
 
+                    @Override
                     public boolean isCellEditable(int rowIndex, int columnIndex) {
                         return false;
                     }
 
+                    @Override
                     public Object getValueAt(int rowIndex, int columnIndex) {
                         return null;
                     }
 
+                    @Override
                     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
                     }
 
+                    @Override
                     public void addTableModelListener(TableModelListener l) {
                     }
 
+                    @Override
                     public void removeTableModelListener(TableModelListener l) {
                     }
                 };
@@ -150,10 +160,11 @@ public class DataRequestManager extends javax.swing.JPanel {
                         try {
                             Thread.sleep(2000); // you could use this thread to calculate your table model.
                         } catch (InterruptedException ex) {
-                            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
                         }
                         SwingUtilities.invokeLater(new Runnable() {
+                            @Override
                             public void run() {
                                 final SortableTable internalTable = (SortableTable) _tables.get(row);
                                 Container parent = internalTable.getParent();
@@ -198,6 +209,7 @@ public class DataRequestManager extends javax.swing.JPanel {
                 return overlayable;
             }
 
+            @Override
             public void destroyChildComponent(HierarchicalTable table, Component component, int row) {
                 Component t = JideSwingUtilities.getFirstChildOf(JTable.class, component);
                 if (t instanceof JTable) {
@@ -532,35 +544,35 @@ public class DataRequestManager extends javax.swing.JPanel {
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(filterField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addComponent(filterField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                 .addComponent(ScrllTable));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(filterField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScrllTable, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)));
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(filterField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ScrllTable, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)));
     }// </editor-fold>
 
     private void BDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDownloadActionPerformed
         if (WorkbenchFrame.BSConnect.isEnabled()) {
-            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"
-                    + ""), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"),
+                    I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
         } else {
             try {
                 JTable internalTable = _tables.get(indexParent);
                 int idDelivery = Integer.parseInt(internalTable.getValueAt(internalTable.getSelectedRow(), 0).toString());
                 new DownloadData(getIDsImage(idDelivery), idDelivery).setVisible(true);
             } catch (SQLException ex) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                        + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        ex.getMessage(), null, null, ex, Level.SEVERE, null));
             }
         }
     }//GEN-LAST:event_BDownloadActionPerformed
@@ -590,14 +602,14 @@ public class DataRequestManager extends javax.swing.JPanel {
         int idDelivery = Integer.parseInt(internalTable.getValueAt(internalTable.getSelectedRow(), 0).toString());
         if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("DataRequestManager.delete-data-request-confirm"), I18N.get("Text.Confirm"), 0) == 0) {
             try {
-                PreparedStatement ps = Config.con.prepareStatement("delete from dmt_requester "
-                        + "where id_requester = ?");
+                PreparedStatement ps = Config.con.prepareStatement("DELETE FROM dmt_requester "
+                        + "WHERE id_requester = ?");
                 ps.setInt(1, getIdRequester(idDelivery));
                 int result = ps.executeUpdate();
                 BRefresh.doClick();
             } catch (SQLException ex) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                        + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                        ex.getMessage(), null, null, ex, Level.SEVERE, null));
             }
         }
     }//GEN-LAST:event_BDeleteActionPerformed
@@ -658,8 +670,8 @@ public class DataRequestManager extends javax.swing.JPanel {
 
     private void confirmDataTreated(int idDelivery, String status) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("update dmt_delivery set "
-                    + "confirm_request_treated = ? where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery SET "
+                    + "confirm_request_treated = ? WHERE id_delivery = ?");
             ps.setString(1, status);
             ps.setInt(2, idDelivery);
             int result = ps.executeUpdate();
@@ -667,33 +679,33 @@ public class DataRequestManager extends javax.swing.JPanel {
                 BRefresh.doClick();
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
     }
 
     private int getIdRequester(int idDelivery) {
         int idRequester = 0;
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select dmt_delivery.id_requester from "
-                    + "dmt_delivery inner join dmt_requester on dmt_delivery.id_requester = "
-                    + "dmt_requester.id_requester where id_delivery = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT dmt_delivery.id_requester FROM "
+                    + "dmt_delivery INNER JOIN dmt_requester ON dmt_delivery.id_requester = "
+                    + "dmt_requester.id_requester WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
                 return res.getInt(1);
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return idRequester;
     }
 
     private ArrayList<String> getIDsImage(int idDelivery) throws SQLException {
         ArrayList<String> IDList = new ArrayList<>();
-        PreparedStatement ps = Config.con.prepareStatement("select id_image from "
-                + "dmt_deliver where id_delivery = ?");
+        PreparedStatement ps = Config.con.prepareStatement("SELECT id_image FROM "
+                + "dmt_deliver WHERE id_delivery = ?");
         ps.setInt(1, idDelivery);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -745,16 +757,20 @@ public class DataRequestManager extends javax.swing.JPanel {
             removeMouseWheelListeners();
         }
 
+        @Override
         public void componentResized(ComponentEvent e) {
             setSize(getSize().width, getPreferredSize().height);
         }
 
+        @Override
         public void componentMoved(ComponentEvent e) {
         }
 
+        @Override
         public void componentShown(ComponentEvent e) {
         }
 
+        @Override
         public void componentHidden(ComponentEvent e) {
         }
 
@@ -796,14 +812,17 @@ public class DataRequestManager extends javax.swing.JPanel {
             return false;
         }
 
+        @Override
         public boolean hasChild(int row) {
             return true;
         }
 
+        @Override
         public boolean isExpandable(int row) {
             return true;
         }
 
+        @Override
         public boolean isHierarchical(int row) {
             return true;
         }
@@ -813,12 +832,13 @@ public class DataRequestManager extends javax.swing.JPanel {
             return String.class;
         }
 
+        @Override
         public Object getChildValueAt(int row) {
             MyTableModelChild model = null;
             Object name = getValueAt(row, 0);
-            model = new MyTableModelChild(getDataRequestDetails(getIdRequestFromYear(name.toString(), "select "
-                    + "id_delivery from dmt_delivery where year(request_date) = ?")), new String[]{"ID", "Date"
-                        + "", "Names", "Interest Area", "Size", "Status"}) {
+            model = new MyTableModelChild(getDataRequestDetails(getIdRequestFromYear(name.toString(), "SELECT "
+                    + "id_delivery FROM dmt_delivery WHERE YEAR(request_date) = ?")), new String[]{"ID", "Date",
+                        "Names", "Interest Area", "Size", "Status"}) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
@@ -830,18 +850,18 @@ public class DataRequestManager extends javax.swing.JPanel {
 
     private class MyTableModelChild extends AbstractTableModel implements StyleModel {
 
-        private String[] columnNames;
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES;
+        private final ArrayList[] DATA;
 
         public MyTableModelChild(String[][] data, String[] columnNames) {
-            this.columnNames = columnNames;
-            Data = new ArrayList[columnNames.length];
+            this.COLUMN_NAMES = columnNames;
+            DATA = new ArrayList[columnNames.length];
             for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+                DATA[i] = new ArrayList();
             }
             for (int j = 0; j < data.length; j++) {
                 for (int i = 0; i < columnNames.length; i++) {
-                    Data[i].add(data[j][i]);
+                    DATA[i].add(data[j][i]);
                 }
             }
         }
@@ -850,8 +870,9 @@ public class DataRequestManager extends javax.swing.JPanel {
             return true;
         }
 
+        @Override
         public CellStyle getCellStyleAt(int rowIndex, int columnIndex) {
-            if (columnIndex == columnNames.length - 1) {
+            if (columnIndex == COLUMN_NAMES.length - 1) {
                 if ("Yes".equalsIgnoreCase(getValueAt(rowIndex, columnIndex).toString())) {
 //                    setValueAt("", rowIndex, columnIndex);
                     return completed;
@@ -864,25 +885,29 @@ public class DataRequestManager extends javax.swing.JPanel {
             }
         }
 
+        @Override
         public boolean isCellStyleOn() {
             return true;
         }
 
+        @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
+        @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
+        @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -897,40 +922,40 @@ public class DataRequestManager extends javax.swing.JPanel {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].add("");
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 
     private String[][] getDataRequestDetails(ArrayList list) {
-        String[][] RequestTab = new String[doCount("select count(dmt_delivery.id_delivery) from dmt_delivery "
-                + "inner join dmt_requester on dmt_delivery.id_requester = dmt_requester.id_requester "
-                + "where dmt_delivery.id_delivery in (" + manyCriterias(list) + ")")][6];
+        String[][] RequestTab = new String[doCount("SELECT COUNT(dmt_delivery.id_delivery) FROM dmt_delivery "
+                + "INNER JOIN dmt_requester ON dmt_delivery.id_requester = dmt_requester.id_requester "
+                + "WHERE dmt_delivery.id_delivery IN (" + manyCriterias(list) + ")")][6];
         try {
-            ResultSet res = Config.con.createStatement().executeQuery("select * from dmt_delivery "
-                    + "inner join dmt_requester on dmt_delivery.id_requester = dmt_requester.id_requester "
-                    + "where dmt_delivery.id_delivery in (" + manyCriterias(list) + ") order by request_date desc");
+            ResultSet res = Config.con.createStatement().executeQuery("SELECT * FROM dmt_delivery "
+                    + "INNER JOIN dmt_requester ON dmt_delivery.id_requester = dmt_requester.id_requester "
+                    + "WHERE dmt_delivery.id_delivery IN (" + manyCriterias(list) + ") ORDER BY request_date DESC");
             int i = 0;
             while (res.next()) {
                 RequestTab[i][0] = res.getString("dmt_delivery.id_delivery");
@@ -944,8 +969,8 @@ public class DataRequestManager extends javax.swing.JPanel {
                 i++;
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return RequestTab;
     }
@@ -960,19 +985,18 @@ public class DataRequestManager extends javax.swing.JPanel {
                 list.add(res.getInt(1));
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return list;
     }
 
     private String[][] getDataRequestYears() {
-        String[][] tabYears = new String[doCount("select count(distinct year(request_date)) from dmt_delivery "
-                + "")][2];
+        String[][] tabYears = new String[doCount("SELECT COUNT(DISTINCT YEAR(request_date)) FROM dmt_delivery")][2];
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select distinct year(request_date), "
-                    + "count(id_delivery) from dmt_delivery group by year(request_date) order by "
-                    + "year(request_date) desc");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT YEAR(request_date), "
+                    + "COUNT(id_delivery) FROM dmt_delivery group by YEAR(request_date) ORDER BY "
+                    + "YEAR(request_date) DESC");
             ResultSet res = ps.executeQuery();
             int i = 0;
             while (res.next()) {
@@ -981,8 +1005,8 @@ public class DataRequestManager extends javax.swing.JPanel {
                 i++;
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return tabYears;
     }
@@ -995,8 +1019,8 @@ public class DataRequestManager extends javax.swing.JPanel {
                 return res.getInt(1);
             }
         } catch (SQLException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"
-                    + ""), ex.getMessage(), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
         return 0;
     }
@@ -1015,12 +1039,11 @@ public class DataRequestManager extends javax.swing.JPanel {
     }
 
     private String manyCriterias(ArrayList list) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            values += "\'" + list.get(i) + "\',";
+            values.append("\'").append(list.get(i)).append("\',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        return values.substring(0, values.length() - 1);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jidesoft.swing.JideButton BDelete;

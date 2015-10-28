@@ -65,6 +65,25 @@ public class DownloadData extends javax.swing.JFrame {
         initializingStatusList(true, idImagesList);
         //Create the table of images
         createTable(idImagesList);
+        PanMore.setVisible(false);//hide the lower panel
+        setCellStyle();
+
+        //Method thats read and copy images from Server to target
+        runningSocketClient(idImagesList);
+        downloadData = this;
+
+        timerSpeedTime = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ProgressOnGoing.getValue() > 3) {
+                    speedAndDuration();
+                    FileTime = remainingTime(fileSize, cumulSizeFile, t1);
+                    TotalTime = remainingTime(dataSizeTotal, cumulTotalSize, t1);
+                }
+            }
+        });
+        timerSpeedTime.start();
+
         //Show the support name for each image in the table
         table.addMouseMotionListener(new MouseMotionAdapter() {
 
@@ -79,25 +98,6 @@ public class DownloadData extends javax.swing.JFrame {
                 aTable.repaint();
             }
         });
-
-        PanMore.setVisible(false);//hide the lower panel
-        setCellStyle();
-
-        //Method thats read and copy images from Server to target
-        runningSocketClient(idImagesList);
-
-        downloadData = this;
-        timerSpeedTime = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (ProgressOnGoing.getValue() > 3) {
-                    speedAndDuration();
-                    FileTime = remainingTime(fileSize, cumulSizeFile, t1);
-                    TotalTime = remainingTime(dataSizeTotal, cumulTotalSize, t1);
-                }
-            }
-        });
-        timerSpeedTime.start();
         this.setSize(this.getWidth(), this.getHeight() - 200);
         this.setIconImage(DMTIconsFactory.getImageIcon(DMTIconsFactory.DMTIcon.DOWNLOADDATA).getImage());
         this.setLocationRelativeTo(null);
@@ -232,8 +232,8 @@ public class DownloadData extends javax.swing.JFrame {
 
         BTFileExists.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/osfac/dmt/images/pyramid1_2.png"))); // NOI18N
         BTFileExists.setToolTipText(bundle.getString("DownloadData.BTFileExists.toolTipText")); // NOI18N
-        BTFileExists.setEnabled(false);
         BTFileExists.setFocusable(false);
+        BTFileExists.setSelected(true);
 
         labTargetFolder.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
 
@@ -449,8 +449,9 @@ public class DownloadData extends javax.swing.JFrame {
 
         BTFileExists.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/osfac/dmt/images/pyramid1_2.png"))); // NOI18N
         BTFileExists.setToolTipText(bundle.getString("DownloadData.BTFileExists.toolTipText")); // NOI18N
-        BTFileExists.setEnabled(false);
+        BTFileExists.setEnabled(true);
         BTFileExists.setFocusable(false);
+        BTFileExists.setSelected(true);
 
         labTargetFolder.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
 
@@ -598,13 +599,18 @@ public class DownloadData extends javax.swing.JFrame {
                         confirmDataTreated(idDelivery);
                     }
                     for (a = 0; a < idImagesList.size(); a++) {
-                        changeRowStatus(SPROGRESSING);
-                        outDownload.write(String.valueOf(idImagesList.get(a)).getBytes());
-                        outDownload.flush();
-                        Thread.sleep(10);
-                        waitingFileBeSending = true;
-                        while (waitingFileBeSending) {
+                        //Check if file exists in destination folder and skip if true
+                        if (!fileInTargetFolder(idImagesList.get(a))) {
+                            changeRowStatus(SPROGRESSING);
+                            outDownload.write(String.valueOf(idImagesList.get(a)).getBytes());
+                            outDownload.flush();
+                            Thread.sleep(10);
+                            waitingFileBeSending = true;
+                            while (waitingFileBeSending) {
 //////////                System.out.println("Waiting ...");
+                            }
+                        } else {
+                            continue;
                         }
                     }
 //                    labImageName.setText("");
@@ -673,8 +679,8 @@ public class DownloadData extends javax.swing.JFrame {
 //                        BDownloadFailedFiles.setEnabled(true);
 //                    }
 //                } catch (IOException | InterruptedException e) {
-//                    JXErrorPane.showDialog(downloadData, new ErrorInfo("Fatal error"
-//                        + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+//                    JXErrorPane.showDialog(downloadData, new ErrorInfo("Fatal error",
+//                        e.getMessage(), null, null, e, Level.SEVERE, null));
 //            }
 //        }
 //        }.start();
@@ -696,6 +702,7 @@ public class DownloadData extends javax.swing.JFrame {
         statusImages.set(a, status);
         jScrollPane1.repaint();
         table.repaint();
+        this.repaint();
     }
 
     private void setCellStyle() {
@@ -1023,18 +1030,7 @@ public class DownloadData extends javax.swing.JFrame {
                             }
                             File targetFile = new File(destByCategory(labTargetFolder.getText(), idImagesList.get(a))
                                     + File.separator + imageName);
-                            //Check if file exists in destination folder and skip if true
-//                            if (!fileInTargetFolder(targetFile, fileSize)) {
-//                                //Download method
                             downloadingAction(targetFile, positionCumul, imageName, in);
-//                            } else {
-//                                System.out.println("file already exists");
-//                                int nbRead;
-//                                while ((nbRead = in.read(TAMPON)) != -1) {
-//                                    break;
-//                                }
-//                                waitingFileBeSending = false;
-//                            }
                         }
                         waitingFileBeSending = false;
                     }
@@ -1051,14 +1047,36 @@ public class DownloadData extends javax.swing.JFrame {
         }.start();
     }
 
-    private boolean fileInTargetFolder(File targetFile, long fromFileSize) {
-        if (targetFile.exists() && !targetFile.isDirectory() && targetFile.isFile()) {
-            long toFileSize = targetFile.length();
-            System.out.println("toFileSize " + toFileSize);
-            System.out.println("fromFileSize " + fromFileSize);
-            while (true) {
-                System.out.println("file exists " + (toFileSize >= fromFileSize));
-                return (toFileSize >= fromFileSize); // check if the size length is different
+    private boolean fileInTargetFolder(String imageID) {
+        if (BTFileExists.isSelected()) {
+            try {
+                PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT image_name, size FROM dmt_image "
+                        + "WHERE id_image = ?");
+                ps.setString(1, imageID);
+                ResultSet res = ps.executeQuery();
+                while (res.next()) {
+                    String imageName = res.getString(1),
+                            targetSize,
+                            imageSize = Config.convertOctetToAnyInDouble((long) (res.getDouble(2) * (1024 * 1024)));
+                    if (getImageFormat(idImagesList.get(a)).equals("")) {
+                        imageName = imageName + ".zip";
+                    }
+                    File targetFile = new File(destByCategory(labTargetFolder.getText(), idImagesList.get(a))
+                            + File.separator + imageName);
+                    targetSize = Config.convertOctetToAnyInDouble(targetFile.length());
+
+                    double imageSizeDbl = Double.valueOf(imageSize.substring(0, imageSize.length() - 3).trim()),
+                            targetFileDbl = Double.valueOf(targetSize.substring(0, targetSize.length() - 3).trim());
+
+                    if (targetFile.exists()) {
+                        if ((targetFileDbl >= imageSizeDbl) || (imageSize.equals(targetSize))) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                JXErrorPane.showDialog(null, new ErrorInfo("Fatal error",
+                        e.getMessage(), null, null, e, Level.SEVERE, null));
             }
         }
         return false;
@@ -1104,6 +1122,8 @@ public class DownloadData extends javax.swing.JFrame {
                     break;
                 }
             }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
@@ -1181,12 +1201,10 @@ public class DownloadData extends javax.swing.JFrame {
                 } else {
                     return failed;
                 }
+            } else if (statusImages.get(rowIndex) == 1) {
+                return cellTextBold;
             } else {
-                if (statusImages.get(rowIndex) == 1) {
-                    return cellTextBold;
-                } else {
-                    return cellText;
-                }
+                return cellText;
             }
         }
 
@@ -1292,7 +1310,7 @@ public class DownloadData extends javax.swing.JFrame {
     private final int SCOMPLETED = 2;
     private final int SFAILED = 3;
     private String dir;
-    private boolean waitingFileBeSending = false;
+    private volatile boolean waitingFileBeSending = false;
     private long dataSizeTotal;
     private final int BUFFER = 1024 * 512;
     private byte TAMPON[] = new byte[BUFFER];

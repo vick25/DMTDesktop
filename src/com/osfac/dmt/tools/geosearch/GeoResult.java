@@ -78,13 +78,12 @@ public class GeoResult extends JDialog {
         this.IDImagesList = IDList;
         this.IDCloudImageList = IDCloudImageList;
 
-        try {
-            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
-        } catch (IOException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
-        }
-
+//        try {
+//            sclientMetadata = new Socket(Config.host, Config.PORTMETADATA);
+//        } catch (IOException ex) {
+//            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+//                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
+//        }
         tableModel = new MyTableModel();
         table = new SortableTable(tableModel);
 //        table.setSortable(false);
@@ -141,11 +140,9 @@ public class GeoResult extends JDialog {
                         //Draw the retrieve shape on the map
                         drawingShapeFromDB(wkt);
                         commandKey.put(table.getSelectedRow(), currentCommand);
-                    } else {
-                        if (WorkbenchFrame.previewLayer != null && commandList.get(commandKey.get(table.getSelectedRow())) != null) {
-                            deleteShapeDrawn(commandList.get(commandKey.get(table.getSelectedRow())));
-                            commandKey.remove(table.getSelectedRow());
-                        }
+                    } else if (WorkbenchFrame.previewLayer != null && commandList.get(commandKey.get(table.getSelectedRow())) != null) {
+                        deleteShapeDrawn(commandList.get(commandKey.get(table.getSelectedRow())));
+                        commandKey.remove(table.getSelectedRow());
                     }
                 }
                 //Get the images preview
@@ -220,10 +217,10 @@ public class GeoResult extends JDialog {
             //Method to fill the table with the list of images
             fillTable("SELECT DISTINCT * FROM dmt_image WHERE dmt_image.id_image IN (" + IDs.toString() + ")\n"
                     + "ORDER BY dmt_image.id_image ASC");
-            this.setTitle(new StringBuilder(table.getRowCount()).append(" ").append(I18N.get("GeoResult.title")).toString());
+            this.setTitle(new StringBuilder().append(table.getRowCount()).append(" ").append(I18N.get("GeoResult.title")).toString());
 
             //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
-            runningSocketClient();
+//            runningSocketClient();
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
@@ -819,14 +816,12 @@ public class GeoResult extends JDialog {
             }
             dataRequestForm = new DataRequestForm(DMTWorkbench.frame, true, listIDImage, getSizeOfImages(listIDImage), listImagePathRow, this);
             dataRequestForm.setVisible(true);
+        } else if (WorkbenchFrame.BSConnect.isEnabled()) {
+            JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"),
+                    I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
         } else {
-            if (WorkbenchFrame.BSConnect.isEnabled()) {
-                JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get("GeoResult.message-server-connection-error"),
-                        I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
-            } else {
-                this.dispose();
-                new DownloadData(listIDImage).setVisible(true);
-            }
+            this.dispose();
+            new DownloadData(listIDImage).setVisible(true);
         }
     }//GEN-LAST:event_BSubmitActionPerformed
 
@@ -1141,8 +1136,10 @@ public class GeoResult extends JDialog {
                 table.setValueAt(headerChecked, nbRow - 1, 0);
                 table.setValueAt(res.getString("dmt_image.id_image"), nbRow - 1, 1);
                 table.setValueAt(res.getString("image_name"), nbRow - 1, 2);
-                table.setValueAt(res.getDate("date"), nbRow - 1, 4);
-                table.setValueAt(res.getDouble("size"), nbRow - 1, 5);
+                table.setValueAt(res.getDouble("cloud_cover"), nbRow - 1, 3);
+                table.setValueAt(res.getDouble("ndvi"), nbRow - 1, 4);
+                table.setValueAt(res.getDate("date"), nbRow - 1, 5);
+                table.setValueAt(res.getDouble("size"), nbRow - 1, 6);
                 nbRow++;
             }
             TableUtils.autoResizeAllColumns(table);
@@ -1170,9 +1167,11 @@ public class GeoResult extends JDialog {
                         dataRead = new String(TAMPON, 0, nbbit);
 
                         if (dataRead.equals(HDDNOTCONNECTED)) {
-                            System.out.println(HDDNOTCONNECTED);
+//                            System.out.println(HDDNOTCONNECTED);
+                            table.setValueAt(-1, getTableRowIndex(currentIDCloud), 3);
                         } else if (dataRead.equals(FILENOTEXIST)) {
-                            System.out.println(FILENOTEXIST);
+//                            System.out.println(FILENOTEXIST);
+                            table.setValueAt(-1, getTableRowIndex(currentIDCloud), 3);
                         } else {
 //                            long zipFileSize = Long.parseLong(dataRead);  //read the file size
 //                            System.out.println("ZipFileSize: " + zipFileSize);
@@ -1219,37 +1218,42 @@ public class GeoResult extends JDialog {
     }
 
     //Method to fill the cloud cover of landsat images
-    public void fillCloudCover() {
+    private void fillCloudCover() {
         new Thread() {
 
             @Override
             public void run() {
-                try {
-                    if (!IDCloudImageList.isEmpty()) {
-                        progress.setProgressStatus(I18N.get("WorkbenchFrame.Retrieving-cloud-images-value-from-metadata"));
-                        progress.setIndeterminate(true);
-                        for (int i = 0; i < table.getRowCount(); i++) {
-                            for (int j = 0; j < IDCloudImageList.size(); j++) {
-                                if (Integer.parseInt(table.getValueAt(i, 1).toString()) == IDCloudImageList.get(j)) {
-                                    currentIDCloud = IDCloudImageList.get(j);
+                if (running) {
+                    try {
+                        if (!IDCloudImageList.isEmpty()) {
+                            progress.setProgressStatus(I18N.get("WorkbenchFrame.Retrieving-cloud-images-value-from-metadata"));
+                            progress.setIndeterminate(true);
+                            for (int i = 0; i < table.getRowCount(); i++) {
+                                for (int j = 0; j < IDCloudImageList.size(); j++) {
+                                    if (Integer.parseInt(table.getValueAt(i, 1).toString()) == IDCloudImageList.get(j)) {
+                                        currentIDCloud = IDCloudImageList.get(j);
 //                                    System.err.println("ID: " + table.getValueAt(i, 1).toString() + " -- " + IDCloudImageList.get(j));
-                                    outMetadata.write(String.valueOf(currentIDCloud).getBytes());
-                                    outMetadata.flush();
-                                    yield();
-                                    Thread.sleep(10);
-                                    waitSentFile = true;
-                                    while (waitSentFile) {
+                                        outMetadata.write(String.valueOf(currentIDCloud).getBytes());
+                                        outMetadata.flush();
+                                        yield();
+                                        Thread.sleep(10);
+                                        waitSentFile = true;
+                                        while (waitSentFile) {
 //////////                System.out.println("Waiting ...");
+                                        }
                                     }
                                 }
                             }
+                            progress.setProgress(100);
                         }
+                    } catch (IOException | InterruptedException ex) {
+                        JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                                ex.getMessage(), null, null, ex, Level.SEVERE, null));
+                    } catch (NullPointerException ex) {
                         progress.setProgress(100);
+                        return;
                     }
-                } catch (IOException | InterruptedException ex) {
-                    JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                            ex.getMessage(), null, null, ex, Level.SEVERE, null));
-                } catch (NullPointerException ex) {
+                } else {
                     progress.setProgress(100);
                     return;
                 }
@@ -1355,7 +1359,7 @@ public class GeoResult extends JDialog {
     private class MyTableModel extends TreeTableModel {
 
         private final String[] COLUMNS_NAMES = {"", I18N.get("Text.ID"), I18N.get("Text.IMAGES"),
-            I18N.get("Text.CLOUDCOVER"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
+            I18N.get("Text.CLOUDCOVER"), I18N.get("Text.NDVI"), I18N.get("Text.DATE"), I18N.get("Text.SIZE-IN-MO")};
         private final ArrayList[] DATA;
 
         public MyTableModel() {
@@ -1483,6 +1487,7 @@ public class GeoResult extends JDialog {
     private DataRequestForm dataRequestForm;
     private Socket sclientMetadata;
     private DataOutputStream outMetadata;
+    private boolean running = true;
     private volatile boolean waitSentFile = false;
     private final int BUFFER = 1024 * 512;
     private final byte TAMPON[] = new byte[BUFFER];

@@ -1407,7 +1407,7 @@ public class DataRequestForm extends javax.swing.JDialog {
                             File directory = new File(new StringBuilder().append(new JFileChooser().getCurrentDirectory())
                                     .append(File.separator).append("OSFAC-DMT").append(File.separator)
                                     .append(Config.correctText(new SimpleDateFormat("yyyy-MM-dd",
-                                                            new DateFormatSymbols()).format(new Date()))).toString());
+                                            new DateFormatSymbols()).format(new Date()))).toString());
                             directory.mkdirs();
                             String pathPDF = verification(requestPDF(directory));
                             JasperExportManager.exportReportToPdfFile(jp, pathPDF);

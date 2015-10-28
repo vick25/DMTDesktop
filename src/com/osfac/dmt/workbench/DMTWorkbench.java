@@ -172,6 +172,7 @@ public final class DMTWorkbench {
      * @throws java.lang.Exception
      */
     public DMTWorkbench(String title, String[] args, TaskMonitor monitor) throws Exception {
+        //Execute some configurations
         Config config = new Config();
         frame = new WorkbenchFrame(title, context); //Application Main Interface
 
@@ -264,7 +265,7 @@ public final class DMTWorkbench {
         ((Office2003Painter) Office2003Painter.getInstance()).setColorName(Config.lookAndFeel);
         LookAndFeelFactory.installDefaultLookAndFeelAndExtension();
         LookAndFeelFactory.installJideExtension(LookAndFeelFactory.OFFICE2003_STYLE);//Set the default theme
-        Config.pref.putInt(SettingKeyFactory.Language.INDEX, 0);//Set the default language
+//        Config.pref.putInt(SettingKeyFactory.Language.INDEX, 0);//Set the default language
 //        long start = PlugInManager.secondsSince(0);
         try {
             // first fetch parameters, LOCALE might be changed with -i18n switch
@@ -333,6 +334,7 @@ public final class DMTWorkbench {
             OpenJumpConfiguration.postExtensionInitialization(workbench.context);
 //////            Config.optionsDialog = SettingOptionsDialog.showOptionsDialog();
 
+            //Set the User ID if the version is LITE
             if (Config.isLiteVersion()) {
                 WorkbenchFrame.idUser = 4;
                 _frame.showFrame(splashWindow);
