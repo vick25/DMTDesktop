@@ -38,6 +38,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -257,6 +259,13 @@ public class GeoResult extends JDialog {
         if (Config.isLiteVersion() || Config.isSimpleUser()) {
             CBForm.setVisible(false);
         }
+        this.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                running = false;
+            }
+        });
         this.setLocation(5, 5);
     }
 
