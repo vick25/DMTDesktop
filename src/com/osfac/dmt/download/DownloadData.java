@@ -1063,12 +1063,13 @@ public class DownloadData extends javax.swing.JFrame {
                     }
                     File targetFile = new File(destByCategory(labTargetFolder.getText(), idImagesList.get(a))
                             + File.separator + imageName);
-                    targetSize = Config.convertOctetToAnyInDouble(targetFile.length());
-
-                    double imageSizeDbl = Double.valueOf(imageSize.substring(0, imageSize.length() - 3).trim()),
-                            targetFileDbl = Double.valueOf(targetSize.substring(0, targetSize.length() - 3).trim());
 
                     if (targetFile.exists()) {
+                        targetSize = Config.convertOctetToAnyInDouble(targetFile.length());
+
+                        double imageSizeDbl = Double.valueOf(imageSize.substring(0, imageSize.length() - 3).trim()),
+                                targetFileDbl = Double.valueOf(targetSize.substring(0, targetSize.length() - 3).trim());
+
                         if ((targetFileDbl >= imageSizeDbl) || (imageSize.equals(targetSize))) {
                             return true;
                         }

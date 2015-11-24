@@ -775,7 +775,7 @@ public class GeoResult extends JDialog {
                 ListYear.setModel(yearListModel);
                 yearListModel.insertElementAt(CheckBoxList.ALL, 0);
                 ListYear.getCheckBoxListSelectionModel().addSelectionInterval(0, ListYear.getModel().getSize() - 1);
-                fillTable("SELECT distinct * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
+                fillTable("SELECT DISTINCT * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
                         + "dmt_category.id_category WHERE dmt_image.id_image IN (" + IDs.toString() + ") "
                         + criteriaSearch() + "ORDER BY dmt_image.id_image ASC");
             } catch (SQLException ex) {
@@ -803,7 +803,7 @@ public class GeoResult extends JDialog {
         if (ListYear.getCheckBoxListSelectedValues().length <= 0) {
             cleanTable();
         } else {
-            fillTable("SELECT distinct * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
+            fillTable("SELECT DISTINCT * FROM dmt_category JOIN dmt_image ON dmt_image.id_category = "
                     + "dmt_category.id_category JOIN dmt_concern ON dmt_concern.id_image = dmt_image.id_image JOIN dmt_pathrow "
                     + "ON dmt_pathrow.path_row = dmt_concern.path_row WHERE dmt_image.id_image IN "
                     + "(" + IDs.toString() + ") " + criteriaSearch() + "ORDER BY dmt_image.id_image ASC");

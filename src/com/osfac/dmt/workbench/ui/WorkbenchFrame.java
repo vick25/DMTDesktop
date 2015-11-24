@@ -896,10 +896,10 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 //                        System.out.println(where);
                         ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image, category_name\n"
                                 + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
-                                + "dmt_category.id_category WHERE\n" + where.toString());
+                                + "dmt_category.id_category WHERE\n" + where.toString() + "\nGROUP BY image_name");
 //                        System.out.println("SELECT DISTINCT id_image, category_name\n"
 //                                + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
-//                                + "dmt_category.id_category WHERE\n" + where.toString());
+//                                + "dmt_category.id_category WHERE\n" + where.toString() + "\nGROUP BY image_name");
                         ArrayList<Integer> IDsImageList = new ArrayList<>();
                         ArrayList<Integer> cloudCoverImageList = new ArrayList<>();
                         while (res.next()) {
@@ -1447,11 +1447,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 });
                 i.addPropertyChangeListener(JInternalFrame.TITLE_PROPERTY,
                         new PropertyChangeListener() {
-                            @Override
-                            public void propertyChange(PropertyChangeEvent e) {
-                                updateTitle();
-                            }
-                        });
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        updateTitle();
+                    }
+                });
                 return null;
             }
         }.yield();
@@ -1962,7 +1962,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                     // Confirm you want to close them first
                     if (confirmClose(
                             StringUtil.split(new StringBuilder(
-                                            I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
+                                    I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
                                     .append(" ")
                                     .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
                                     60), I18N.get("ui.WorkbenchFrame.close-all"))) {
@@ -1985,7 +1985,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 // Confirm you want to close them first
                 if (confirmClose(
                         StringUtil.split(new StringBuilder(
-                                        I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
+                                I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
                                 .append(" ")
                                 .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
                                 60), I18N.get("ui.WorkbenchFrame.close-all"))) {
@@ -2037,11 +2037,11 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         .append(StringUtil.s(modifiedLayers.size()))
                         .append(" ")
                         .append((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
-                                        : I18N.get("ui.WorkbenchFrame.has-been-modified"))
+                                : I18N.get("ui.WorkbenchFrame.has-been-modified"))
                         .append(" (")
                         .append(((modifiedLayers.size() > 3) ? "e.g. " : ""))
                         .append(StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
-                                                0, Math.min(3, modifiedLayers.size())))).append(").\n")
+                                0, Math.min(3, modifiedLayers.size())))).append(").\n")
                         .append(I18N.get("ui.WorkbenchFrame.continue")).toString(), 80),
                 JOptionPane.WARNING_MESSAGE);
         pane.setOptions(new String[]{action, I18N.get("ui.WorkbenchFrame.cancel")});
@@ -2283,7 +2283,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private static LoadDefaultLayers loadDefaultLayers;
     public static JideButton DataRequestFound;
     public static JideButton BSConnect; //connect to FTP Server
-    public static String TypeOfVersion = Config.FULL_VERSION;
+    public static String TypeOfVersion = Config.LITE_VERSION;
     public static int idUser;
     public static DataRequestSync dataRequestSync;
 }

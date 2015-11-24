@@ -714,16 +714,26 @@ public class QuerySearch extends javax.swing.JPanel {
     }//GEN-LAST:event_BSubmitActionPerformed
 
     private void BSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSearchActionPerformed
-        table.unsort();
-        cleanTable();
-        clearVector();
-        searchData();
+        new Thread() {
+            @Override
+            public void run() {
+                table.unsort();
+                cleanTable();
+                clearVector();
+                searchData();
+            }
+        }.start();
     }//GEN-LAST:event_BSearchActionPerformed
 
     private void BAddSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BAddSearchActionPerformed
-        table.unsort();
-        cleanTable();
-        searchData();
+        new Thread() {
+            @Override
+            public void run() {
+                table.unsort();
+                cleanTable();
+                searchData();
+            }
+        }.start();
     }//GEN-LAST:event_BAddSearchActionPerformed
 
     private void BResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BResetActionPerformed
@@ -993,8 +1003,8 @@ public class QuerySearch extends javax.swing.JPanel {
     }
 
     private String getPathPreview(String idImage) throws SQLException {
-        PreparedStatement ps = Config.con.prepareStatement("SELECT preview_path FROM dmt_support WHERE id_support = ("
-                + "SELECT id_support FROM dmt_image WHERE id_image = ?)");
+        PreparedStatement ps = Config.con.prepareStatement("SELECT preview_path FROM dmt_support WHERE id_support = "
+                + "(SELECT id_support FROM dmt_image WHERE id_image = ?)");
         ps.setString(1, idImage);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -1171,8 +1181,10 @@ public class QuerySearch extends javax.swing.JPanel {
                         + "dmt_concern ON dmt_concern.id_image = dmt_image.id_image JOIN dmt_pathrow ON dmt_pathrow.path_row = dmt_concern.path_row "
                         + WHERE + " ORDER BY dmt_image.id_image";
             }
-//            System.out.println(query);
-            simulateNumber = simulateQuery("SELECT COUNT(DISTINCT dmt_image.image_name) " + query.substring(18));
+
+            simulateNumber = simulateQuery("SELECT COUNT(DISTINCT dmt_image.image_name) " + query.substring(18));//simulate number
+            query = new StringBuilder(query.substring(0, query.lastIndexOf("ORDER BY")))
+                    .append("\nGROUP BY image_name").append("\nORDER BY dmt_image.id_image").toString();//remove duplicate images name
             if (simulateNumber == 0) {
                 WorkbenchFrame.progress.setProgress(100);
                 showItemInScrollPane(BLabLoading, I18N.get("Search.no-image-has-been-found"));
@@ -1232,7 +1244,7 @@ public class QuerySearch extends javax.swing.JPanel {
     private void startSearch(ResultSet res) {
         try {
             IDIMAGE = res.getString("dmt_image.id_image");
-            if (!vID.contains(IDIMAGE) && !vImage.contains(res.getString("image_name"))) {
+            if (!vID.contains(IDIMAGE)) {
                 vID.add(IDIMAGE);
 //                if (res.getString("category_name").equalsIgnoreCase("LANDSAT")) {
 //                    cloudCoverImageList.add(Integer.parseInt(IDIMAGE)); //get only the ID of Landsat image for cloud cover
@@ -1282,7 +1294,6 @@ public class QuerySearch extends javax.swing.JPanel {
                     .append(simulateNumber).toString());
             susp = true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                     ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
