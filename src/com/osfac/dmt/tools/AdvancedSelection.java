@@ -471,7 +471,8 @@ public class AdvancedSelection extends javax.swing.JDialog {
                             I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                 }
             } else if (RBFrom.isSelected()) {
-                for (int i = Integer.parseInt(CBFrom.getSelectedItem().toString()); i < Integer.parseInt(CBTo.getSelectedItem().toString()); i++) {
+                for (int i = Integer.parseInt(CBFrom.getSelectedItem().toString());
+                        i < Integer.parseInt(CBTo.getSelectedItem().toString()); i++) {
                     table.setValueAt(true, i - 1, 0);
                 }
             } else if (RBBetween.isSelected()) {

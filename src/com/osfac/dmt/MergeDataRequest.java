@@ -16,7 +16,7 @@ public class MergeDataRequest {
     public MergeDataRequest() {
         try {
             conNew = connectToTargetDB("bd_osfac_new");
-            PreparedStatement ps = conNew.prepareStatement("select id_requerant from t_requerant");
+            PreparedStatement ps = conNew.prepareStatement("SELECT id_requerant FROM t_requerant");
             ResultSet res = ps.executeQuery();
             while (res.next()) {
                 int idRequesterNew = insertRequester(findRequesterData(res.getInt(1)));
@@ -31,7 +31,7 @@ public class MergeDataRequest {
 
     private int insertDelivery(int idRequester, ArrayList<String> data, int idRequerantOld) throws SQLException {
         int idDelivery = -1;
-        PreparedStatement ps = Config.con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)",
+        PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_delivery VALUES (?,?,?,?,?,?,?,?,?)",
                 Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, null);
         ps.setInt(2, idRequester);
@@ -47,14 +47,14 @@ public class MergeDataRequest {
                     idDelivery = res.getInt(1);
                     ArrayList<Integer> list = getIDUsage(idRequerantOld);
                     for (int i = 0; i < list.size(); i++) {
-                        ps = Config.con.prepareStatement("insert into dmt_choose values (?,?)");
+                        ps = Config.con.prepareStatement("INSERT INTO dmt_choose VALUES (?,?)");
                         ps.setInt(1, idDelivery);
                         ps.setInt(2, list.get(i));
                         int result2 = ps.executeUpdate();
                     }
                     ArrayList<Integer> IDImages = getIDImages(idRequerantOld);
                     for (int i = 0; i < IDImages.size(); i++) {
-                        ps = Config.con.prepareStatement("insert into dmt_deliver values (?,?)");
+                        ps = Config.con.prepareStatement("INSERT INTO dmt_deliver VALUES (?,?)");
                         ps.setInt(1, IDImages.get(i));
                         ps.setInt(2, idDelivery);
                         int result3 = ps.executeUpdate();
@@ -62,14 +62,14 @@ public class MergeDataRequest {
                 }
             }
         }
-        System.err.println(new StringBuilder(NewRequester).append(" has been added in the database successfully ...").toString());
+        System.err.println(NewRequester + " has been added in the database successfully ...");
         return idDelivery;
     }
 
     private ArrayList<Integer> getIDImages(int idRequerant) throws SQLException {
         ArrayList<Integer> list = new ArrayList<>();
-        PreparedStatement ps = conNew.prepareStatement("select id_image from t_livrer where id_livraison = "
-                + "(select id_livraison from t_livraison where id_requerant = ?)");
+        PreparedStatement ps = conNew.prepareStatement("SELECT id_image FROM t_livrer WHERE id_livraison = "
+                + "(SELECT id_livraison FROM t_livraison WHERE id_requerant = ?)");
         ps.setInt(1, idRequerant);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -81,7 +81,7 @@ public class MergeDataRequest {
     }
 
     private boolean isExistedInDB(int idImage) throws SQLException {
-        PreparedStatement ps = Config.con.prepareStatement("select id_image from dmt_image where id_image = ?");
+        PreparedStatement ps = Config.con.prepareStatement("SELECT id_image FROM dmt_image WHERE id_image = ?");
         ps.setInt(1, idImage);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -92,7 +92,7 @@ public class MergeDataRequest {
 
     private ArrayList<Integer> getIDUsage(int idRequerant) throws SQLException {
         ArrayList<Integer> list = new ArrayList<>();
-        PreparedStatement ps = conNew.prepareStatement("select id_usage from t_choisir where id_requerant = ?");
+        PreparedStatement ps = conNew.prepareStatement("SELECT id_usage FROM t_choisir WHERE id_requerant = ?");
         ps.setInt(1, idRequerant);
         ResultSet res = ps.executeQuery();
         while (res.next()) {
@@ -103,8 +103,8 @@ public class MergeDataRequest {
 
     private ArrayList<String> findDeliveryData(int idRequester) throws SQLException {
         ArrayList<String> data = new ArrayList<>();
-        PreparedStatement ps = conNew.prepareStatement("select id_utilisateur,volume,date,pathrow from "
-                + "t_livraison where id_requerant = ?");
+        PreparedStatement ps = conNew.prepareStatement("SELECT id_utilisateur,volume,date,pathrow FROM "
+                + "t_livraison WHERE id_requerant = ?");
         ps.setInt(1, idRequester);
         ResultSet res = ps.executeQuery();
         ResultSetMetaData rsmd = res.getMetaData();
@@ -129,7 +129,7 @@ public class MergeDataRequest {
     }
 
     private int insertRequester(ArrayList<String> data) throws SQLException {
-        PreparedStatement ps = Config.con.prepareStatement("insert into dmt_requester values "
+        PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_requester VALUES "
                 + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, null);
         for (int i = 0; i < data.size(); i++) {
@@ -147,8 +147,7 @@ public class MergeDataRequest {
         if (result == 1) {
             ResultSet res = ps.getGeneratedKeys();
             if (res.next()) {
-                NewRequester = new StringBuilder(data.get(0)).append(" ").append(data.get(1)).
-                        append(" ").append(data.get(2)).toString();
+                NewRequester = data.get(0) + " " + data.get(1) + " " + data.get(2);
 //                System.out.print(NewRequester + " has been found ... ");
                 return res.getInt(1);
             }
@@ -158,10 +157,10 @@ public class MergeDataRequest {
 
     private ArrayList<String> findRequesterData(int idRequester) throws SQLException {
         ArrayList<String> RequesterData = new ArrayList<>();
-        PreparedStatement ps = conNew.prepareStatement("select prenom,nom,postnom,sexe,adresse,telephone,"
-                + "email,profession,nom_institution,nationalite,zone_interet,note,commentaire from "
-                + "t_requerant inner join t_institution on t_institution.id_institution = "
-                + "t_requerant.id_institution where id_requerant = ?");
+        PreparedStatement ps = conNew.prepareStatement("SELECT prenom,nom,postnom,sexe,adresse,telephone,"
+                + "email,profession,nom_institution,nationalite,zone_interet,note,commentaire FROM "
+                + "t_requerant INNER JOIN t_institution ON t_institution.id_institution = "
+                + "t_requerant.id_institution WHERE id_requerant = ?");
         ps.setInt(1, idRequester);
         ResultSet res = ps.executeQuery();
         ResultSetMetaData rsmd = res.getMetaData();

@@ -326,7 +326,8 @@ public class GeoCriteria extends javax.swing.JPanel {
 
     private void setSNPoint(int value, int minimium) {
         SNPoint.setValue(value);
-        SNPoint.setModel(new SpinnerNumberModel(Integer.valueOf(value), Integer.valueOf(minimium), null, Integer.valueOf(1)));
+        SNPoint.setModel(new SpinnerNumberModel(Integer.valueOf(value), Integer.valueOf(minimium),
+                null, Integer.valueOf(1)));
     }
 
     public class MyTableModel extends AbstractTableModel {

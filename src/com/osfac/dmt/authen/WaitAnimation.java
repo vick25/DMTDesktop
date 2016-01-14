@@ -27,8 +27,7 @@ public class WaitAnimation extends JComponent implements ActionListener {
         animation = new Image[6];
         for (int i = 0; i < 6; i++) {
             animation[i] = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource(
-                    new StringBuilder("/com/osfac/dmt/authen/images/auth_").
-                    append(String.valueOf(i)).append(".png").toString()));
+                    "/com/osfac/dmt/authen/images/auth_" + String.valueOf(i) + ".png"));
             tracker.addImage(animation[i], i);
         }
         try {

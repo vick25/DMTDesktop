@@ -141,13 +141,14 @@ public class panRequest extends javax.swing.JPanel {
 
     private class MyTableModel extends AbstractTableModel implements StyleModel {
 
-        private String[] columnNames = {I18N.get("Text.ID"), I18N.get("Text.REQUEST"), I18N.get("Text.SENT")};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {I18N.get("Text.ID"), I18N.get("Text.REQUEST"),
+            I18N.get("Text.SENT")};
+        private final ArrayList[] DATA;
 
         public MyTableModel() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
@@ -175,22 +176,22 @@ public class panRequest extends javax.swing.JPanel {
 
         @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -205,29 +206,29 @@ public class panRequest extends javax.swing.JPanel {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].add("");
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 

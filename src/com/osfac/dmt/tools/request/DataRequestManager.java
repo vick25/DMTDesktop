@@ -951,11 +951,11 @@ public class DataRequestManager extends javax.swing.JPanel {
     private String[][] getDataRequestDetails(ArrayList list) {
         String[][] RequestTab = new String[doCount("SELECT COUNT(dmt_delivery.id_delivery) FROM dmt_delivery "
                 + "INNER JOIN dmt_requester ON dmt_delivery.id_requester = dmt_requester.id_requester "
-                + "WHERE dmt_delivery.id_delivery IN (" + manyCriterias(list) + ")")][6];
+                + "WHERE dmt_delivery.id_delivery IN (" + manyCriteria(list) + ")")][6];
         try {
             ResultSet res = Config.con.createStatement().executeQuery("SELECT * FROM dmt_delivery "
                     + "INNER JOIN dmt_requester ON dmt_delivery.id_requester = dmt_requester.id_requester "
-                    + "WHERE dmt_delivery.id_delivery IN (" + manyCriterias(list) + ") ORDER BY request_date DESC");
+                    + "WHERE dmt_delivery.id_delivery IN (" + manyCriteria(list) + ") ORDER BY request_date DESC");
             int i = 0;
             while (res.next()) {
                 RequestTab[i][0] = res.getString("dmt_delivery.id_delivery");
@@ -1038,10 +1038,10 @@ public class DataRequestManager extends javax.swing.JPanel {
         failed.setIcon(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/dialog_close.png")));
     }
 
-    private String manyCriterias(ArrayList list) {
-        StringBuilder values = new StringBuilder();
+    private String manyCriteria(ArrayList list) {
+        String values = "";
         for (int i = 0; i < list.size(); i++) {
-            values.append("\'").append(list.get(i)).append("\',");
+            values += "\'" + list.get(i) + "\',";
         }
         return values.substring(0, values.length() - 1);
     }

@@ -198,8 +198,7 @@ public class DataRequestSync extends javax.swing.JDialog {
                         number = doCount("SELECT COUNT(*) FROM dmt_delivery WHERE confirm_request_treated = ?",
                                 con, "No");
                         PBar.setMaximum(number);
-                        labTask.setText(new StringBuilder(I18N.get("DataRequestSync.Number-of-items-to-be-synchronized"))
-                                .append(" ").append(number).toString());
+                        labTask.setText(I18N.get("DataRequestSync.Number-of-items-to-be-synchronized") + " " + number);
                         WorkbenchFrame.DataRequestFound.setToolTipText(labTask.getText());
                         PreparedStatement ps = con.prepareStatement("SELECT * FROM dmt_delivery "
                                 + "WHERE confirm_request_treated = ?");
@@ -213,8 +212,8 @@ public class DataRequestSync extends javax.swing.JDialog {
                             if (idRequesterNew != -1) {
                                 insertDelivery(idRequesterNew, findDeliveryData(res.getInt(1), con), con, res.getInt(1));
                                 PBar.setValue(++i);
-                                WorkbenchFrame.DataRequestFound.setToolTipText(new StringBuilder(I18N.get("DataRequestSync.Synchronizing-database"))
-                                        .append(PBar.getString()).toString());
+                                WorkbenchFrame.DataRequestFound.setToolTipText(I18N.get("DataRequestSync.Synchronizing-database")
+                                        + PBar.getString());
                                 confirmSync(res.getInt(1), con);
                             }
                         }
@@ -287,7 +286,7 @@ public class DataRequestSync extends javax.swing.JDialog {
                     }
                 }
             }
-            labTask.setText(new StringBuilder(NewRequester).append(" ").append(I18N.get("DataRequestSync.added-successfully")).toString());
+            labTask.setText(NewRequester + " " + I18N.get("DataRequestSync.added-successfully"));
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
                     ex.getMessage(), null, null, ex, Level.SEVERE, null));
@@ -363,10 +362,8 @@ public class DataRequestSync extends javax.swing.JDialog {
             if (result == 1) {
                 ResultSet res = ps.getGeneratedKeys();
                 if (res.next()) {
-                    NewRequester = new StringBuilder().append(data.get(0)).append(" ").append(data.get(1))
-                            .append(" ").append(data.get(2)).toString();
-                    labTask.setText(new StringBuilder(NewRequester).append(" ")
-                            .append(I18N.get("DataRequestSync.has-been-found")).toString());
+                    NewRequester = data.get(0) + " " + data.get(1) + " " + data.get(2);
+                    labTask.setText(NewRequester + " " + I18N.get("DataRequestSync.has-been-found"));
                     return res.getInt(1);
                 }
             }

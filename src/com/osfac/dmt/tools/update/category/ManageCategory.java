@@ -25,9 +25,9 @@ public class ManageCategory extends javax.swing.JDialog {
         table.getTableHeader().setReorderingAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setTableStyleProvider(new RowStripeTableStyleProvider(new Color[]{
-                    getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1, "253, 253, 244")),
-                    getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255")),
-                    getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe3Color3, "210, 255, 210"))}));
+            getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1, "253, 253, 244")),
+            getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255")),
+            getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe3Color3, "210, 255, 210"))}));
         Config.centerTableHeadAndBold(table);
         initComponents();
         updateTable();
@@ -146,7 +146,7 @@ public class ManageCategory extends javax.swing.JDialog {
 
     private void fillTable() {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_category");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_category");
             ResultSet res = ps.executeQuery();
             int row = 0;
             while (res.next()) {
@@ -174,34 +174,34 @@ public class ManageCategory extends javax.swing.JDialog {
 
     private class MyTableModel extends AbstractTableModel {
 
-        private String[] columnNames = {"ID", "Category",};
-        private ArrayList[] Data;
+        private final String[] COLUMN_NAMES = {"ID", "Category",};
+        private final ArrayList[] DATA;
 
         public MyTableModel() {
-            Data = new ArrayList[columnNames.length];
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i] = new ArrayList();
+            DATA = new ArrayList[COLUMN_NAMES.length];
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i] = new ArrayList();
             }
         }
 
         @Override
         public int getColumnCount() {
-            return columnNames.length;
+            return COLUMN_NAMES.length;
         }
 
         @Override
         public int getRowCount() {
-            return Data[0].size();
+            return DATA[0].size();
         }
 
         @Override
         public String getColumnName(int col) {
-            return columnNames[col];
+            return COLUMN_NAMES[col];
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return Data[col].get(row);
+            return DATA[col].get(row);
         }
 
         @Override
@@ -216,29 +216,29 @@ public class ManageCategory extends javax.swing.JDialog {
 
         @Override
         public void setValueAt(Object value, int row, int col) {
-            Data[col].set(row, value);
+            DATA[col].set(row, value);
             fireTableCellUpdated(row, col);
         }
 
         public void addNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].add("");
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].add("");
             }
-            this.fireTableRowsInserted(0, Data[0].size() - 1);
+            this.fireTableRowsInserted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow() {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(Data[i].size() - 1);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(DATA[i].size() - 1);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
 
         public void removeNewRow(int index) {
-            for (int i = 0; i < columnNames.length; i++) {
-                Data[i].remove(index);
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                DATA[i].remove(index);
             }
-            this.fireTableRowsDeleted(0, Data[0].size() - 1);
+            this.fireTableRowsDeleted(0, DATA[0].size() - 1);
         }
     }
 

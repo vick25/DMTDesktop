@@ -27,8 +27,8 @@ public class ImagePreview extends javax.swing.JDialog {
         try {
             panImage.setImage(new ImageIcon(new URL(pathimg)).getImage());
         } catch (MalformedURLException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
         }
         panImage.repaint();
         initComponents();

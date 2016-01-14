@@ -68,8 +68,8 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
 
             while (res.next()) {
                 labRequester.setText(": " + res.getString("firstname") + " "
-                        + "" + res.getString("familyname").toUpperCase() + " "
-                        + "" + res.getString("othername").toUpperCase());
+                        + res.getString("familyname").toUpperCase() + " "
+                        + res.getString("othername").toUpperCase());
                 firstname = res.getString("firstname");
                 familyname = res.getString("familyname");
                 othername = res.getString("othername");
@@ -102,7 +102,7 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
     private int getNumber(int idDelivery) {
         int number = 0;
         try {
-            PreparedStatement ps = con.prepareStatement("SELECT count(id_image) FROM dmt_deliver WHERE id_delivery = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(id_image) FROM dmt_deliver WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -779,7 +779,7 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
 
     private int insertRequester(Connection con) {
         try {
-            PreparedStatement ps = con.prepareStatement("insert into dmt_requester values "
+            PreparedStatement ps = con.prepareStatement("INSERT INTO dmt_requester VALUES "
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
@@ -813,7 +813,7 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
     private int insertDelivery(int idRequester, Connection con) {
         int IDDelivery = -1;
         try {
-            PreparedStatement ps = con.prepareStatement("insert into dmt_delivery values (?,?,?,?,?,?,?,?,?)",
+            PreparedStatement ps = con.prepareStatement("INSERT INTO dmt_delivery VALUES (?,?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, null);
             ps.setInt(2, idRequester);
@@ -831,14 +831,14 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
                     IDDelivery = res.getInt(1);
                     ArrayList<Integer> list = getUsageIDs();
                     for (int i = 0; i < list.size(); i++) {
-                        ps = con.prepareStatement("insert into dmt_choose values (?,?)");
+                        ps = con.prepareStatement("INSERT INTO dmt_choose VALUES (?,?)");
                         ps.setInt(1, IDDelivery);
                         ps.setInt(2, list.get(i));
                         int result2 = ps.executeUpdate();
                     }
                     ArrayList<Integer> vID = getIDImages();
                     for (int i = 0; i < vID.size(); i++) {
-                        ps = con.prepareStatement("insert into dmt_deliver values (?,?)");
+                        ps = con.prepareStatement("INSERT INTO dmt_deliver VALUES (?,?)");
                         ps.setInt(1, vID.get(i));
                         ps.setInt(2, IDDelivery);
                         int result3 = ps.executeUpdate();
@@ -855,8 +855,8 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
     private ArrayList<Integer> getIDImages() {
         ArrayList<Integer> list = new ArrayList();
         try {
-            PreparedStatement ps = con.prepareStatement("SELECT id_image FROM dmt_deliver "
-                    + " WHERE id_delivery = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT id_image FROM dmt_deliver\n"
+                    + "WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -911,14 +911,14 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
             msg.setTo(labEmail.getText().substring(2));
             //Sujet de message
             msg.setSubject(I18N.get("ReviewDataRequestForm.Email-subject-to-requester"));
-            StringBuilder emailContent;
+            String emailContent;
             if (getCategories(idDelivery).contains("ASTER") || getCategories(idDelivery).contains("SPOT")) {
-                emailContent = new StringBuilder("Mr/Ms <b>").append(names).append(I18N.get("ReviewDataRequestForm.Email-content-to-other"));
+                emailContent = "Mr/Ms <b>" + names + I18N.get("ReviewDataRequestForm.Email-content-to-other");
             } else {
-                emailContent = new StringBuilder("Mr/Ms <b>").append(names).append(I18N.get("ReviewDataRequestForm.Email-content-to-other-aster-spot"));
+                emailContent = "Mr/Ms <b>" + names + I18N.get("ReviewDataRequestForm.Email-content-to-other-aster-spot");
             }
             //Contenu de message
-            msg.setContent(emailContent.toString(), true);
+            msg.setContent(emailContent, true);
             //Envoyer le message
             mail.sendMessage(msg);
             confirmSentEmail(idDelivery);
@@ -1029,7 +1029,7 @@ public class ReviewDataRequestForm extends javax.swing.JDialog {
         try {
             PreparedStatement ps = con.prepareStatement("SELECT DISTINCT category_name FROM dmt_category\n"
                     + "INNER JOIN dmt_image ON\n"
-                    + "dmt_category.id_category = dmt_image.id_category "
+                    + "dmt_category.id_category = dmt_image.id_category\n"
                     + "INNER JOIN dmt_deliver ON\n"
                     + "dmt_image.id_image = dmt_deliver.id_image WHERE id_delivery = ?");
             ps.setInt(1, idDelivery);

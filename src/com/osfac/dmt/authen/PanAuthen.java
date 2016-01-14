@@ -27,8 +27,8 @@ public class PanAuthen extends javax.swing.JPanel {
         this.glassPane = glassPane;
         this.parent = parent;
         initComponents(I18N.DMTResourceBundle);
-        BServerIP.setText(new StringBuilder(I18N.get("com.osfac.dmt.Config.Server-Text")).append(" ").
-                append(Config.pref.get(SettingKeyFactory.Connection.HOST, Config.host)).toString());
+        BServerIP.setText(I18N.get("com.osfac.dmt.Config.Server-Text") + " "
+                + Config.pref.get(SettingKeyFactory.Connection.HOST, Config.host));
 
         //initialize value and log in automatically
         initialValues();

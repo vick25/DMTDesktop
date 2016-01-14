@@ -106,7 +106,7 @@ public class DataRequestForm extends javax.swing.JDialog {
         CBNationality.setSelectedIndex(57); //DRC
         autoCompleteTxt();
         checkCategories();
-        Timer timer = new Timer(300, new ActionListener() {
+        Timer timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!txtFirstName.getText().equals("") && !txtFamilyName.getText().equals("") && checkOutUsage()
@@ -1404,10 +1404,10 @@ public class DataRequestForm extends javax.swing.JDialog {
                             idReq.put("logo", getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/001.png"));
                             InputStream inForm = getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/form.jasper");
                             JasperPrint jp = JasperFillManager.fillReport(inForm, idReq, Config.con);
-                            File directory = new File(new StringBuilder().append(new JFileChooser().getCurrentDirectory())
-                                    .append(File.separator).append("OSFAC-DMT").append(File.separator)
-                                    .append(Config.correctText(new SimpleDateFormat("yyyy-MM-dd",
-                                            new DateFormatSymbols()).format(new Date()))).toString());
+                            File directory = new File(new JFileChooser().getCurrentDirectory()
+                                    + File.separator + "OSFAC-DMT" + File.separator
+                                    + Config.correctText(new SimpleDateFormat("yyyy-MM-dd",
+                                            new DateFormatSymbols()).format(new Date())));
                             directory.mkdirs();
                             String pathPDF = verification(requestPDF(directory));
                             JasperExportManager.exportReportToPdfFile(jp, pathPDF);
@@ -1430,12 +1430,12 @@ public class DataRequestForm extends javax.swing.JDialog {
                                 }.start();
                             }
                             WorkbenchFrame.progress.setProgressStatus(
-                                    new StringBuilder(I18N.get("ReviewDataRequestForm.Sending-Email-to"))
-                                    .append(" dmt@osfac.net ......").toString());
+                                    I18N.get("ReviewDataRequestForm.Sending-Email-to")
+                                    + " dmt@osfac.net ......");
                             WorkbenchFrame.progress.setIndeterminate(true);
-                            sendEmail(pathPDF, new StringBuilder(Config.capitalFirstLetter(txtFirstName.getText()))
-                                    .append(" ").append(txtFamilyName.getText().toUpperCase()).append(" ")
-                                    .append(txtOtherName.getText().toUpperCase()).toString(), idDelivery);
+                            sendEmail(pathPDF, Config.capitalFirstLetter(txtFirstName.getText())
+                                    + " " + txtFamilyName.getText().toUpperCase() + " "
+                                    + txtOtherName.getText().toUpperCase(), idDelivery);
                         } catch (JRException ex) {
                             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
                         }
@@ -1523,14 +1523,13 @@ public class DataRequestForm extends javax.swing.JDialog {
         JideButton closeButton = createButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/close.png")));
         closeButton.addActionListener(closeAction);
         rightPanel.add(closeButton);
-        StringBuilder text = new StringBuilder("<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>");
+        String text = "<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>";
         if (!firstName.isEmpty() && !familyName.isEmpty()) {
-            text.append("\"<font color=blue>").append(firstName).append(" ").append(familyName)
-                    .append("</font>\" ").append(I18N.get("DataRequestForm.found-in-database"))
-                    .append("<br>");
+            text += ("\"<font color=blue>" + firstName + " " + familyName + "</font>\" "
+                    + I18N.get("DataRequestForm.found-in-database") + "<br>");
         }
-        text.append("</HTML>");
-        final JLabel LabelMessage = new JLabel(text.toString());
+        text += ("</HTML>");
+        final JLabel LabelMessage = new JLabel(text);
         PaintPanel panel = new PaintPanel(new BorderLayout(6, 6));
         panel.setBorder(BorderFactory.createEmptyBorder(6, 7, 7, 7));
         panel.add(LabelMessage, BorderLayout.CENTER);
@@ -1744,10 +1743,10 @@ public class DataRequestForm extends javax.swing.JDialog {
         JideButton closeButton = createButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/close.png")));
         closeButton.addActionListener(closeAction);
         rightPanel.add(closeButton);
-        final StringBuilder text = new StringBuilder("<HTML><CENTER><H4><U>OSFAC-Data Management Tool</U></H4></CENTER>")
-                .append("<H3><font color=green>").append(I18N.get("DataRequestForm.a-pdf-file-created"))
-                .append("</font></H3>").append("</HTML>");
-        final JLabel LabelMessage = new JLabel(text.toString());
+        final String text = "<HTML><CENTER><H4><U>OSFAC-Data Management Tool</U></H4></CENTER>"
+                + "<H3><font color=green>" + I18N.get("DataRequestForm.a-pdf-file-created")
+                + "</font></H3></HTML>";
+        final JLabel LabelMessage = new JLabel(text);
         PaintPanel panel = new PaintPanel(new BorderLayout(6, 6));
         panel.setBorder(BorderFactory.createEmptyBorder(6, 7, 7, 7));
         panel.add(LabelMessage, BorderLayout.CENTER);
@@ -1841,15 +1840,15 @@ public class DataRequestForm extends javax.swing.JDialog {
             //Sujet de message
             msg.setSubject(I18N.get("ReviewDataRequestForm.Email-subject-to-dmt"));
             //Contenu de message
-            msg.setContent(new StringBuilder(I18N.get("ReviewDataRequestForm.Email-content-to-dmt-part1"))
-                    .append(names).append(I18N.get("ReviewDataRequestForm.Email-content-to-dmt-part2")).toString(), true);
+            msg.setContent(I18N.get("ReviewDataRequestForm.Email-content-to-dmt-part1")
+                    + names + I18N.get("ReviewDataRequestForm.Email-content-to-dmt-part2"), true);
             //Piece jointe s'il y a lieu
             msg.setAttachmentURL(filePath);
             //Envoyer le message
             mail.sendMessage(msg);
             WorkbenchFrame.progress.setProgress(100);
-            WorkbenchFrame.progress.setProgressStatus(new StringBuilder(I18N.get("ReviewDataRequestForm.Sending-confirmation-Email-to"))
-                    .append(" ").append(txtEMail.getText()).append(" ......").toString());
+            WorkbenchFrame.progress.setProgressStatus(I18N.get("ReviewDataRequestForm.Sending-confirmation-Email-to")
+                    + " " + txtEMail.getText() + " ......");
             WorkbenchFrame.progress.setIndeterminate(true);
             //send email to the requester : Source de message
             msg.setFrom(new InternetAddress("dmt@osfac.net", "OSFAC-DMT"));
@@ -1857,18 +1856,18 @@ public class DataRequestForm extends javax.swing.JDialog {
             msg.setTo(txtEMail.getText());
             //Sujet de message
             msg.setSubject(I18N.get("ReviewDataRequestForm.Email-subject-to-requester"));
-            StringBuilder emailContent;
+            String emailContent;
             String title = (RBMale.isSelected()) ? "Mr" : "Ms";
 
             if (getCategories(idDelivery).contains("ASTER") || getCategories(idDelivery).contains("SPOT")) {
-                emailContent = new StringBuilder(title).append(" <b>").append(names)
-                        .append(I18N.get("ReviewDataRequestForm.Email-content-to-other"));
+                emailContent = title + " <b>" + names
+                        + I18N.get("ReviewDataRequestForm.Email-content-to-other");
             } else {
-                emailContent = new StringBuilder(title).append(" <b>").append(names)
-                        .append(I18N.get("ReviewDataRequestForm.Email-content-to-other-aster-spot"));
+                emailContent = title + " <b>" + names
+                        + I18N.get("ReviewDataRequestForm.Email-content-to-other-aster-spot");
             }
             //Contenu de message
-            msg.setContent(emailContent.toString(), true);
+            msg.setContent(emailContent, true);
             //Envoyer le message
             mail.sendMessage(msg);
             confirmSentEmail(idDelivery);
@@ -1928,7 +1927,6 @@ public class DataRequestForm extends javax.swing.JDialog {
                 category += res.getString(1) + ",";
             }
             category = category.substring(0, category.length() - 1);
-            return category;
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
@@ -1936,10 +1934,10 @@ public class DataRequestForm extends javax.swing.JDialog {
     }
 
     private String getPathRow() {
-        StringBuilder pathrow = new StringBuilder();
+        String pathrow = "";
         for (int i = 0; i < vPathRow.size(); i++) {
-            pathrow.append("P").append(vPathRow.get(i).substring(0, 3)).append("-R0")
-                    .append(vPathRow.get(i).substring(3)).append("; ");
+            pathrow += "P" + vPathRow.get(i).substring(0, 3) + "-R0"
+                    + vPathRow.get(i).substring(3) + "; ";
         }
         return pathrow.substring(0, pathrow.length() - 2);
     }
@@ -1947,7 +1945,7 @@ public class DataRequestForm extends javax.swing.JDialog {
     private String getCountry(int idDelivery) {
         String country = "";
         try {
-            PreparedStatement ps = Config.con.prepareStatement("SELECT distinct country_name FROM `dmt_country` dmt_country INNER JOIN `dmt_include` "
+            PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT country_name FROM `dmt_country` dmt_country INNER JOIN `dmt_include` "
                     + "dmt_include ON dmt_country.`id_country` = dmt_include.`id_country` INNER JOIN `dmt_pathrow` dmt_pathrow ON "
                     + "dmt_include.`path_row` = dmt_pathrow.`path_row` INNER JOIN `dmt_concern` dmt_concern ON dmt_pathrow.`path_row` = "
                     + "dmt_concern.`path_row` INNER JOIN `dmt_image` dmt_image ON dmt_concern.`id_image` = dmt_image.`id_image` "
@@ -1959,7 +1957,6 @@ public class DataRequestForm extends javax.swing.JDialog {
                 country += res.getString(1) + ",";
             }
             country = country.substring(0, country.length() - 1);
-            return country;
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
@@ -2175,7 +2172,6 @@ public class DataRequestForm extends javax.swing.JDialog {
     }
 
     private String getCategory(String idImage) {
-        String category = "";
         try {
             PreparedStatement ps = Config.con.prepareStatement("SELECT category_name FROM dmt_category JOIN dmt_image ON "
                     + "dmt_category.id_category = dmt_image.id_category WHERE id_image = ?");
@@ -2187,13 +2183,13 @@ public class DataRequestForm extends javax.swing.JDialog {
         } catch (SQLException ex) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), ex.getMessage(), null, null, ex, Level.SEVERE, null));
         }
-        return category;
+        return "";
     }
 
     private String manyCriteria(ArrayList list) {
-        StringBuilder values = new StringBuilder();
+        String values = "";
         for (int i = 0; i < list.size(); i++) {
-            values.append("\'").append(list.get(i)).append("\',");
+            values += "\'" + list.get(i) + "\',";
         }
         return values.substring(0, values.length() - 1);
     }
@@ -2456,7 +2452,7 @@ public class DataRequestForm extends javax.swing.JDialog {
 
     private void setDataFromAlertToFields(int row) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_requester "
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_requester\n"
                     + "WHERE id_requester = ?");
             ps.setInt(1, Integer.parseInt(alertTable.getValueAt(row, 0).toString()));
             ResultSet res = ps.executeQuery();
@@ -2484,7 +2480,7 @@ public class DataRequestForm extends javax.swing.JDialog {
     }
 
     private void initialize(String size) {
-        txtNumber.setText(new StringBuilder().append(vID.size()).append(" image(s)").toString());
+        txtNumber.setText(vID.size() + " image(s)");
         txtSize.setText(size);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

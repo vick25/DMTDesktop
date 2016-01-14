@@ -192,20 +192,20 @@ public class GeoResult extends JDialog {
         yearListModel = new DefaultListModel();
         //===Get the images from DB to fill the table
         try {
-            for (int i = 0; i < IDList.size(); i++) {
-                IDs.append(IDList.get(i)).append(",");
+            for (int i = 0; i < IDImagesList.size(); i++) {
+                IDs += IDImagesList.get(i) + ",";
             }
-            if (!IDs.toString().isEmpty()) {
-                IDs = new StringBuilder().append(IDs.substring(0, IDs.length() - 1));
+            if (!IDs.isEmpty()) {
+                IDs = IDs.substring(0, IDs.length() - 1);
             }
             ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT category_name FROM dmt_category JOIN dmt_image\n"
                     + "ON dmt_category.id_category = dmt_image.id_category\n"
-                    + "WHERE id_image IN (" + IDs.toString() + ") ORDER BY category_name ASC");
+                    + "WHERE id_image IN (" + IDs + ") ORDER BY category_name ASC");
             while (res.next()) {
                 categoryListModel.addElement(res.getString(1));
             }
             res = Config.con.createStatement().executeQuery("SELECT DISTINCT YEAR(date) FROM dmt_image\n"
-                    + "WHERE id_image IN (" + IDs.toString() + ") ORDER BY YEAR(date) ASC");
+                    + "WHERE id_image IN (" + IDs + ") ORDER BY YEAR(date) ASC");
             while (res.next()) {
                 yearListModel.addElement(res.getString(1));
             }
@@ -217,9 +217,9 @@ public class GeoResult extends JDialog {
             ListYear.getCheckBoxListSelectionModel().addSelectionInterval(0, ListYear.getModel().getSize() - 1);
 
             //Method to fill the table with the list of images
-            fillTable("SELECT DISTINCT * FROM dmt_image WHERE dmt_image.id_image IN (" + IDs.toString() + ")\n"
+            fillTable("SELECT DISTINCT * FROM dmt_image WHERE dmt_image.id_image IN (" + IDs + ")\n"
                     + "ORDER BY dmt_image.id_image ASC");
-            this.setTitle(new StringBuilder().append(table.getRowCount()).append(" ").append(I18N.get("GeoResult.title")).toString());
+            this.setTitle(table.getRowCount() + " " + I18N.get("GeoResult.title"));
 
             //Check and get the cloud cover of images -- Method thats read and copy images from Server to target
 //            runningSocketClient();
@@ -234,21 +234,17 @@ public class GeoResult extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (table.getRowCount() > 0) {
-                    LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed"))
-                            .append(" : ").append(table.getRowCount()).toString());
+                    LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : " + table.getRowCount());
                     int rowChecked = 0;
                     for (int i = 0; i < table.getRowCount(); i++) {
                         if (table.getValueAt(i, 0).equals(true)) {
                             rowChecked++;
                         }
                     }
-                    LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked"))
-                            .append(" : ").append(rowChecked).toString());
+                    LabImageChecked.setText(I18N.get("Text.Images-checked") + " : " + rowChecked);
                 } else {
-                    LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed"))
-                            .append(" : 0").toString());
-                    LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked"))
-                            .append(" : 0").toString());
+                    LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : 0");
+                    LabImageChecked.setText(I18N.get("Text.Images-checked") + " : 0");
                 }
                 submitEnabled();
                 enabledPopupItems();
@@ -884,8 +880,8 @@ public class GeoResult extends JDialog {
                     createExcelFile(fc.getSelectedFile());
                 }
             } else {
-                JOptionPane.showMessageDialog(this, new StringBuilder(fc.getSelectedFile().getName()).append(" ").
-                        append(I18N.get("GeoResult.Export-already-exists-message")).toString(),
+                JOptionPane.showMessageDialog(this, fc.getSelectedFile().getName() + " "
+                        + I18N.get("GeoResult.Export-already-exists-message"),
                         I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             }
         }
@@ -978,10 +974,10 @@ public class GeoResult extends JDialog {
                     messagePreview(I18N.get("Text.Loading"), true);
                     pathPreviewFile = getPathPreview(table.getValueAt(table.getSelectedRow(), 1).toString().trim());
                     WorkbenchFrame.progress.setIndeterminate(true);
-                    WorkbenchFrame.progress.setProgressStatus(new StringBuilder(I18N.get("Text.Loading2")).append(" \"")
-                            .append(new File(pathPreviewFile).getName()).append("\" ")
-                            .append(I18N.get("Text.from.text")).append(" ")
-                            .append(Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net")).append("  ...").toString());
+                    WorkbenchFrame.progress.setProgressStatus(I18N.get("Text.Loading2") + " \""
+                            + new File(pathPreviewFile).getName() + "\" " + I18N.get("Text.from.text")
+                            + " " + Config.pref.get(SettingKeyFactory.OtherFeatures.HOST, "http://www.osfac.net")
+                            + "  ...");
                     if (pathPreviewFile.equals("")) {
                         messagePreview(I18N.get("Text.Preview-not-available"), false);
                         WorkbenchFrame.progress.setProgress(100);
@@ -1110,8 +1106,8 @@ public class GeoResult extends JDialog {
         while (nbTable > 0) {
             tableModel.removeNewRow(--nbTable);
         }
-        LabImageDisplayed.setText(new StringBuilder(I18N.get("Text.Images-displayed")).append(" : 0").toString());
-        LabImageChecked.setText(new StringBuilder(I18N.get("Text.Images-checked")).append(" : 0").toString());
+        LabImageDisplayed.setText(I18N.get("Text.Images-displayed") + " : 0");
+        LabImageChecked.setText(I18N.get("Text.Images-checked") + " : 0");
     }
 
     private String getPathPreview(String idImage) throws SQLException {
@@ -1271,30 +1267,29 @@ public class GeoResult extends JDialog {
     }
 
     private String criteriaSearch() {
-        StringBuilder where = new StringBuilder(), categories, years;
+        String where, categories, years;
 
         if (ListCategory.getCheckBoxListSelectedValues().length != 0) {
-            categories = new StringBuilder(" AND (category_name IN (")
-                    .append(manyCriteria(ListCategory.getCheckBoxListSelectedValues())).append("))");
+            categories = " AND (category_name IN (" + manyCriteria(ListCategory.getCheckBoxListSelectedValues()) + "))";
         } else {
-            categories = new StringBuilder();
+            categories = "";
         }
         if (ListYear.getCheckBoxListSelectedValues().length != 0) {
-            years = new StringBuilder(" AND (YEAR(date) IN (").
-                    append(manyCriteria(ListYear.getCheckBoxListSelectedValues())).append("))");
+            years = " AND (YEAR(date) IN (" + manyCriteria(ListYear.getCheckBoxListSelectedValues()) + "))";
         } else {
-            years = new StringBuilder();
+            years = "";
         }
-        where.append(categories.toString()).append(years.toString());
-        return where.toString();
+        where = categories + years;
+        return where;
     }
 
     private String manyCriteria(Object[] list) {
-        StringBuilder values = new StringBuilder();
+        String values = "";
         for (int i = 0; i < list.length; i++) {
-            values.append("\'").append(list[i]).append("\',");
+            values += "\'" + list[i].toString() + "\',";
         }
-        return values.substring(0, values.length() - 1);
+        values = values.substring(0, values.length() - 1);
+        return values;
     }
 
     private void createExcelFile(File file) {
@@ -1482,7 +1477,7 @@ public class GeoResult extends JDialog {
     ArrayList<Integer> IDCloudImageList;
     static SortableTable table;
     MyTableModel tableModel;
-    StringBuilder IDs = new StringBuilder();
+    String IDs = "";
 //    GeoResult geoResult;
     String pathPreviewFile = null;
     boolean headerChecked = false;

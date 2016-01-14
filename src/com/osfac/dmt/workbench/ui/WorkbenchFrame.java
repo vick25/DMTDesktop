@@ -165,14 +165,13 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     @SuppressWarnings("LeakingThisInConstructor")
     public WorkbenchFrame(String title, final WorkbenchContext workbenchContext) throws Exception {
         if (Config.isFullVersion()) {
-            this.setTitle(new StringBuilder(title).append("   [").append(I18N.get("Text.Server-IP-Address-text"))
-                    .append(" ").append(Config.host).append("]").toString());
+            this.setTitle(title + "   [" + I18N.get("Text.Server-IP-Address-text")
+                    + " " + Config.host + "]");
         } else {
             this.setTitle(title);
         }
         BSConnect = new JideButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/base.png")));
-        BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
-                .append(" [").append(Config.host).append("]").toString());
+        BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
         BSConnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -449,12 +448,12 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         }
                     } catch (IOException | InterruptedException e) {
                         BSConnect.setEnabled(true);
-                        BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
-                                .append(" [").append(Config.host).append("]").toString());
+                        BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " ["
+                                + Config.host + "]");
                         progress.setProgress(100);
                         JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                                new StringBuilder(I18N.get("WorkbenchFrame.Text.not-cennected-to-server"))
-                                .append("\n").append(e.getMessage()).toString(), null, null, e, Level.SEVERE, null));
+                                I18N.get("WorkbenchFrame.Text.not-cennected-to-server")
+                                + "\n" + e.getMessage(), null, null, e, Level.SEVERE, null));
 //                        System.exit(0);
                         System.err.println(I18N.get("WorkbenchFrame.Text.not-cennected-to-server"));
 //                        ex.printStackTrace();
@@ -463,16 +462,14 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             };
             th.start();
             BSConnect.setEnabled(false);
-            BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
-                    .append(" [").append(Config.host).append("]").toString());
+            BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
         } catch (IOException e) {
             BSConnect.setEnabled(true);
-            BSConnect.setToolTipText(new StringBuilder(I18N.get("Text.connect-to-FTP-server-text"))
-                    .append(" [").append(Config.host).append("]").toString());
+            BSConnect.setToolTipText(I18N.get("Text.connect-to-FTP-server-text") + " [" + Config.host + "]");
             progress.setProgress(100);
             JXErrorPane.showDialog(DMTWorkbench.frame, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                    new StringBuilder(I18N.get("WorkbenchFrame.Text.unable-to-connect-to-server"))
-                    .append("\n").append(e.getMessage()).toString(), null, null, e, Level.SEVERE, null));
+                    I18N.get("WorkbenchFrame.Text.unable-to-connect-to-server") + "\n" + e.getMessage(),
+                    null, null, e, Level.SEVERE, null));
 ////////            System.exit(0);
         }
     }
@@ -643,25 +640,25 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     }
 
     private static String getCategoriesSelected() {
-        StringBuilder categories = new StringBuilder();
+        String categories = "";
         for (int i = 0; i < ChBCategoryList.size(); i++) {
             if (ChBCategoryList.get(i).isSelected()) {
-                categories.append(ChBCategoryList.get(i).getText()).append(",");
+                categories += ChBCategoryList.get(i).getText() + ",";
             }
         }
-        if (categories.toString().endsWith(",")) {
-            categories = new StringBuilder().append(categories.substring(0, categories.length() - 1));
+        if (categories.endsWith(",")) {
+            categories = categories.substring(0, categories.length() - 1);
         }
 
-        StringBuilder value = new StringBuilder();
-        String tab[] = categories.toString().split(",");
+        String value = "";
+        String tab[] = categories.split(",");
         for (int i = 0; i < tab.length; i++) {
-            value.append("\'").append(tab[i]).append("\',");
+            value += "\'" + tab[i] + "\',";
         }
-        if (value.toString().endsWith(",")) {
-            value = new StringBuilder().append(value.substring(0, value.length() - 1));
+        if (value.endsWith(",")) {
+            value = value.substring(0, value.length() - 1);
         }
-        return value.toString();
+        return value;
     }
 
     public static Connection remoteDBConnecting() {
@@ -671,8 +668,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             String hostN = "dbosfacdmt.db.8487892.hostedresource.com";
             String username = "dbosfacdmt";
             String password = "OsfacLab01";
-            conN = DriverManager.getConnection(new StringBuilder("jdbc:mysql://").append(hostN)
-                    .append("/").append(database).toString(), username, password);
+            conN = DriverManager.getConnection("jdbc:mysql://" + hostN + "/" + database, username, password);
         } catch (SQLException ex) {
 //            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
 //                    ex.getMessage(), null, null, ex, Level.SEVERE, null));
@@ -801,8 +797,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         label.setAlignment(JLabel.CENTER);
         statusBar.add(label, JideBoxLayout.FLEXIBLE);
         timeStatusBar = new TimeStatusBarItem();
-        timeStatusBar.setTextFormat(new SimpleDateFormat(new StringBuilder(
-                I18N.get("language.format.date")).append("  HH:mm:ss").toString()));
+        timeStatusBar.setTextFormat(new SimpleDateFormat(
+                I18N.get("language.format.date") + " HH:mm:ss"));
         statusBar.add(timeStatusBar, JideBoxLayout.FLEXIBLE);
         final MemoryStatusBarItem gc = new MemoryStatusBarItem();
         statusBar.add(gc, JideBoxLayout.FLEXIBLE);
@@ -830,8 +826,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private JPanel createToolTipContent() {
         JPanel fieldPanel = new JPanel(new BorderLayout(6, 6));
         fieldPanel.setOpaque(false);
-        JideButton bt = new JideButton(new StringBuilder(I18N.get("Text.updater.button-update-text"))
-                .append(" ").append(new_version).toString());
+        JideButton bt = new JideButton(I18N.get("Text.updater.button-update-text") + " " + new_version);
         bt.setButtonStyle(3);
         bt.setIcon(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/browser(17).png")));
         bt.setAlwaysShowHyperlink(true);
@@ -876,7 +871,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
         if (categories.isEmpty() || categories.equals("''")) {
             JOptionPane.showMessageDialog(DMTWorkbench.frame, I18N.get(
-                    "Text.WorkbenchFrame.categories-not-selected"), I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
+                    "Text.WorkbenchFrame.categories-not-selected"),
+                    I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
         } else {
             new Thread() {
                 @Override
@@ -888,18 +884,18 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                         Object FeatureTab[] = activeTaskFrame.getLayerViewPanel().
                                 getSelectionManager().getFeatureSelection().getSelectedItems().toArray();
 
-                        StringBuffer where = new StringBuffer(" (category_name IN (").append(categories).append(")) AND\n");
+                        String where = " (category_name IN (" + categories + ")) AND\n";
                         for (int i = 0; i < FeatureTab.length; i++) {
-                            where.append(" (Intersects(GeomFromText('").append(FeatureTab[i]).append("'), shape) = 1) OR");
+                            where += " (Intersects(GeomFromText('" + FeatureTab[i] + "'), shape) = 1) OR";
                         }
-                        where = new StringBuffer(where.substring(0, where.length() - 3));
+                        where = where.substring(0, where.length() - 3);
 //                        System.out.println(where);
                         ResultSet res = Config.con.createStatement().executeQuery("SELECT DISTINCT id_image, category_name\n"
                                 + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
-                                + "dmt_category.id_category WHERE\n" + where.toString() + "\nGROUP BY image_name");
+                                + "dmt_category.id_category WHERE\n" + where + "\nGROUP BY image_name");
 //                        System.out.println("SELECT DISTINCT id_image, category_name\n"
 //                                + "FROM dmt_image INNER JOIN dmt_category ON dmt_image.id_category =\n"
-//                                + "dmt_category.id_category WHERE\n" + where.toString() + "\nGROUP BY image_name");
+//                                + "dmt_category.id_category WHERE\n" + where+ "\nGROUP BY image_name");
                         ArrayList<Integer> IDsImageList = new ArrayList<>();
                         ArrayList<Integer> cloudCoverImageList = new ArrayList<>();
                         while (res.next()) {
@@ -1510,7 +1506,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         // Sometimes we want to create a LayerManager with no categories
         task.getLayerManager().addCategory(StandardCategoryNames.WORKING);
         task.getLayerManager().addCategory(StandardCategoryNames.SYSTEM);
-        task.setName(new StringBuilder(I18N.get("ui.WorkbenchFrame.task")).append(" ").append(taskSequence++).toString());
+        task.setName(I18N.get("ui.WorkbenchFrame.task") + " " + taskSequence++);
         return task;
     }
 
@@ -1659,13 +1655,12 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             message = I18N.get("ui.WorkbenchFrame.no-description-was-provided");
         } else if (t.getLocalizedMessage().toLowerCase().indexOf(
                 I18N.get("ui.WorkbenchFrame.side-location-conflict")) > -1) {
-            message = new StringBuilder().append(t.getLocalizedMessage()).append(" -- ")
-                    .append(I18N.get("ui.WorkbenchFrame.check-for-invalid-geometries")).toString();
+            message = t.getLocalizedMessage() + " -- "
+                    + I18N.get("ui.WorkbenchFrame.check-for-invalid-geometries");
         } else {
             message = t.getLocalizedMessage();
         }
-        return new StringBuilder(message).append("\n\n (").append(StringUtil.toFriendlyName(t.getClass().getName()))
-                .append(")").toString();
+        return message + "\n\n (" + StringUtil.toFriendlyName(t.getClass().getName()) + ")";
     }
 
     public boolean hasInternalFrame(JInternalFrame internalFrame) {
@@ -1686,7 +1681,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
 
     @Override
     public void warnUser(String warning) {
-        log(new StringBuilder(I18N.get("ui.WorkbenchFrame.warning")).append(": ").append(warning).toString());
+        log(I18N.get("ui.WorkbenchFrame.warning") + ": " + warning);
         flashStatusMessage(warning, Color.yellow);
     }
 
@@ -1737,8 +1732,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
         }
         if (windowMenu.getItemCount() == addedMenuItems) {
             // For ezLink [Bob Boseko]
-            windowMenu.add(new JMenuItem(new StringBuilder("(")
-                    .append(I18N.get("ui.WorkbenchFrame.no-windows")).append(")").toString()));
+            windowMenu.add(new JMenuItem("(" + I18N.get("ui.WorkbenchFrame.no-windows") + ")"));
         }
     }
 
@@ -1859,8 +1853,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             @Override
             public void keyPressed(KeyEvent e) {
                 Object[] plugInAndEnableCheck = (Object[]) keyCodeAndModifiersToPlugInAndEnableCheckMap.get(
-                        new StringBuilder(e.getKeyCode()).append(":")
-                        .append(e.getModifiers()).toString());
+                        e.getKeyCode() + ":" + e.getModifiers());
                 if (plugInAndEnableCheck == null) {
                     return;
                 }
@@ -1961,10 +1954,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 if (!associatedFrames.isEmpty()) {
                     // Confirm you want to close them first
                     if (confirmClose(
-                            StringUtil.split(new StringBuilder(
-                                    I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
-                                    .append(" ")
-                                    .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
+                            StringUtil.split(I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame ")
+                                    + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
                                     60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                         for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                             GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
@@ -1984,10 +1975,8 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             if (!associatedFrames.isEmpty()) {
                 // Confirm you want to close them first
                 if (confirmClose(
-                        StringUtil.split(new StringBuilder(
-                                I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame"))
-                                .append(" ")
-                                .append(I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also")).toString(),
+                        StringUtil.split(I18N.get("ui.WorkbenchFrame.other-internal-frames-depend-on-this-task-frame ")
+                                + I18N.get("ui.WorkbenchFrame.do-you-want-to-close-them-also"),
                                 60), I18N.get("ui.WorkbenchFrame.close-all"))) {
                     for (java.util.Iterator it = associatedFrames.iterator(); it.hasNext();) {
                         GUIUtil.dispose((JInternalFrame) it.next(), desktopPane);
@@ -2032,17 +2021,15 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
             return pane.getValue().equals(action);
         }
         JOptionPane pane = new JOptionPane(
-                StringUtil.split(new StringBuilder().append(modifiedLayers.size()).append(" ")
-                        .append(I18N.get("ui.WorkbenchFrame.dataset"))
-                        .append(StringUtil.s(modifiedLayers.size()))
-                        .append(" ")
-                        .append((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
-                                : I18N.get("ui.WorkbenchFrame.has-been-modified"))
-                        .append(" (")
-                        .append(((modifiedLayers.size() > 3) ? "e.g. " : ""))
-                        .append(StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
-                                0, Math.min(3, modifiedLayers.size())))).append(").\n")
-                        .append(I18N.get("ui.WorkbenchFrame.continue")).toString(), 80),
+                StringUtil.split(modifiedLayers.size() + " "
+                        + I18N.get("ui.WorkbenchFrame.dataset")
+                        + StringUtil.s(modifiedLayers.size()) + " "
+                        + ((modifiedLayers.size() > 1) ? I18N.get("ui.WorkbenchFrame.have-been-modified")
+                                : I18N.get("ui.WorkbenchFrame.has-been-modified")) + " ("
+                        + ((modifiedLayers.size() > 3) ? "e.g. " : "")
+                        + StringUtil.toCommaDelimitedString(new ArrayList(modifiedLayers).subList(
+                                0, Math.min(3, modifiedLayers.size()))) + ").\n"
+                        + I18N.get("ui.WorkbenchFrame.continue"), 80),
                 JOptionPane.WARNING_MESSAGE);
         pane.setOptions(new String[]{action, I18N.get("ui.WorkbenchFrame.cancel")});
         pane.createDialog(this, "OSFAC-DMT").setVisible(true);
@@ -2171,9 +2158,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
-                    setTitle((panel.selectedNodes(Layer.class).size() != 1) ? (new StringBuilder("(")
-                            .append(panel.selectedNodes(Layer.class).size()).append(" ")
-                            .append(I18N.get("ui.WorkbenchFrame.layers-selected")).append(")").toString())
+                    setTitle((panel.selectedNodes(Layer.class).size() != 1) ? ("("
+                            + panel.selectedNodes(Layer.class).size() + " "
+                            + I18N.get("ui.WorkbenchFrame.layers-selected") + ")")
                             : ((Layerable) panel.selectedNodes(Layer.class).iterator().next()).getName());
                 }
 
@@ -2193,9 +2180,9 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
                 @Override
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                     LayerNamePanel panel = ((LayerNamePanelProxy) getActiveInternalFrame()).getLayerNamePanel();
-                    setTitle((panel.selectedNodes(WMSLayer.class).size() != 1) ? (new StringBuilder("(")
-                            .append(panel.selectedNodes(WMSLayer.class).size()).append(" ")
-                            .append(I18N.get("ui.WorkbenchFrame.wms-layers-selected")).append(")").toString())
+                    setTitle((panel.selectedNodes(WMSLayer.class).size() != 1) ? ("("
+                            + panel.selectedNodes(WMSLayer.class).size() + " "
+                            + I18N.get("ui.WorkbenchFrame.wms-layers-selected") + ")")
                             : ((Layerable) panel.selectedNodes(WMSLayer.class).iterator().next()).getName());
                 }
 
@@ -2283,7 +2270,7 @@ public class WorkbenchFrame extends DefaultDockableBarDockableHolder implements 
     private static LoadDefaultLayers loadDefaultLayers;
     public static JideButton DataRequestFound;
     public static JideButton BSConnect; //connect to FTP Server
-    public static String TypeOfVersion = Config.LITE_VERSION;
+    public static String TypeOfVersion = Config.FULL_VERSION;
     public static int idUser;
     public static DataRequestSync dataRequestSync;
 }

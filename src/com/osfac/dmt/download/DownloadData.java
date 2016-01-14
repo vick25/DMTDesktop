@@ -688,7 +688,7 @@ public class DownloadData extends javax.swing.JFrame {
 
     private void confirmDataTreated(int idDelivery) {
         try {
-            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery SET "
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_delivery SET\n"
                     + "confirm_request_treated = ? WHERE id_delivery = ?");
             ps.setString(1, "Yes");
             ps.setInt(2, idDelivery);
@@ -762,9 +762,9 @@ public class DownloadData extends javax.swing.JFrame {
     }
 
     private String manyCriteria(ArrayList list) {
-        StringBuilder values = new StringBuilder();
+        String values = "";
         for (int i = 0; i < list.size(); i++) {
-            values.append("\'").append(list.get(i)).append("\',");
+            values += "\'" + list.get(i) + "\',";
         }
         return values.substring(0, values.length() - 1);
     }
@@ -791,10 +791,10 @@ public class DownloadData extends javax.swing.JFrame {
         }
         ProgressTotal.setIndeterminate(false);
         BTargetFolder.setEnabled(targetFolder);
-        labSize.setText(new StringBuilder(I18N.get("DownloadData.label-Total-size")).append(" ")
-                .append(convertCapacity(dataSizeTotal)).toString());
-        labNumber.setText(new StringBuilder(I18N.get("DownloadData.label-Number")).append(" ")
-                .append(idImagesList.size()).toString());
+        labSize.setText(I18N.get("DownloadData.label-Total-size") + " "
+                + convertCapacity(dataSizeTotal));
+        labNumber.setText(I18N.get("DownloadData.label-Number") + " "
+                + idImagesList.size());
         Long positionMax = new Long(dataSizeTotal);
         if (positionMax > 2047483647) {
             positionMax /= 1048576;
@@ -806,7 +806,7 @@ public class DownloadData extends javax.swing.JFrame {
         boolean val = false;
         try {
             InputStream inImportant = getClass().getResourceAsStream("/com/osfac/dmt/form/jasper/001.png");
-            File dest = new File(new StringBuilder(dir).append(File.separator).append("001.png").toString());
+            File dest = new File(dir + File.separator + "001.png");
             try (FileOutputStream fout = new FileOutputStream(dest)) {
                 int nbRead;
                 while ((nbRead = inImportant.read(TAMPON)) != -1) {
@@ -839,24 +839,23 @@ public class DownloadData extends javax.swing.JFrame {
         ProgressOnGoing.setValue((int) cumulSizeFile);
         pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
         pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-        ProgressTotal.setString(new StringBuilder().append(Config.convertOctetToAnyInDouble(cumulTotalSize)).append(" ")
-                .append(I18N.get("DownloadData.text-of")).append(" ")
-                .append(Config.convertOctetToAnyInDouble(dataSizeTotal)).append("                                         ")
-                .append(pourcentAll).append("              ").append("                           ").append(TotalTime).toString());
-        ProgressOnGoing.setString(new StringBuilder().append(conversion(cumulSizeFile)).append(" ")
-                .append(I18N.get("DownloadData.text-of")).append(" ").append(conversion(fileSize))
-                .append("                                               ").append(pourcentFile)
-                .append("                                              ").append(FileTime).toString());
+        ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize)
+                + " " + I18N.get("DownloadData.text-of") + " " + Config.convertOctetToAnyInDouble(dataSizeTotal)
+                + "                                         " + pourcentAll
+                + "                                         " + TotalTime);
+        ProgressOnGoing.setString(conversion(cumulSizeFile) + " "
+                + I18N.get("DownloadData.text-of") + " " + conversion(fileSize)
+                + "                                               " + pourcentFile
+                + "                                              " + FileTime);
     }
 
     private void endOfDownload(String title) {
         labImageName.setText("");
         this.setTitle(title);
-        ProgressTotal.setString(new StringBuilder("                                         ")
-                .append(pourcentAll).append("              ")
-                .append("                           ").toString());
-        ProgressOnGoing.setString(new StringBuilder("                                               ")
-                .append(pourcentFile).append("                                              ").toString());
+        ProgressTotal.setString("                                         "
+                + pourcentAll + "                                         ");
+        ProgressOnGoing.setString("                                               "
+                + pourcentFile + "                                              ");
     }
 
     private void speedAndDuration() {
@@ -885,9 +884,9 @@ public class DownloadData extends javax.swing.JFrame {
             } else {
                 time = tpsSec + " sec";
             }
-            this.setTitle(new StringBuilder(" ").append(pourcentAll).append(" - ").append(time)
-                    .append(" ").append("(").append(s).append(") - ").append(a + 1).append(" ")
-                    .append(I18N.get("DownloadData.text-of")).append(" ").append(idImagesList.size()).toString());
+            this.setTitle(" " + pourcentAll + " - " + time + " " + "(" + s
+                    + ") - " + (a + 1) + " " + I18N.get("DownloadData.text-of") + " "
+                    + idImagesList.size());
         }
     }
 
@@ -1108,16 +1107,15 @@ public class DownloadData extends javax.swing.JFrame {
                 ProgressOnGoing.setValue((int) cumulSizeFile);
                 pourcentAll = (int) (ProgressTotal.getPercentComplete() * 100) + "%";
                 pourcentFile = (int) (ProgressOnGoing.getPercentComplete() * 100) + "%";
-                ProgressTotal.setString(new StringBuilder().append(Config.convertOctetToAnyInDouble(cumulTotalSize))
-                        .append(" ").append(I18N.get("DownloadData.text-of")).append(" ")
-                        .append(Config.convertOctetToAnyInDouble(dataSizeTotal)).append("                                         ")
-                        .append(pourcentAll).append("              ")
-                        .append("                           ") + TotalTime);
-                ProgressOnGoing.setString(new StringBuilder().append(conversion(cumulSizeFile)).append(" ")
-                        .append(I18N.get("DownloadData.text-of")).append(" ").append(conversion(fileSize))
-                        .append("                                               ")
-                        .append(pourcentFile).append("                                              ")
-                        .append(FileTime).toString());
+                ProgressTotal.setString(Config.convertOctetToAnyInDouble(cumulTotalSize)
+                        + " " + I18N.get("DownloadData.text-of") + " "
+                        + Config.convertOctetToAnyInDouble(dataSizeTotal)
+                        + "                                         " + pourcentAll
+                        + "                                         " + TotalTime);
+                ProgressOnGoing.setString(conversion(cumulSizeFile)
+                        + " " + I18N.get("DownloadData.text-of") + " " + conversion(fileSize)
+                        + "                                               " + pourcentFile
+                        + "                                              " + FileTime);
                 if (endCopyFile >= fileSize) {
                     changeRowStatus(SCOMPLETED);
                     break;
@@ -1161,15 +1159,14 @@ public class DownloadData extends javax.swing.JFrame {
     }
 
     private String conversion(long valeur) {
-        StringBuilder value = new StringBuilder();
         if ((valeur >= 1024) && (valeur < (1024 * 1024))) {
-            return value.append((long) valeur / 1024).append(" Ko").toString();
+            return ((long) valeur / 1024) + " Ko";
         } else if ((valeur >= (1024 * 1024)) && (valeur < (1024 * 1024 * 1024))) {
-            return value.append((long) valeur / (1024 * 1024)).append(" Mo").toString();
+            return ((long) valeur / (1024 * 1024)) + " Mo";
         } else if ((valeur >= (1024 * 1024 * 1024))) {
-            return value.append((long) valeur / (1024 * 1024 * 1024)).append(" Go").toString();
+            return ((long) valeur / (1024 * 1024 * 1024)) + " Go";
         } else {
-            return value.append((long) valeur).append(" Octets").toString();
+            return ((long) valeur) + " Octets";
         }
     }
 
@@ -1313,7 +1310,7 @@ public class DownloadData extends javax.swing.JFrame {
     private String dir;
     private volatile boolean waitingFileBeSending = false;
     private long dataSizeTotal;
-    private final int BUFFER = 1024 * 512;
+    private final int BUFFER = 1024;
     private byte TAMPON[] = new byte[BUFFER];
     private long fileSize, cumulSizeFile, cumulTotalSize, t1, capacity_Treated = 0;
     private DataOutputStream outDownload;

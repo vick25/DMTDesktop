@@ -34,10 +34,10 @@ public class UserManager extends javax.swing.JPanel {
         table = new SortableTable();
         table.setTableStyleProvider(new RowStripeTableStyleProvider(
                 new Color[]{Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe21Color1,
-                                    "253, 253, 244")), Config.getColorFromKey(Config.pref
+                            "253, 253, 244")), Config.getColorFromKey(Config.pref
                             .get(SettingKeyFactory.FontColor.RStripe21Color2, "230, 230, 255")),
                     Config.getColorFromKey(Config.pref.get(SettingKeyFactory.FontColor.RStripe3Color3,
-                                    "210, 255, 210"))}));
+                            "210, 255, 210"))}));
         table.getTableHeader().setReorderingAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addMouseListener(new MouseAdapter() {
@@ -498,10 +498,10 @@ public class UserManager extends javax.swing.JPanel {
     }//GEN-LAST:event_BRefreshActionPerformed
 
     private void BDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDeleteActionPerformed
-        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, new StringBuilder(I18N.get("UserManager.This-will-delete"))
-                .append(" \"").append(table.getValueAt(table.getSelectedRow(), 1)).append(" ")
-                .append(table.getValueAt(table.getSelectedRow(), 2)).append("\".").append(" ")
-                .append(I18N.get("UserManager.This-will-delete2")).toString(), I18N.get("Text.Confirm"), 0) == 0) {
+        if (JOptionPane.showConfirmDialog(DMTWorkbench.frame, I18N.get("UserManager.This-will-delete")
+                + " \"" + table.getValueAt(table.getSelectedRow(), 1) + " "
+                + table.getValueAt(table.getSelectedRow(), 2) + "\". "
+                + I18N.get("UserManager.This-will-delete2"), I18N.get("Text.Confirm"), 0) == 0) {
             try {
                 PreparedStatement ps = Config.con.prepareStatement("DELETE FROM dmt_user WHERE id_user = ?");
                 ps.setInt(1, Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));

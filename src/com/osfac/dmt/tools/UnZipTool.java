@@ -335,12 +335,12 @@ public class UnZipTool extends javax.swing.JDialog {
             File[] tabFiles = fc.getSelectedFiles();
             for (int i = 0; i < tabFiles.length; i++) {
                 if (ListFiles.contains(tabFiles[i].getAbsolutePath())) {
-                    JOptionPane.showMessageDialog(parent, new StringBuilder("\"").append(tabFiles[i].getName())
-                            .append("\" ").append(I18N.get("UnZipTool.already-shown-on-the-list")).toString(),
+                    JOptionPane.showMessageDialog(parent, "\"" + tabFiles[i].getName()
+                            + "\" " + I18N.get("UnZipTool.already-shown-on-the-list"),
                             I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                 } else if (!tabFiles[i].getAbsolutePath().toLowerCase().endsWith("zip")) {
-                    JOptionPane.showMessageDialog(parent, new StringBuilder(I18N.get("UnZipTool.format-not-accaptable"))
-                            .append(" : ").append("\"").append(tabFiles[i].getName()).append("\"").toString(),
+                    JOptionPane.showMessageDialog(parent, I18N.get("UnZipTool.format-not-accaptable")
+                            + " : \"" + tabFiles[i].getName() + "\"",
                             I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
                 } else {
                     ListFiles.add(tabFiles[i].getAbsolutePath());
@@ -366,13 +366,12 @@ public class UnZipTool extends javax.swing.JDialog {
     }//GEN-LAST:event_JListFilesValueChanged
 
     private void unzipZipFile(File source) {
-        FileInputStream fis = null;
         try {
+            ZipEntry entry;
             File dest = new File(source.getParent() + File.separator
                     + source.getName().substring(0, source.getName().lastIndexOf('.')));
-            fis = new FileInputStream(source.getAbsolutePath());
-            try (BufferedInputStream buffis = new BufferedInputStream(fis)) {
-                zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(source)));
+            try (ZipInputStream zis
+                    = new ZipInputStream(new BufferedInputStream(new FileInputStream(source)))) {
                 while ((entry = zis.getNextEntry()) != null) {
                     //                lblInfos.setText(entry.getName());
                     if (entry.isDirectory()) {
@@ -380,33 +379,24 @@ public class UnZipTool extends javax.swing.JDialog {
                                 + File.separator + entry.getName() + File.separator);
                         dossierEntry.mkdirs();
                     } else {
-                        buffos = new BufferedOutputStream(new FileOutputStream(
-                                dest.getAbsolutePath() + File.separator + entry.getName()), BUFFER);
-                        while ((count = zis.read(data, 0, BUFFER)) != -1) {
-                            buffos.write(data, 0, count);
-                            progressValue += (count);
-                            ProgressBar.setValue(progressValue);
+                        try (BufferedOutputStream buffos = new BufferedOutputStream(new FileOutputStream(
+                                dest.getAbsolutePath() + File.separator + entry.getName()), BUFFER)) {
+                            while ((count = zis.read(data, 0, BUFFER)) != -1) {
+                                buffos.write(data, 0, count);
+                                progressValue += (count);
+                                ProgressBar.setValue(progressValue);
+                            }
+                            buffos.flush();
                         }
-                        buffos.close();
-                        buffos.flush();
                     }
                 }
                 zis.closeEntry();
-                zis.close();
             }
             doneSuccessfully = true;
         } catch (IOException e) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error")
-                    + "", e.getMessage(), null, null, e, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    e.getMessage(), null, null, e, Level.SEVERE, null));
             doneSuccessfully = false;
-        } finally {
-            try {
-                fis.close();
-            } catch (IOException e) {
-                JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
-                        e.getMessage(), null, null, e, Level.SEVERE, null));
-                doneSuccessfully = false;
-            }
         }
     }
 
@@ -415,16 +405,15 @@ public class UnZipTool extends javax.swing.JDialog {
             File dest = new File(source.getParent() + File.separator
                     + source.getName().substring(0, source.getName().lastIndexOf('.')));
             dest.mkdir();
-            gzis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(source)));
-            buffos = new BufferedOutputStream(new FileOutputStream(dest));
-            while ((count = gzis.read(data, 0, BUFFER)) != -1) {
-                buffos.write(data, 0, count);
-                progressValue += count;
-                ProgressBar.setValue(progressValue);
+            try (GZIPInputStream gzis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(source)));
+                    BufferedOutputStream buffos = new BufferedOutputStream(new FileOutputStream(dest))) {
+                while ((count = gzis.read(data, 0, BUFFER)) != -1) {
+                    buffos.write(data, 0, count);
+                    progressValue += count;
+                    ProgressBar.setValue(progressValue);
+                }
+                buffos.flush();
             }
-            buffos.flush();
-            buffos.close();
-            gzis.close();
             doneSuccessfully = true;
         } catch (IOException e) {
             JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
@@ -459,8 +448,8 @@ public class UnZipTool extends javax.swing.JDialog {
     private void displayFilesChoosen(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             if (!list.get(i).toLowerCase().endsWith("zip")) {
-                JOptionPane.showMessageDialog(parent, new StringBuilder(I18N.get("UnZipTool.format-not-accaptable"))
-                        .append("\"").append(new File(list.get(i)).getName()).append("\"").toString(),
+                JOptionPane.showMessageDialog(parent, I18N.get("UnZipTool.format-not-accaptable")
+                        + "\"" + new File(list.get(i)).getName() + "\"",
                         I18N.get("Text.Warning"), JOptionPane.WARNING_MESSAGE);
             } else {
                 ListFiles.add(list.get(i));
@@ -501,12 +490,8 @@ public class UnZipTool extends javax.swing.JDialog {
     Timer timer;
     ArrayList<String> ListFiles = new ArrayList<>();
     ArrayList<String> listFileName = new ArrayList<>();
-    private ZipInputStream zis;
-    private GZIPInputStream gzis;
-    private BufferedOutputStream buffos;
-    private ZipEntry entry;
     private final int BUFFER = 4096;
-    private byte[] data = new byte[BUFFER];
+    private final byte[] data = new byte[BUFFER];
     private int count, progressValue, progressValMax;
     boolean doneSuccessfully = false;
 }

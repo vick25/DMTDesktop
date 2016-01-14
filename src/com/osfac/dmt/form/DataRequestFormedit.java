@@ -1526,13 +1526,13 @@ public class DataRequestFormedit extends javax.swing.JDialog {
         JideButton closeButton = createButton(new ImageIcon(getClass().getResource("/com/osfac/dmt/images/close.png")));
         closeButton.addActionListener(closeAction);
         rightPanel.add(closeButton);
-        StringBuilder text = new StringBuilder("<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>");
+        String text = "<HTML><CENTER><H4><U>OSFAC - Data Management Tool</U></H4></CENTER>";
         if (!firstName.isEmpty() && !familyName.isEmpty()) {
-            text.append("\"<font color=blue>").append(firstName).append(" ").append(familyName).append("</font>\" ")
-                    .append(I18N.get("DataRequestForm.found-in-database")).append("<br>");
+            text += "\"<font color=blue>" + firstName + " " + familyName + "</font>\" "
+                    + I18N.get("DataRequestForm.found-in-database") + "<br>";
         }
-        text.append("</HTML>");
-        final JLabel LabelMessage = new JLabel(text.toString());
+        text += ("</HTML>");
+        final JLabel LabelMessage = new JLabel(text);
         PaintPanel panel = new PaintPanel(new BorderLayout(6, 6));
         panel.setBorder(BorderFactory.createEmptyBorder(6, 7, 7, 7));
         panel.add(LabelMessage, BorderLayout.CENTER);
@@ -1721,12 +1721,12 @@ public class DataRequestFormedit extends javax.swing.JDialog {
             int result = ps.executeUpdate();
             if (result == 1) {
                 ArrayList<Integer> list = getIDUsage();
-                ps = Config.con.prepareStatement("delete FROM dmt_choose WHERE id_delivery = ?");
+                ps = Config.con.prepareStatement("DELETE FROM dmt_choose WHERE id_delivery = ?");
                 ps.setInt(1, idDelivery);
                 int result1 = ps.executeUpdate();
                 if (result1 == 1) {
                     for (int i = 0; i < list.size(); i++) {
-                        ps = Config.con.prepareStatement("insert into dmt_choose values (?,?)");
+                        ps = Config.con.prepareStatement("INSERT INTO dmt_choose VALUES (?,?)");
                         ps.setInt(1, idDelivery);
                         ps.setInt(2, list.get(i));
                         int result2 = ps.executeUpdate();

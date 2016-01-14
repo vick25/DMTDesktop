@@ -209,8 +209,6 @@
     <mapping>
       <key class="java.lang.String">org.openjump.core.ui.plugin.file.OpenRecentPlugIn.FILES</key>
       <value class="java.util.LinkedHashSet">
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Collectivite_RDC.shp</item>
-        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Commune_Kin_RDC.shp</item>
         <item class="java.lang.String">D:\Lidar\Data\LO81830642015062LGN00.tar.gz</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_Angola.shp</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_RCA.shp</item>
@@ -219,6 +217,8 @@
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\District_RDC.shp</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Territoire_RDC.shp</item>
         <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.0_Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.2_Desktop\default layers\Pays_COMIFAC.shp</item>
+        <item class="java.lang.String">C:\Users\Victor KADIATA\Documents\NetBeansProjects\DMT2.2_Desktop\default layers\Province_RDC.shp</item>
       </value>
     </mapping>
     <mapping>

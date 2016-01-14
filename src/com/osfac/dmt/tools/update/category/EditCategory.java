@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
@@ -17,7 +16,7 @@ public class EditCategory extends javax.swing.JDialog {
         this.IdCategory = IdCategory;
         initComponents();
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_category where id_category = ?");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_category WHERE id_category = ?");
             ps.setInt(1, IdCategory);
             ResultSet res = ps.executeQuery();
             while (res.next()) {
@@ -124,7 +123,7 @@ public class EditCategory extends javax.swing.JDialog {
 
     private void BValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BValidateActionPerformed
         try {
-            PreparedStatement ps = Config.con.prepareStatement("update dmt_category set category_name = ? where id_category = ?");
+            PreparedStatement ps = Config.con.prepareStatement("UPDATE dmt_category SET category_name = ? WHERE id_category = ?");
             ps.setString(1, txtCategory.getText().toUpperCase());
             ps.setInt(2, IdCategory);
             int result = ps.executeUpdate();
@@ -142,6 +141,7 @@ public class EditCategory extends javax.swing.JDialog {
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 Config dbConnection = new Config();
                 EditCategory dialog = new EditCategory(new javax.swing.JFrame(), true, 1);

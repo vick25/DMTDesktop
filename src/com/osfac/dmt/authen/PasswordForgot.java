@@ -248,7 +248,7 @@ public class PasswordForgot extends javax.swing.JDialog {
     private void BValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BValidateActionPerformed
         if (Config.valideEmail(txtEmail)) {
             try {
-                PreparedStatement ps = Config.con.prepareStatement("select password from dmt_user where email = ?");
+                PreparedStatement ps = Config.con.prepareStatement("SELECT password FROM dmt_user WHERE email = ?");
                 ps.setString(1, txtEmail.getText());
                 final ResultSet res = ps.executeQuery();
                 if (res.next()) {
@@ -279,8 +279,8 @@ public class PasswordForgot extends javax.swing.JDialog {
     private ArrayList getUserEmail() {
         ArrayList<String> list = new ArrayList();
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select distinct email from dmt_user "
-                    + "where id_user not in (?, ?) order by email");
+            PreparedStatement ps = Config.con.prepareStatement("SELECT DISTINCT email FROM dmt_user\n"
+                    + "WHERE id_user NOT IN (?, ?) ORDER BY email");
             ps.setInt(1, 3);
             ps.setInt(2, 4);
             ResultSet res = ps.executeQuery();
@@ -300,8 +300,8 @@ public class PasswordForgot extends javax.swing.JDialog {
             BValidate.setEnabled(false);
             txtEmail.setEnabled(false);
             BLStatus.setBusy(true);
-            BLStatus.setText(new StringBuilder(I18N.get("ReviewDataRequestForm.Sending-Email-to")).
-                    append(" ").append(txtEmail.getText()).append(" ...").toString());
+            BLStatus.setText(I18N.get("ReviewDataRequestForm.Sending-Email-to")
+                    + " " + txtEmail.getText() + " ...");
             MailSender mail = new MailSender("smtp.gmail.com", 465, "dmt@osfac.net", "osfaclab01", true);
             MailMessage msg = new MailMessage();
             //Source de message
@@ -311,9 +311,9 @@ public class PasswordForgot extends javax.swing.JDialog {
             //Sujet de message
             msg.setSubject(I18N.get("PasswordForgot.email-subject"));
             //Contenu de message
-            msg.setContent(new StringBuilder(I18N.get("PasswordForgot.email-content1")).append(" ").
-                    append(txtEmail.getText()).append(I18N.get("PasswordForgot.email-content2")).
-                    append(" ").append(password).append(I18N.get("PasswordForgot.email-content3")).toString(), true);
+            msg.setContent(I18N.get("PasswordForgot.email-content1") + " "
+                    + txtEmail.getText() + I18N.get("PasswordForgot.email-content2") + " " + password
+                    + I18N.get("PasswordForgot.email-content3"), true);
             //Envoyer le message
             mail.sendMessage(msg);
             BLStatus.setBusy(false);
@@ -321,7 +321,8 @@ public class PasswordForgot extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, I18N.get("PasswordForgot.email-confirmation"));
             this.dispose();
         } catch (UnsupportedEncodingException | MessagingException ex) {
-            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"), I18N.get("PasswordForgot.error-sending-email"), null, null, ex, Level.SEVERE, null));
+            JXErrorPane.showDialog(null, new ErrorInfo(I18N.get("com.osfac.dmt.Config.Error"),
+                    I18N.get("PasswordForgot.error-sending-email"), null, null, ex, Level.SEVERE, null));
             BLStatus.setBusy(false);
             BLStatus.setText("");
             timer.start();

@@ -185,8 +185,7 @@ public final class DMTWorkbench {
                 //[sstein 6.July.2008] disabled to enable loading of two properties files
                 //properties = new WorkbenchPropertiesFile(defaultFile, frame);
             } else {
-                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Default plugins file does not exist: ")
-                        .append(defaultFile).toString());
+                System.out.println("OSFAC-DMT: Warning: Default plugins file does not exist: " + defaultFile);
             }
         }
 
@@ -199,8 +198,7 @@ public final class DMTWorkbench {
                 //properties = new WorkbenchPropertiesFile(propertiesFile, frame);
                 propertiesFileExists = true;
             } else {
-                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Properties file does not exist: ")
-                        .append(propertiesFile).toString());
+                System.out.println("OSFAC-DMT: Warning: Properties file does not exist: " + propertiesFile);
             }
         }
 
@@ -216,8 +214,7 @@ public final class DMTWorkbench {
         if (commandLine.hasOption(PLUG_IN_DIRECTORY_OPTION)) {
             extensionsDirectory = new File(commandLine.getOption(PLUG_IN_DIRECTORY_OPTION).getArg(0));
             if (!extensionsDirectory.exists()) {
-                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Extensions directory does not exist: ")
-                        .append(extensionsDirectory).toString());
+                System.out.println("OSFAC-DMT: Warning: Extensions directory does not exist: " + extensionsDirectory);
                 extensionsDirectory = null;
             }
         } else {
@@ -226,9 +223,8 @@ public final class DMTWorkbench {
             if (!extensionsDirectory.exists()) {
                 // Added further information so that debug user will know where
                 // it is actually looking for as the extension directory.
-                System.out.println(new StringBuilder("OSFAC-DMT: Warning: Extensions directory does not exist: ")
-                        .append(extensionsDirectory).append(" where homedir = [")
-                        .append(System.getProperty("user.dir")).append("]").toString());
+                System.out.println("OSFAC-DMT: Warning: Extensions directory does not exist: "
+                        + extensionsDirectory + " where homedir = [" + System.getProperty("user.dir") + "]");
                 extensionsDirectory = null;
             }
         }
@@ -281,14 +277,12 @@ public final class DMTWorkbench {
             setFont();
             ProgressMonitor progressMonitor = (ProgressMonitor) progressMonitorClass.newInstance();
             SplashPanel splashPanel = new SplashPanel(splashImage(),
-                    new StringBuilder(I18N.get("ui.AboutDialog.version")).append(" ").
-                    append(DMTVersion.CURRENT_VERSION).toString());
+                    I18N.get("ui.AboutDialog.version") + " " + DMTVersion.CURRENT_VERSION);
             splashPanel.add(progressMonitor, new GridBagConstraints(0, 10, 1, 1, 1,
                     0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 10), 0, 0));
 
-            main(args, new StringBuilder(I18N.get("ui.WorkbenchFrame.title")).append(" ")
-                    .append(I18N.get("JUMPWorkbench.version.number")).append(" ")
-                    .append(WorkbenchFrame.TypeOfVersion).toString(), new DMTConfiguration(), splashPanel, progressMonitor);
+            main(args, I18N.get("ui.WorkbenchFrame.title") + " " + I18N.get("JUMPWorkbench.version.number")
+                    + " " + WorkbenchFrame.TypeOfVersion, new DMTConfiguration(), splashPanel, progressMonitor);
 //            System.out.println("OJ start took " + PlugInManager.secondsSince(start) + "s alltogether.");
         } catch (Throwable t) {
             WorkbenchFrame.showThrowable(t, null);

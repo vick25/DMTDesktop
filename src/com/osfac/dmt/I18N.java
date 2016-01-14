@@ -69,8 +69,8 @@ public final class I18N {
     // STanner changed the place where are stored bundles. Now are in /language
     // public static ResourceBundle rb =
     // ResourceBundle.getBundle("com.osfac.dmt.jump");
-    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle(new StringBuilder("language/dmt_").
-            append(Config.pref.get(SettingKeyFactory.Language.ABREV, "en")).toString());
+    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle("language/dmt_"
+            + Config.pref.get(SettingKeyFactory.Language.ABREV, "en"));
 //    public static ResourceBundle DMTResourceBundle = ResourceBundle.getBundle("language/dmt_en");
     // [Michael Michaud 2007-03-23] plugInsResourceBundle is deactivated because
     // all the methods
@@ -126,8 +126,7 @@ public final class I18N {
             return resourceBundle.getString(key);
         } catch (java.util.MissingResourceException e) {
             String[] labelpath = key.split("\\.");
-            LOG.debug(new StringBuilder("No resource bundle or no translation found for the key : ").
-                    append(key).toString());
+            LOG.debug("No resource bundle or no translation found for the key : " + key);
             return labelpath[labelpath.length - 1];
         }
     }
@@ -155,7 +154,7 @@ public final class I18N {
     public static I18N getInstance(final String category) {
         I18N instance = instances.get(category);
         if (instance == null) {
-            String resourcePath = new StringBuilder(category.replace('.', '/')).append("/language/dmt").toString();
+            String resourcePath = category.replace('.', '/') + "/language/dmt";
             instance = new I18N(resourcePath);
             instances.put(category, instance);
         }
@@ -176,14 +175,13 @@ public final class I18N {
         String[] lc = localeCode.split("_");
         Locale locale = Locale.getDefault();
         if (lc.length > 1) {
-            LOG.debug(new StringBuilder("lang:").append(lc[0]).append(" ").append("country:").append(lc[1]).toString());
+            LOG.debug("lang:" + lc[0] + " " + "country:" + lc[1]);
             locale = new Locale(lc[0], lc[1]);
         } else if (lc.length > 0) {
-            LOG.debug(new StringBuilder("lang:").append(lc[0]).toString());
+            LOG.debug("lang:" + lc[0]);
             locale = new Locale(lc[0]);
         } else {
-            LOG.debug(new StringBuilder(localeCode).
-                    append(" is an illegal argument to define lang [and country]").toString());
+            LOG.debug(localeCode + " is an illegal argument to define lang [and country]");
         }
 
         return locale;
@@ -197,7 +195,7 @@ public final class I18N {
      * @param langcountry
      */
     public static void loadFile(final String langcountry) {
-        DMTResourceBundle = ResourceBundle.getBundle(new StringBuilder("language/dmt_").append(Config.pref.get(SettingKeyFactory.Language.ABREV, "en")).toString(),
+        DMTResourceBundle = ResourceBundle.getBundle("language/dmt_" + Config.pref.get(SettingKeyFactory.Language.ABREV, "en"),
                 fromCode(langcountry));
     }
 
@@ -220,7 +218,7 @@ public final class I18N {
             return DMTResourceBundle.getString(label);
         } catch (java.util.MissingResourceException e) {
             String[] labelpath = label.split("\\.");
-            LOG.debug(new StringBuilder("No resource bundle or no translation found for the key : ").append(label).toString());
+            LOG.debug("No resource bundle or no translation found for the key : " + label);
             return labelpath[labelpath.length - 1];
         }
     }
@@ -232,8 +230,7 @@ public final class I18N {
      * @return string signature for LOCALE
      */
     public static String getLocale() {
-        return new StringBuilder(DMTResourceBundle.getLocale().getLanguage()).
-                append("_").append(DMTResourceBundle.getLocale().getCountry()).toString();
+        return DMTResourceBundle.getLocale().getLanguage() + "_" + DMTResourceBundle.getLocale().getCountry();
     }
 
     /**
@@ -278,8 +275,8 @@ public final class I18N {
             return mformat.format(objects);
         } catch (java.util.MissingResourceException e) {
             final String[] labelpath = label.split("\\.");
-            LOG.warn(new StringBuilder(e.getMessage()).append(" no default value, the resource key is used: ").
-                    append(labelpath[labelpath.length - 1]).toString());
+            LOG.warn(e.getMessage() + " no default value, the resource key is used: "
+                    + labelpath[labelpath.length - 1]);
             final MessageFormat mformat = new MessageFormat(
                     labelpath[labelpath.length - 1]);
             return mformat.format(objects);

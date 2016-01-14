@@ -585,9 +585,9 @@ public class MainCriteria extends javax.swing.JPanel {
     }
 
     private String manyCriteria(Object[] list) {
-        StringBuilder values = new StringBuilder();
+        String values = "";
         for (int i = 0; i < list.length; i++) {
-            values.append("\'").append(list[i].toString()).append("\',");
+            values += "\'" + list[i] + "\',";
         }
         return values.substring(0, values.length() - 1);
     }

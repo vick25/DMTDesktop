@@ -118,8 +118,8 @@ public class AddCategory extends javax.swing.JDialog {
     private void BValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BValidateActionPerformed
         if (uniqueness(txtCategory.getText())) {
             try {
-                PreparedStatement ps = Config.con.prepareStatement("insert into dmt_category (category_name)"
-                        + " values (?)");
+                PreparedStatement ps = Config.con.prepareStatement("INSERT INTO dmt_category (category_name)"
+                        + " VALUES (?)");
                 ps.setString(1, txtCategory.getText().toUpperCase());
                 int result = ps.executeUpdate();
                 if (result == 1) {
@@ -138,14 +138,13 @@ public class AddCategory extends javax.swing.JDialog {
     private boolean uniqueness(String category) {
         boolean unique = true;
         try {
-            PreparedStatement ps = Config.con.prepareStatement("select * from dmt_category where "
+            PreparedStatement ps = Config.con.prepareStatement("SELECT * FROM dmt_category WHERE\n"
                     + "category_name = ?");
             ps.setString(1, category);
             Config.res = ps.executeQuery();
             while (Config.res.next()) {
-                JOptionPane.showMessageDialog(this, "The cathegory \""
-                        + "" + category + "\" already exists in the database"
-                        + "", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "The cathegory \"" + category
+                        + "\" already exists in the database", "Warning", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         } catch (SQLException e) {

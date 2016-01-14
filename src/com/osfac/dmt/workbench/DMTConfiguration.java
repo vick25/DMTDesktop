@@ -291,7 +291,7 @@ public class DMTConfiguration implements Setup {
         //[sstein 2.June.2008] added back due to table list history (need to check other way?)
         featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
                 .getFrame().getCategoryPopupMenu(), addDatastoreLayerPlugIn,
-                new StringBuilder(addDatastoreLayerPlugIn.getName()).append("...").toString(),
+                addDatastoreLayerPlugIn.getName() + "...",
                 false, AddDatastoreLayerPlugIn.ICON, null);
 
         /* //[sstein 21.Mar.2008] removed since now contained in new open menu
@@ -320,7 +320,7 @@ public class DMTConfiguration implements Setup {
         JPopupMenu wmsLayerNamePopupMenu = workbenchContext.getWorkbench()
                 .getFrame().getWMSLayerNamePopupMenu();
         featureInstaller.addPopupMenuItem(wmsLayerNamePopupMenu,
-                editWMSQueryPlugIn, new StringBuilder(editWMSQueryPlugIn.getName()).append("...").toString(),
+                editWMSQueryPlugIn, editWMSQueryPlugIn.getName() + "...",
                 false, null, editWMSQueryPlugIn
                 .createEnableCheck(workbenchContext));
         wmsLayerNamePopupMenu.addSeparator(); // ===================
@@ -447,7 +447,7 @@ public class DMTConfiguration implements Setup {
          }
          */
         featureInstaller.addPopupMenuItem(layerNamePopupMenu,
-                saveDatasetAsPlugIn, new StringBuilder(saveDatasetAsPlugIn.getName()).append("...").toString(),
+                saveDatasetAsPlugIn, saveDatasetAsPlugIn.getName() + "...",
                 false, SaveDatasetAsPlugIn.ICON, AbstractSaveDatasetAsPlugIn
                 .createEnableCheck(workbenchContext));
 
@@ -597,7 +597,7 @@ public class DMTConfiguration implements Setup {
         featureInstaller.addMainMenuItemWithJava14Fix(
                 saveImageAsPlugIn,
                 new String[]{MenuNames.FILE, MenuNames.FILE_SAVEVIEW},
-                new StringBuilder(saveImageAsPlugIn.getName()).append("...").toString(),
+                saveImageAsPlugIn.getName() + "...",
                 false,
                 null,
                 SaveImageAsPlugIn.createEnableCheck(workbenchContext));
@@ -694,7 +694,7 @@ public class DMTConfiguration implements Setup {
                 .toSmallIcon(zoomToSelectedItemsPlugIn.getIcon()),
                 ZoomToSelectedItemsPlugIn.createEnableCheck(workbenchContext));
         featureInstaller.addMainMenuItemWithJava14Fix(zoomToCoordinatePlugIn, new String[]{MenuNames.VIEW},
-                new StringBuilder(zoomToCoordinatePlugIn.getName()).append("...").toString(), false, null,
+                zoomToCoordinatePlugIn.getName() + "...", false, null,
                 zoomToCoordinatePlugIn.createEnableCheck(workbenchContext));
         featureInstaller.addMainMenuItemWithJava14Fix(zoomPreviousPlugIn, new String[]{MenuNames.VIEW},
                 zoomPreviousPlugIn.getName(), false, GUIUtil
@@ -794,7 +794,7 @@ public class DMTConfiguration implements Setup {
          * HELP ===========================================================================
          */
         featureInstaller.addMainMenuItemWithJava14Fix(shortcutKeysPlugIn, new String[]{MenuNames.HELP},
-                new StringBuilder(shortcutKeysPlugIn.getName()).append("...").toString(), false, ShortcutKeysPlugIn.ICON, null);
+                shortcutKeysPlugIn.getName() + "...", false, ShortcutKeysPlugIn.ICON, null);
 //        new FeatureInstaller(workbenchContext).addMainMenuItemWithJava14Fix(
 //                new AboutPlugIn(), new String[]{MenuNames.HELP}, I18N.get("JUMPConfiguration.about"), false, AboutPlugIn.ICON, null);
 
@@ -802,8 +802,8 @@ public class DMTConfiguration implements Setup {
          * CUSTOMIZE ===========================================================================
          */
         //-- [sstein: 24.03.2007 new menu]
-        featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[]{MenuNames.CUSTOMIZE}, new StringBuilder(optionsPlugIn
-                .getName()).append("...").toString(), false, null, null);
+        featureInstaller.addMainMenuItemWithJava14Fix(optionsPlugIn, new String[]{MenuNames.CUSTOMIZE},
+                optionsPlugIn.getName() + "...", false, null, null);
     }
 
     //==== [sstein: 23.02.2006] ======
